@@ -68,6 +68,7 @@
 
     <string name="discover_repositories">Discover Repositories</string>
     <string name="search_repositories_hint">Search repo, description…</string>
+    <string name="search">Search</string>
 
     <!-- Filters -->
     <string name="filter_by_language">Filter by Language</string>
