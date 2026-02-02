@@ -1,0 +1,216 @@
+package com.darkmintis.gitstore.feature.settings.presentation
+
+import com.darkmintis.gitstore.R
+
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
+
+
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
+import com.darkmintis.gitstore.core.presentation.model.FontTheme
+import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
+import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
+import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.appearance
+
+@Composable
+fun SettingsRoot(
+    onNavigateBack: () -> Unit,
+    viewModel: SettingsViewModel = koinViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            SettingsEvent.OnLogoutSuccessful -> {
+                coroutineScope.launch {
+                    snackbarState.showSnackbar(context.getString(R.string.logout_success))
+
+                    onNavigateBack()
+                }
+            }
+
+            is SettingsEvent.OnLogoutError -> {
+                coroutineScope.launch {
+                    snackbarState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
+    SettingsScreen(
+        state = state,
+        onAction = { action ->
+            when (action) {
+                SettingsAction.OnNavigateBackClick -> {
+                    onNavigateBack()
+                }
+
+                else -> {
+                    viewModel.onAction(action)
+                }
+            }
+        },
+        snackbarState = snackbarState
+    )
+
+    if (state.isLogoutDialogVisible) {
+        LogoutDialog(
+            onDismissRequest = {
+                viewModel.onAction(SettingsAction.OnLogoutDismiss)
+            },
+            onLogout = {
+                viewModel.onAction(SettingsAction.OnLogoutConfirmClick)
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun SettingsScreen(
+    state: SettingsState,
+    onAction: (SettingsAction) -> Unit,
+    snackbarState: SnackbarHostState
+) {
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarState)
+        },
+        topBar = {
+            TopAppBar(onAction)
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+            appearance(
+                selectedThemeColor = state.selectedThemeColor,
+                onThemeColorSelected = { theme ->
+                    onAction(SettingsAction.OnThemeColorSelected(theme))
+                },
+                isAmoledThemeEnabled = state.isAmoledThemeEnabled,
+                onAmoledThemeToggled = { enabled ->
+                    onAction(SettingsAction.OnAmoledThemeToggled(enabled))
+                },
+                isDarkTheme = state.isDarkTheme,
+                onDarkThemeChange = { isDarkTheme ->
+                    onAction(SettingsAction.OnDarkThemeChange(isDarkTheme))
+                },
+                isUsingSystemFont = state.selectedFontTheme == FontTheme.SYSTEM,
+                onUseSystemFontToggled = { enabled ->
+                    onAction(
+                        SettingsAction.OnFontThemeSelected(
+                            if (enabled) {
+                                FontTheme.SYSTEM
+                            } else FontTheme.CUSTOM
+                        )
+                    )
+                }
+            )
+
+            item {
+                Spacer(Modifier.height(16.dp))
+            }
+
+            about(
+                onAction = onAction
+            )
+
+            if (state.isUserLoggedIn) {
+                item {
+                    Spacer(Modifier.height(16.dp))
+                }
+
+                logout(
+                    onAction = onAction
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun TopAppBar(onAction: (SettingsAction) -> Unit) {
+    TopAppBar(
+        navigationIcon = {
+            IconButton(
+                shapes = IconButtonDefaults.shapes(),
+                onClick = {
+                    onAction(SettingsAction.OnNavigateBackClick)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.navigate_back),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        },
+        title = {
+            Text(
+                text = stringResource(R.string.settings_title),
+                style = MaterialTheme.typography.titleMediumEmphasized,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    GithubStoreTheme {
+        SettingsScreen(
+            state = SettingsState(),
+            onAction = {},
+            snackbarState = SnackbarHostState()
+        )
+    }
+}
+
+
+
