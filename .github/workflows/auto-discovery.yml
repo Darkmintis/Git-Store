@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🔍 Starting Git Store Discovery Engine..."
-          python scripts/fetch_trending.py
+          python scripts/discover.py
           echo "✅ Discovery complete"
 
       - name: Analyze changes
