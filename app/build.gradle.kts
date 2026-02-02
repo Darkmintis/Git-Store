@@ -1,0 +1,159 @@
+import java.util.Properties
+
+plugins {
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
+}
+
+val appVersionName = "1.0.0"
+val appVersionCode = 1
+
+// Load local.properties for secrets like GITHUB_CLIENT_ID
+val localProps = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { this.load(it) }
+}
+val localGithubClientId =
+    (localProps.getProperty("GITHUB_CLIENT_ID") ?: "Ov23linTY28VFpFjFiI9").trim()
+
+android {
+    namespace = "com.darkmintis.gitstore"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    sourceSets {
+        getByName("main") {
+            manifest.srcFile("src/main/AndroidManifest.xml")
+            java.srcDirs("src/main/kotlin")
+            res.srcDirs("src/main/res")
+        }
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+    defaultConfig {
+        applicationId = "com.darkmintis.gitstore"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = appVersionCode
+        versionName = appVersionName
+
+        buildConfigField("String", "GITHUB_CLIENT_ID", "\"${localGithubClientId}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${appVersionName}\"")
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    kotlinOptions {
+        jvmTarget = "21"
+    }
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
+}
+
+dependencies {
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.material3)
+    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.activity.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Koin DI
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    // HTTP and serialization
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.core)
+
+    // Logging
+    implementation(libs.kermit)
+
+    // Image Loading
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.ktor3)
+
+    // Date-time
+    implementation(libs.kotlinx.datetime)
+
+    // Navigation 3
+    implementation(libs.navigation.compose)
+    implementation(libs.jetbrains.navigation3.ui)
+    implementation(libs.jetbrains.lifecycle.viewmodel.compose)
+    implementation(libs.jetbrains.lifecycle.viewmodel)
+    implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
+
+    // Markdown
+    implementation(libs.multiplatform.markdown.renderer)
+    implementation(libs.multiplatform.markdown.renderer.coil3)
+
+    // Liquid
+    implementation(libs.liquid)
+
+    // Data store
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.sqlite.bundled)
+    ksp(libs.androidx.room.compiler)
+
+    // Security
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.core.splashscreen)
+
+    // Testing
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotest.framework.engine)
+    testImplementation(libs.kotest.assertions.core)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0")
+    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
