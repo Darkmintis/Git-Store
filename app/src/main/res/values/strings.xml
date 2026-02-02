@@ -4,6 +4,7 @@
     <string name="app_name">Git Store</string>
 
     <!-- Apps feature - Navigation / Top bar -->
+    <string name="home">Home</string>
     <string name="installed_apps">Installed Apps</string>
     <string name="navigate_back">Navigate back</string>
     <string name="check_for_updates">Check for updates</string>
@@ -216,7 +217,7 @@
 
     <string name="home_category_trending">Trending</string>
     <string name="home_category_new">New</string>
-    <string name="home_category_recently_updated">Recently updated</string>
+    <string name="home_category_popular">Popular</string>
 
     <string name="home_finding_repositories">Finding repositories...</string>
     <string name="home_loading_more">Loading more...</string>
