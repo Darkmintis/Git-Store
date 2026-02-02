@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launcher Icon Background -->
+    <color name="ic_launcher_background">#1A1A1A</color>
+    
+    <!-- Brand Colors -->
+    <color name="brand_primary">#2C2C2C</color>
+    <color name="brand_accent">#4CAF50</color>
+    
+    <!-- Theme Colors -->
+    <color name="background_dark">#121212</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+</resources>
