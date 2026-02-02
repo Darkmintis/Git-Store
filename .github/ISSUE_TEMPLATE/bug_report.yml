@@ -1,0 +1,88 @@
+name: Bug Report
+description: Report a bug in Git Store
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear description of what the bug is
+      placeholder: Describe the issue...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App Version
+      description: Which version of Git Store are you using?
+      placeholder: "1.5.1"
+    validations:
+      required: true
+
+  - type: input
+    id: android
+    attributes:
+      label: Android Version
+      description: Which Android version?
+      placeholder: "Android 14"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: What device are you using?
+      placeholder: "Samsung Galaxy S24"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs/Screenshots
+      description: Add any relevant logs or screenshots
+      placeholder: Paste logs or drag images here
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information about the problem
