@@ -3,18 +3,6 @@ package com.darkmintis.gitstore.feature.details.presentation.model
 import com.darkmintis.gitstore.R
 
 import androidx.compose.runtime.Composable
-
-
-
-
-
-
-
-
-
-
-
-
 import androidx.compose.ui.res.stringResource
 
 sealed class LogResult {
