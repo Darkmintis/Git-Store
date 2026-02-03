@@ -132,17 +132,6 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            // GitHub sign-in button (only show if not logged in)
-            if (!state.isUserLoggedIn) {
-                signInWithGitHub(
-                    onAction = onAction
-                )
-
-                item {
-                    Spacer(Modifier.height(24.dp))
-                }
-            }
-
             moreApps(
                 onAction = onAction
             )
@@ -154,6 +143,17 @@ fun SettingsScreen(
             support(
                 onAction = onAction
             )
+
+            // GitHub sign-in button (only show if not logged in)
+            if (!state.isUserLoggedIn) {
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
+
+                signInWithGitHub(
+                    onAction = onAction
+                )
+            }
 
             item {
                 Spacer(Modifier.height(24.dp))
