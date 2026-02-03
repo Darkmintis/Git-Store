@@ -30,12 +30,11 @@ Download the latest APK from [Releases](https://github.com/Darkmintis/Git-Store/
 
 ## License
 
-**GNU General Public License v3.0** - See [LICENSE](LICENSE) file for details
+**Apache License 2.0** - See [LICENSE](LICENSE) file for details
 
-This software requires:
-- Attribution to Darkmintis in any distribution or modification
-- Source code must remain open source
-- Modified versions must use a different name/branding
+Licensed under the Apache License, Version 2.0. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+This project incorporates code and concepts from multiple open source projects. See Credits section below for attribution.
 
 ## Credits
 
