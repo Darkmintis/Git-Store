@@ -194,11 +194,41 @@ fun SearchScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            SearchTopbar(
-                onAction = onAction,
-                state = state,
-                focusRequester = focusRequester
-            )
+            Column {
+                SearchTopbar(
+                    onAction = onAction,
+                    state = state,
+                    focusRequester = focusRequester
+                )
+                // Language filter chip
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    FilterChip(
+                        selected = state.selectedLanguage != ProgrammingLanguage.All,
+                        onClick = { onAction(SearchAction.OnToggleLanguageSheetVisibility) },
+                        label = {
+                            Text(
+                                text = if (state.selectedLanguage == ProgrammingLanguage.All) {
+                                    stringResource(R.string.language_all)
+                                } else {
+                                    stringResource(state.selectedLanguage.label())
+                                }
+                            )
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.KeyboardArrowDown,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         Column(

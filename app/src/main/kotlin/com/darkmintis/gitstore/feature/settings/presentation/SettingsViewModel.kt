@@ -93,6 +93,10 @@ class SettingsViewModel(
                 )
             }
 
+            SettingsAction.OnGitHubSignInClick -> {
+                // Handled in composable - navigation to AuthenticationScreen
+            }
+
             is SettingsAction.OnBrowserOpen -> {
                 browserHelper.openUrl(url = action.url)
             }

@@ -198,6 +198,9 @@ fun AppNavigation(
                         SettingsRoot(
                             onNavigateBack = {
                                 navBackStack.removeLastOrNull()
+                            },
+                            onNavigateToAuth = {
+                                navBackStack.add(GithubStoreGraph.AuthenticationScreen)
                             }
                         )
                     }

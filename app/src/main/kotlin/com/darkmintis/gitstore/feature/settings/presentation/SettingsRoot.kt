@@ -47,11 +47,13 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDi
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
 fun SettingsRoot(
     onNavigateBack: () -> Unit,
+    onNavigateToAuth: () -> Unit,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -82,6 +84,10 @@ fun SettingsRoot(
             when (action) {
                 SettingsAction.OnNavigateBackClick -> {
                     onNavigateBack()
+                }
+
+                SettingsAction.OnGitHubSignInClick -> {
+                    onNavigateToAuth()
                 }
 
                 else -> {
@@ -126,6 +132,17 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
+            // GitHub sign-in button (only show if not logged in)
+            if (!state.isUserLoggedIn) {
+                signInWithGitHub(
+                    onAction = onAction
+                )
+
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
+            }
+
             moreApps(
                 onAction = onAction
             )
