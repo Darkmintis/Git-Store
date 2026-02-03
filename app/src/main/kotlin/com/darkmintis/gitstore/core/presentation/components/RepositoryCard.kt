@@ -60,6 +60,7 @@ fun RepositoryCard(
     discoveryRepository: DiscoveryRepository,
     onClick: () -> Unit,
     onDeveloperClick: (String) -> Unit,
+    onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uriHandler = LocalUriHandler.current
@@ -173,23 +174,30 @@ fun RepositoryCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(
-                        text = "⭐ ${discoveryRepository.repository.stargazersCount}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        softWrap = false,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    Text(
-                        text = "• 🌴 ${discoveryRepository.repository.forksCount}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        softWrap = false,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    // Clickable favorite icon with count below
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.clickable { onToggleFavorite() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Favorite",
+                            tint = if (discoveryRepository.isFavourite) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = "${discoveryRepository.repository.stargazersCount}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
 
                     discoveryRepository.repository.language?.let {
                         Text(
@@ -246,7 +254,7 @@ fun RepositoryCard(
                         shapes = IconButtonDefaults.shapes(),
                     ) {
                         Icon(
-                            imageVector = Icons.Default.OpenInBrowser,
+                            painter = androidx.compose.ui.res.painterResource(R.drawable.ic_github),
                             contentDescription = stringResource(R.string.open_in_browser),
                         )
                     }
@@ -343,7 +351,8 @@ fun RepositoryCardPreview() {
                 isStarred = false
             ),
             onClick = { },
-            onDeveloperClick = { }
+            onDeveloperClick = { },
+            onToggleFavorite = { }
         )
     }
 }

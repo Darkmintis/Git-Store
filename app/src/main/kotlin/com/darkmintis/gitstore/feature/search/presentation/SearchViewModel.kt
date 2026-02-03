@@ -5,8 +5,8 @@ import com.darkmintis.gitstore.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-
-
+import com.darkmintis.gitstore.core.data.local.db.entities.FavoriteRepo
+import kotlinx.datetime.Clock as DateClock
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -340,6 +340,32 @@ class SearchViewModel(
 
             is SearchAction.OnRepositoryDeveloperClick -> {
                 /* Handled in composable */
+            }
+
+            is SearchAction.OnToggleFavorite -> {
+                viewModelScope.launch {
+                    try {
+                        val repo = action.repository
+
+                        val favoriteRepo = FavoriteRepo(
+                            repoId = repo.id,
+                            repoName = repo.name,
+                            repoOwner = repo.owner.login,
+                            repoOwnerAvatarUrl = repo.owner.avatarUrl,
+                            repoDescription = repo.description,
+                            primaryLanguage = repo.language,
+                            repoUrl = repo.htmlUrl,
+                            latestVersion = null,
+                            latestReleaseUrl = null,
+                            addedAt = DateClock.System.now().toEpochMilliseconds(),
+                            lastSyncedAt = DateClock.System.now().toEpochMilliseconds()
+                        )
+
+                        favouritesRepository.toggleFavorite(favoriteRepo)
+                    } catch (t: Throwable) {
+                        Logger.e { "Failed to toggle favorite: ${t.message}" }
+                    }
+                }
             }
         }
     }

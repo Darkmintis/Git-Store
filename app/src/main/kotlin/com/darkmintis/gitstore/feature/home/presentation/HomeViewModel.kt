@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import android.app.Application
+import com.darkmintis.gitstore.core.data.local.db.entities.FavoriteRepo
 import com.darkmintis.gitstore.core.domain.Platform
 import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
@@ -23,6 +24,7 @@ import com.darkmintis.gitstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import com.darkmintis.gitstore.core.presentation.model.DiscoveryRepository
 import com.darkmintis.gitstore.feature.home.domain.repository.HomeRepository
 import com.darkmintis.gitstore.feature.home.presentation.model.HomeCategory
+import kotlinx.datetime.Clock as DateClock
 
 class HomeViewModel(
     private val application: Application,
@@ -237,6 +239,32 @@ class HomeViewModel(
 
             is HomeAction.OnRepositoryClick -> {
                 /* Handled in composable */
+            }
+
+            is HomeAction.OnToggleFavorite -> {
+                viewModelScope.launch {
+                    try {
+                        val repo = action.repo
+
+                        val favoriteRepo = FavoriteRepo(
+                            repoId = repo.id,
+                            repoName = repo.name,
+                            repoOwner = repo.owner.login,
+                            repoOwnerAvatarUrl = repo.owner.avatarUrl,
+                            repoDescription = repo.description,
+                            primaryLanguage = repo.language,
+                            repoUrl = repo.htmlUrl,
+                            latestVersion = null,
+                            latestReleaseUrl = null,
+                            addedAt = DateClock.System.now().toEpochMilliseconds(),
+                            lastSyncedAt = DateClock.System.now().toEpochMilliseconds()
+                        )
+
+                        favouritesRepository.toggleFavorite(favoriteRepo)
+                    } catch (t: Throwable) {
+                        Logger.e { "Failed to toggle favorite: ${t.message}" }
+                    }
+                }
             }
 
             is HomeAction.OnRepositoryDeveloperClick -> {

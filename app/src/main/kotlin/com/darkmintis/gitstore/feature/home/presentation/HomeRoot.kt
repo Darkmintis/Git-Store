@@ -212,6 +212,9 @@ private fun MainState(
                     onDeveloperClick = { username ->
                         onAction(HomeAction.OnRepositoryDeveloperClick(username))
                     },
+                    onToggleFavorite = {
+                        onAction(HomeAction.OnToggleFavorite(homeRepo.repository))
+                    },
                     modifier = Modifier
                         .animateItem()
                         .liquefiable(liquidState)

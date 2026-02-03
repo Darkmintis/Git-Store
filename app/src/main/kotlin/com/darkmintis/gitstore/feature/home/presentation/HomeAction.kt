@@ -13,5 +13,6 @@ sealed interface HomeAction {
     data class SwitchCategory(val category: HomeCategory) : HomeAction
     data class OnRepositoryClick(val repo: GithubRepoSummary) : HomeAction
     data class OnRepositoryDeveloperClick(val username: String) : HomeAction
+    data class OnToggleFavorite(val repo: GithubRepoSummary) : HomeAction
 }
 

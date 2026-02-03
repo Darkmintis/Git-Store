@@ -328,6 +328,9 @@ fun SearchScreen(
                                 onDeveloperClick = { username ->
                                     onAction(SearchAction.OnRepositoryDeveloperClick(username))
                                 },
+                                onToggleFavorite = {
+                                    onAction(SearchAction.OnToggleFavorite(discoveryRepository.repository))
+                                },
                                 modifier = Modifier.animateItem()
                             )
                         }
