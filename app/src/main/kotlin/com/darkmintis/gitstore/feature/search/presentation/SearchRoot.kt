@@ -237,61 +237,6 @@ fun SearchScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 8.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.language_label),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Medium
-                )
-
-                FilterChip(
-                    selected = state.selectedLanguage != ProgrammingLanguage.All,
-                    onClick = {
-                        onAction(SearchAction.OnToggleLanguageSheetVisibility)
-                    },
-                    label = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = stringResource(state.selectedLanguage.label()),
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium
-                            )
-                            Icon(
-                                imageVector = Icons.Outlined.KeyboardArrowDown,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                )
-
-                if (state.selectedLanguage != ProgrammingLanguage.All) {
-                    IconButton(
-                        onClick = {
-                            onAction(SearchAction.OnLanguageSelected(ProgrammingLanguage.All))
-                        },
-                        modifier = Modifier.size(32.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-
             if (state.totalCount != null) {
                 Text(
                     text = stringResource(
