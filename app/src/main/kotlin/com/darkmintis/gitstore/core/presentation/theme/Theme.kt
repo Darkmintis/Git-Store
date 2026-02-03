@@ -405,27 +405,14 @@ val amberOrangeDark = darkColorScheme(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GithubStoreTheme(
-    isDarkTheme: Boolean = false,
+    isDarkTheme: Boolean = true, // Always dark theme
     appTheme: AppTheme = AppTheme.OCEAN,
     fontTheme: FontTheme = FontTheme.CUSTOM,
     isAmoledTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val baseColorScheme = when {
-        appTheme == AppTheme.DYNAMIC -> {
-            getDynamicColorScheme(isDarkTheme) ?: run {
-                if (isDarkTheme) AppTheme.OCEAN.darkScheme else AppTheme.OCEAN.lightScheme
-            }
-        }
-        isDarkTheme -> appTheme.darkScheme!!
-        else -> appTheme.lightScheme!!
-    }
-
-    val colorScheme = if (isDarkTheme && isAmoledTheme) {
-        baseColorScheme?.toAmoled()
-    } else {
-        baseColorScheme
-    }
+    // Always use dark theme with brand colors (dark grey/black + orange/red)
+    val colorScheme = oceanBlueDark
 
     MaterialExpressiveTheme(
         colorScheme = colorScheme,

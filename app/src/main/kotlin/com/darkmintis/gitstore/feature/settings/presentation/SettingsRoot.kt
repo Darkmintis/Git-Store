@@ -46,7 +46,8 @@ import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
-import com.darkmintis.gitstore.feature.settings.presentation.components.sections.appearance
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
 fun SettingsRoot(
@@ -125,33 +126,20 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            appearance(
-                selectedThemeColor = state.selectedThemeColor,
-                onThemeColorSelected = { theme ->
-                    onAction(SettingsAction.OnThemeColorSelected(theme))
-                },
-                isAmoledThemeEnabled = state.isAmoledThemeEnabled,
-                onAmoledThemeToggled = { enabled ->
-                    onAction(SettingsAction.OnAmoledThemeToggled(enabled))
-                },
-                isDarkTheme = state.isDarkTheme,
-                onDarkThemeChange = { isDarkTheme ->
-                    onAction(SettingsAction.OnDarkThemeChange(isDarkTheme))
-                },
-                isUsingSystemFont = state.selectedFontTheme == FontTheme.SYSTEM,
-                onUseSystemFontToggled = { enabled ->
-                    onAction(
-                        SettingsAction.OnFontThemeSelected(
-                            if (enabled) {
-                                FontTheme.SYSTEM
-                            } else FontTheme.CUSTOM
-                        )
-                    )
-                }
+            moreApps(
+                onAction = onAction
             )
 
             item {
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(24.dp))
+            }
+
+            support(
+                onAction = onAction
+            )
+
+            item {
+                Spacer(Modifier.height(24.dp))
             }
 
             about(

@@ -111,6 +111,7 @@
     <!-- Sections -->
     <string name="section_appearance">APPEARANCE</string>
     <string name="section_about">ABOUT</string>
+    <string name="section_support">SUPPORT US</string>
 
     <!-- Appearance -->
     <string name="theme_color">Theme Color</string>

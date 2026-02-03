@@ -93,6 +93,10 @@ class SettingsViewModel(
                 )
             }
 
+            is SettingsAction.OnBrowserOpen -> {
+                browserHelper.openUrl(url = action.url)
+            }
+
             is SettingsAction.OnThemeColorSelected -> {
                 viewModelScope.launch {
                     themesRepository.setThemeColor(action.themeColor)

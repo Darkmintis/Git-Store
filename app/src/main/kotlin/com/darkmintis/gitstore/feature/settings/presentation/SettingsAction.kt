@@ -13,5 +13,6 @@ sealed interface SettingsAction {
     data object OnLogoutDismiss : SettingsAction
     data object OnHelpClick : SettingsAction
     data class OnFontThemeSelected(val fontTheme: FontTheme) : SettingsAction
+    data class OnBrowserOpen(val url: String) : SettingsAction
 }
 
