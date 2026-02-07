@@ -1,7 +1,6 @@
 package com.darkmintis.gitstore.feature.details.presentation
 
 import com.darkmintis.gitstore.R
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,15 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
-
-
-
-
-
-
-
-
 import io.github.fletchmckee.liquid.LiquidState
 import io.github.fletchmckee.liquid.liquefiable
 import io.github.fletchmckee.liquid.liquid
@@ -60,7 +50,6 @@ import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.details.presentation.components.sections.about
 import com.darkmintis.gitstore.feature.details.presentation.components.sections.header
-import com.darkmintis.gitstore.feature.details.presentation.components.sections.logs
 import com.darkmintis.gitstore.feature.details.presentation.components.sections.author
 import com.darkmintis.gitstore.feature.details.presentation.components.sections.stats
 import com.darkmintis.gitstore.feature.details.presentation.components.sections.whatsNew
@@ -202,10 +191,6 @@ fun DetailsScreen(
                         author = userProfile,
                         onAction = onAction
                     )
-                }
-
-                if (state.installLogs.isNotEmpty()) {
-                    logs(state)
                 }
             }
         }
