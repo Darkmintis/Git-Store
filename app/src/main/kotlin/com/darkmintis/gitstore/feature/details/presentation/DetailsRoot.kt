@@ -16,8 +16,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -245,39 +243,6 @@ private fun DetailsTopbar(
                 if (state.repository != null) {
                     IconButton(
                         onClick = {
-                            onAction(
-                                DetailsAction.OnMessage(
-                                    messageText = if (state.isStarred) {
-                                        R.string.unstar_from_github
-                                    } else {
-                                        R.string.star_from_github
-                                    }
-                                )
-                            )
-                        },
-                        shapes = IconButtonDefaults.shapes(),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    ) {
-                        Icon(
-                            imageVector = if (state.isStarred) {
-                                Icons.Default.Star
-                            } else Icons.Default.StarBorder,
-                            contentDescription = stringResource(
-                                id = if (state.isStarred) {
-                                    R.string.repository_starred
-                                } else {
-                                    R.string.repository_not_starred
-                                }
-                            ),
-                        )
-                    }
-                }
-
-                if (state.repository != null) {
-                    IconButton(
-                        onClick = {
                             onAction(DetailsAction.OnToggleFavorite)
                         },
                         shapes = IconButtonDefaults.shapes(),
@@ -311,7 +276,7 @@ private fun DetailsTopbar(
                         )
                     ) {
                         Icon(
-                            imageVector = Icons.Default.OpenInBrowser,
+                            painter = androidx.compose.ui.res.painterResource(R.drawable.ic_github),
                             contentDescription = stringResource(R.string.open_repository),
                             modifier = Modifier.size(24.dp)
                         )
