@@ -46,7 +46,7 @@ class DiscoveryEngine:
     
     # Quality thresholds
     MIN_STARS = 100
-    MIN_QUALITY_SCORE = 6
+    MIN_QUALITY_SCORE = 4  # Lowered to accept more quality apps
     TARGET_APPS = 50
     
     # Search strategies
@@ -178,18 +178,19 @@ class DiscoveryEngine:
         return min(score, 10)
     
     def _has_apk_releases(self, owner: str, repo: str) -> bool:
-        """Efficiently check if repository has APK releases"""
+        """Check if repository has APK releases (check more thoroughly)"""
         url = f"https://api.github.com/repos/{owner}/{repo}/releases"
-        data = self._make_request(url, params={'per_page': 10})
+        data = self._make_request(url, params={'per_page': 30})  # Check more releases
         
         if not data or not isinstance(data, list):
             return False
         
-        # Check latest releases for APK
-        for release in data[:5]:  # Check only recent releases
+        # Check releases for APK
+        for release in data:
             assets = release.get('assets', [])
             for asset in assets:
                 name = asset.get('name', '').lower()
+                # Check for APK files
                 if name.endswith('.apk'):
                     return True
         
