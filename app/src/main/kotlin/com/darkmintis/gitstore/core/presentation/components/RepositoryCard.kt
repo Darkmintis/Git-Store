@@ -201,17 +201,6 @@ fun RepositoryCard(
                     )
                 }
 
-                Spacer(Modifier.height(12.dp))
-
-                Text(
-                    text = formatUpdatedAt(discoveryRepository.repository.updatedAt),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis
-                )
-
                 Spacer(Modifier.height(24.dp))
 
                 Row(
