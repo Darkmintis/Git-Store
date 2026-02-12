@@ -52,9 +52,8 @@ class CachedTrendingDataSource(
     suspend fun getCachedTrendingRepos(): CachedRepoResponse? {
         return withContext(Dispatchers.IO) {
             try {
-                val platformName = "android"
-
-                val url = "$baseUrl/$platformName.json"
+                // Using apps.json for all Android apps (platform-agnostic naming)
+                val url = "$baseUrl/apps.json"
 
                 Logger.d { "🔍 Fetching cached trending repos from: $url" }
 

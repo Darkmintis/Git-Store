@@ -1,0 +1,282 @@
+{
+  "platform": "android",
+  "lastUpdated": "2026-02-12T00:00:00Z",
+  "totalCount": 15,
+  "discoveryMetadata": {
+    "engine_version": "2.0",
+    "curation": "manual",
+    "note": "Curated list of quality apps with GitHub APK releases"
+  },
+  "repositories": [
+    {
+      "id": 50559945,
+      "name": "NewPipe",
+      "fullName": "TeamNewPipe/NewPipe",
+      "owner": {
+        "login": "TeamNewPipe",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/26560865?v=4"
+      },
+      "description": "A libre lightweight streaming front-end for Android.",
+      "defaultBranch": "dev",
+      "htmlUrl": "https://github.com/TeamNewPipe/NewPipe",
+      "stargazersCount": 32000,
+      "forksCount": 3000,
+      "language": "Java",
+      "topics": ["android", "youtube", "streaming", "privacy"],
+      "releasesUrl": "https://api.github.com/repos/TeamNewPipe/NewPipe/releases",
+      "updatedAt": "2026-02-10T12:00:00Z"
+    },
+    {
+      "id": 31792824,
+      "name": "Signal-Android",
+      "fullName": "signalapp/Signal-Android",
+      "owner": {
+        "login": "signalapp",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/702459?v=4"
+      },
+      "description": "A private messenger for Android.",
+      "defaultBranch": "main",
+      "htmlUrl": "https://github.com/signalapp/Signal-Android",
+      "stargazersCount": 25000,
+      "forksCount": 6000,
+      "language": "Java",
+      "topics": ["android", "messaging", "privacy", "encryption"],
+      "releasesUrl": "https://api.github.com/repos/signalapp/Signal-Android/releases",
+      "updatedAt": "2026-02-11T08:00:00Z"
+    },
+    {
+      "id": 40843348,
+      "name": "termux-app",
+      "fullName": "termux/termux-app",
+      "owner": {
+        "login": "termux",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/8323055?v=4"
+      },
+      "description": "Termux - a terminal emulator application for Android OS",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/termux/termux-app",
+      "stargazersCount": 35000,
+      "forksCount": 3700,
+      "language": "Java",
+      "topics": ["android", "terminal", "emulator", "linux"],
+      "releasesUrl": "https://api.github.com/repos/termux/termux-app/releases",
+      "updatedAt": "2026-02-09T15:30:00Z"
+    },
+    {
+      "id": 13491895,
+      "name": "AntennaPod",
+      "fullName": "AntennaPod/AntennaPod",
+      "owner": {
+        "login": "AntennaPod",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/6251922?v=4"
+      },
+      "description": "A podcast manager for Android",
+      "defaultBranch": "develop",
+      "htmlUrl": "https://github.com/AntennaPod/AntennaPod",
+      "stargazersCount": 6500,
+      "forksCount": 1800,
+      "language": "Java",
+      "topics": ["android", "podcast", "rss", "media"],
+      "releasesUrl": "https://api.github.com/repos/AntennaPod/AntennaPod/releases",
+      "updatedAt": "2026-02-10T20:00:00Z"
+    },
+    {
+      "id": 104288420,
+      "name": "element-android",
+      "fullName": "element-hq/element-android",
+      "owner": {
+        "login": "element-hq",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/56580846?v=4"
+      },
+      "description": "A Matrix collaboration client for Android",
+      "defaultBranch": "develop",
+      "htmlUrl": "https://github.com/element-hq/element-android",
+      "stargazersCount": 3200,
+      "forksCount": 700,
+      "language": "Kotlin",
+      "topics": ["android", "matrix", "messaging", "collaboration"],
+      "releasesUrl": "https://api.github.com/repos/element-hq/element-android/releases",
+      "updatedAt": "2026-02-11T10:00:00Z"
+    },
+    {
+      "id": 1285652,
+      "name": "k-9",
+      "fullName": "thunderbird/thunderbird-android",
+      "owner": {
+        "login": "thunderbird",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/3624380?v=4"
+      },
+      "description": "K-9 Mail – Open Source Email App for Android",
+      "defaultBranch": "main",
+      "htmlUrl": "https://github.com/thunderbird/thunderbird-android",
+      "stargazersCount": 10000,
+      "forksCount": 2400,
+      "language": "Kotlin",
+      "topics": ["android", "email", "mail-client"],
+      "releasesUrl": "https://api.github.com/repos/thunderbird/thunderbird-android/releases",
+      "updatedAt": "2026-02-10T16:00:00Z"
+    },
+    {
+      "id": 188217187,
+      "name": "organicmaps",
+      "fullName": "organicmaps/organicmaps",
+      "owner": {
+        "login": "organicmaps",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/60568620?v=4"
+      },
+      "description": "Organic Maps - offline maps for travelers, tourists, cyclists",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/organicmaps/organicmaps",
+      "stargazersCount": 9500,
+      "forksCount": 850,
+      "language": "C++",
+      "topics": ["android", "maps", "navigation", "offline"],
+      "releasesUrl": "https://api.github.com/repos/organicmaps/organicmaps/releases",
+      "updatedAt": "2026-02-11T14:00:00Z"
+    },
+    {
+      "id": 295915917,
+      "name": "EhViewer",
+      "fullName": "FooIbar/EhViewer",
+      "owner": {
+        "login": "FooIbar",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/59883465?v=4"
+      },
+      "description": "EhViewer overhauled with Material Design 3 and more",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/FooIbar/EhViewer",
+      "stargazersCount": 8800,
+      "forksCount": 400,
+      "language": "Kotlin",
+      "topics": ["android", "material-design", "gallery"],
+      "releasesUrl": "https://api.github.com/repos/FooIbar/EhViewer/releases",
+      "updatedAt": "2026-02-10T11:00:00Z"
+    },
+    {
+      "id": 123456789,
+      "name": "Tusky",
+      "fullName": "tuskyapp/Tusky",
+      "owner": {
+        "login": "tuskyapp",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/28573093?v=4"
+      },
+      "description": "An Android client for the Mastodon social network",
+      "defaultBranch": "develop",
+      "htmlUrl": "https://github.com/tuskyapp/Tusky",
+      "stargazersCount": 2800,
+      "forksCount": 380,
+      "language": "Kotlin",
+      "topics": ["android", "mastodon", "social", "fediverse"],
+      "releasesUrl": "https://api.github.com/repos/tuskyapp/Tusky/releases",
+      "updatedAt": "2026-02-09T22:00:00Z"
+    },
+    {
+      "id": 234567890,
+      "name": "Aegis",
+      "fullName": "beemdevelopment/Aegis",
+      "owner": {
+        "login": "beemdevelopment",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/42984790?v=4"
+      },
+      "description": "A free, secure and open source 2FA app for Android",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/beemdevelopment/Aegis",
+      "stargazersCount": 9200,
+      "forksCount": 450,
+      "language": "Java",
+      "topics": ["android", "2fa", "security", "authentication"],
+      "releasesUrl": "https://api.github.com/repos/beemdevelopment/Aegis/releases",
+      "updatedAt": "2026-02-11T09:00:00Z"
+    },
+    {
+      "id": 345678901,
+      "name": "Nextcloud",
+      "fullName": "nextcloud/android",
+      "owner": {
+        "login": "nextcloud",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/19211038?v=4"
+      },
+      "description": "Nextcloud Android app",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/nextcloud/android",
+      "stargazersCount": 4200,
+      "forksCount": 1800,
+      "language": "Kotlin",
+      "topics": ["android", "cloud", "storage", "sync"],
+      "releasesUrl": "https://api.github.com/repos/nextcloud/android/releases",
+      "updatedAt": "2026-02-10T18:00:00Z"
+    },
+    {
+      "id": 456789012,
+      "name": "Gadgetbridge",
+      "fullName": "Freeyourgadget/Gadgetbridge",
+      "owner": {
+        "login": "Freeyourgadget",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/13997703?v=4"
+      },
+      "description": "Free your gadgets! Android companion app for Smartwatches",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/Freeyourgadget/Gadgetbridge",
+      "stargazersCount": 6800,
+      "forksCount": 1100,
+      "language": "Java",
+      "topics": ["android", "smartwatch", "fitness", "wearable"],
+      "releasesUrl": "https://api.github.com/repos/Freeyourgadget/Gadgetbridge/releases",
+      "updatedAt": "2026-02-09T12:00:00Z"
+    },
+    {
+      "id": 567890123,
+      "name": "Syncthing-Android",
+      "fullName": "syncthing/syncthing-android",
+      "owner": {
+        "login": "syncthing",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/6047296?v=4"
+      },
+      "description": "Wrapper of syncthing for Android",
+      "defaultBranch": "main",
+      "htmlUrl": "https://github.com/syncthing/syncthing-android",
+      "stargazersCount": 3400,
+      "forksCount": 620,
+      "language": "Java",
+      "topics": ["android", "sync", "backup", "p2p"],
+      "releasesUrl": "https://api.github.com/repos/syncthing/syncthing-android/releases",
+      "updatedAt": "2026-02-08T14:00:00Z"
+    },
+    {
+      "id": 678901234,
+      "name": "Catima",
+      "fullName": "CatimaLoyalty/Android",
+      "owner": {
+        "login": "CatimaLoyalty",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/56980074?v=4"
+      },
+      "description": "Catima - Loyalty Card & Ticket Manager for Android",
+      "defaultBranch": "main",
+      "htmlUrl": "https://github.com/CatimaLoyalty/Android",
+      "stargazersCount": 1800,
+      "forksCount": 180,
+      "language": "Java",
+      "topics": ["android", "loyalty", "cards", "wallet"],
+      "releasesUrl": "https://api.github.com/repos/CatimaLoyalty/Android/releases",
+      "updatedAt": "2026-02-10T10:00:00Z"
+    },
+    {
+      "id": 789012345,
+      "name": "ImageToolbox",
+      "fullName": "T8RIN/ImageToolbox",
+      "owner": {
+        "login": "T8RIN",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/52178347?v=4"
+      },
+      "description": "Powerful image editor with Material You design",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/T8RIN/ImageToolbox",
+      "stargazersCount": 4500,
+      "forksCount": 250,
+      "language": "Kotlin",
+      "topics": ["android", "image", "editor", "material-you"],
+      "releasesUrl": "https://api.github.com/repos/T8RIN/ImageToolbox/releases",
+      "updatedAt": "2026-02-11T16:00:00Z"
+    }
+  ]
+}

@@ -1,20 +1,13 @@
-name: Auto Discovery Engine
+name: Auto Discovery
 
 on:
   schedule:
-    # Run every 12 hours for more frequent updates
-    - cron: '0 */12 * * *'
+    - cron: '0 */24 * * *'  # Run daily at midnight UTC
   workflow_dispatch:
-    inputs:
-      force_update:
-        description: 'Force update even if no changes'
-        required: false
-        default: 'false'
 
 jobs:
-  discover-and-analyze:
+  discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     permissions:
       contents: write
@@ -24,92 +17,39 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pip'
-
-      - name: Cache discovery data
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pip
-            cached-data/
-          key: discovery-${{ github.run_id }}
-          restore-keys: |
-            discovery-
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r scripts/requirements.txt
+        run: pip install -r scripts/requirements.txt
 
-      - name: Run Discovery Engine
+      - name: Discover Android apps
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🔍 Starting Git Store Discovery Engine..."
-          python scripts/discover.py
-          echo "✅ Discovery complete"
+        run: python scripts/discover.py
 
-      - name: Analyze changes
-        id: analyze
+      - name: Check for changes
+        id: changes
         run: |
           if git status --porcelain cached-data/ | grep .; then
-            CHANGED_FILES=$(git diff --name-only cached-data/ | wc -l)
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "files_changed=$CHANGED_FILES" >> $GITHUB_OUTPUT
-            echo "📊 Found $CHANGED_FILES updated files"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "files_changed=0" >> $GITHUB_OUTPUT
-            echo "ℹ️ No changes detected"
           fi
 
-      - name: Generate discovery report
-        if: steps.analyze.outputs.changed == 'true'
+      - name: Commit and push to main
+        if: steps.changes.outputs.changed == 'true'
         run: |
-          echo "## Discovery Report" > discovery-report.md
-          echo "" >> discovery-report.md
-          echo "**Date**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> discovery-report.md
-          echo "**Files Updated**: ${{ steps.analyze.outputs.files_changed }}" >> discovery-report.md
-          echo "" >> discovery-report.md
-          echo "### Changed Files:" >> discovery-report.md
-          git diff --name-only cached-data/ >> discovery-report.md
-
-      - name: Commit and push updates
-        if: steps.analyze.outputs.changed == 'true' || github.event.inputs.force_update == 'true'
-        run: |
-          git config user.name "git-store-bot"
-          git config user.email "bot@gitstore.darkmintis.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add cached-data/
-          git commit -m "🚀 Auto Discovery: Updated repository data
+          git commit -m "Update discovered apps ($(date -u +'%Y-%m-%d %H:%M:%S UTC'))"
+          git push origin main
 
-          📊 Discovery Statistics:
-          - Files modified: ${{ steps.analyze.outputs.files_changed }}
-          - Run ID: ${{ github.run_id }}
-          - Timestamp: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
-          
-          [skip ci]" || echo "No changes to commit"
-
-          git push origin main || echo "Nothing to push"
-
-      - name: Upload discovery report
-        if: steps.analyze.outputs.changed == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: discovery-report-${{ github.run_id }}
-          path: discovery-report.md
-          retention-days: 30
-
-      - name: Summary
-        run: |
-          echo "### 🎯 Discovery Engine Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Status**: ${{ steps.analyze.outputs.changed == 'true' && '✅ Updates Found' || '⏭️ No Changes' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Files Updated**: ${{ steps.analyze.outputs.files_changed }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Execution Time**: $(date -u +'%H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      - name: No changes detected
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "No changes in discovered apps"

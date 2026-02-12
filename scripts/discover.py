@@ -2,386 +2,362 @@
 """
 Git Store - Intelligent Discovery Engine
 Advanced system for discovering high-quality Android apps from GitHub
-Uses smart filtering, caching, and multi-strategy discovery
+Uses smart filtering, trending analysis, and APK verification
+Based on proven fetching_trending.py algorithm
 """
 
 import os
 import sys
 import json
 import requests
-from datetime import datetime
-from typing import List, Dict, Optional, Set
-from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import List, Dict, Optional, Tuple
 import time
 from pathlib import Path
 
-@dataclass
-class RepoInfo:
-    """Structured repository information"""
-    id: int
-    name: str
-    full_name: str
-    owner_login: str
-    owner_avatar: str
-    description: Optional[str]
-    html_url: str
-    stars: int
-    forks: int
-    language: Optional[str]
-    topics: List[str]
-    updated_at: str
-    default_branch: str = "main"
-    releases_url: str = ""
+# Validate GITHUB_TOKEN early
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
+if not GITHUB_TOKEN:
+    print("ERROR: GITHUB_TOKEN environment variable is not set or is empty.", file=sys.stderr)
+    print("Please set GITHUB_TOKEN before running this script.", file=sys.stderr)
+    sys.exit(1)
 
-class DiscoveryEngine:
+HEADERS = {
+    'Authorization': f'token {GITHUB_TOKEN}',
+    'Accept': 'application/vnd.github.v3+json'
+}
+
+# Android platform configuration
+PLATFORM_CONFIG = {
+    'topics': ['android'],
+    'installer_extensions': ['.apk'],
+    'score_keywords': ['android', 'mobile', 'kotlin', 'java', 'apk']
+}
+
+MAX_RETRIES = 5
+INITIAL_BACKOFF = 2  # seconds
+
+def exponential_backoff_sleep(attempt: int, retry_after: Optional[int] = None) -> None:
+    """Sleep with exponential backoff, respecting Retry-After if provided"""
+    if retry_after:
+        sleep_time = retry_after
+        print(f"Rate limited - sleeping for {sleep_time}s (from Retry-After header)")
+    else:
+        sleep_time = min(INITIAL_BACKOFF * (2 ** attempt), 60)  # Cap at 60 seconds
+        print(f"Backoff attempt {attempt + 1} - sleeping for {sleep_time}s")
+    time.sleep(sleep_time)
+
+def make_request_with_retry(url: str, params: Optional[Dict] = None, timeout: int = 30) -> Tuple[Optional[requests.Response], Optional[str]]:
     """
-    Smart Discovery Engine for Android Apps
-    Features:
-    - Multi-strategy search (trending, topics, quality)
-    - Intelligent rate limit handling
-    - APK verification
-    - Quality scoring
-    - Deduplication
+    Make HTTP request with retry logic for rate limits and server errors
+    Returns: (response, error_message) - response is None if all retries failed
     """
-    
-    # Quality thresholds
-    MIN_STARS = 100
-    MIN_QUALITY_SCORE = 4  # Lowered to accept more quality apps
-    TARGET_APPS = 50
-    
-    # Search strategies
-    SEARCH_QUERIES = [
-        'android apk topic:android language:kotlin stars:>200',
-        'android app topic:android language:java stars:>150',
-        'fdroid topic:android stars:>100',
-        'android-app topic:mobile stars:>100',
-        'kotlin android topic:app stars:>100',
-    ]
-    
-    def __init__(self):
-        """Initialize discovery engine with GitHub API"""
-        self.token = os.environ.get('GITHUB_TOKEN')
-        if not self.token:
-            self._print_error("GITHUB_TOKEN environment variable not set")
-            sys.exit(1)
-        
-        self.headers = {
-            'Authorization': f'Bearer {self.token}',
-            'Accept': 'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28'
-        }
-        
-        self.session = requests.Session()
-        self.session.headers.update(self.headers)
-        self.rate_limit_remaining = None
-        self.rate_limit_reset = None
-        
-    def _print_error(self, message: str):
-        """Print error message"""
-        print(f"❌ {message}", file=sys.stderr)
-    
-    def _print_info(self, message: str):
-        """Print info message"""
-        print(f"ℹ️  {message}")
-    
-    def _print_success(self, message: str):
-        """Print success message"""
-        print(f"✅ {message}")
-    
-    def _check_rate_limit(self, response: requests.Response):
-        """Update rate limit info from response headers"""
-        self.rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
-        self.rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
-        
-        if self.rate_limit_remaining < 50:
-            self._print_info(f"Rate limit low: {self.rate_limit_remaining} requests remaining")
-    
-    def _handle_rate_limit(self):
-        """Handle rate limit - wait if needed"""
-        if self.rate_limit_remaining and self.rate_limit_remaining < 10:
-            if self.rate_limit_reset:
-                wait_time = max(self.rate_limit_reset - int(time.time()), 60)
-            else:
-                wait_time = 60
-            self._print_info(f"Rate limit reached. Waiting {wait_time}s...")
-            time.sleep(wait_time)
-    
-    def _make_request(self, url: str, params: Optional[Dict] = None, max_retries: int = 3) -> Optional[Dict]:
-        """Make API request with smart retry and rate limit handling"""
-        if params is None:
-            params = {}
-        
-        for attempt in range(max_retries):
-            try:
-                response = self.session.get(url, params=params, timeout=30)
-                self._check_rate_limit(response)
-                
-                if response.status_code == 200:
-                    return response.json()
-                
-                if response.status_code == 403:
-                    # Rate limited - wait and retry
-                    self._handle_rate_limit()
-                    continue
-                
-                if response.status_code == 404:
-                    return None  # Not found
-                
-                # Other errors
-                self._print_error(f"HTTP {response.status_code} for {url}")
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
-                    
-            except requests.RequestException as e:
-                self._print_error(f"Request failed: {e}")
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
-        
-        return None
-    
-    def _calculate_quality_score(self, repo: Dict) -> int:
-        """
-        Calculate quality score (0-10) based on multiple factors
-        Higher score = better quality app
-        """
-        score = 0
-        
-        # Stars weight
-        stars = repo.get('stargazers_count', 0)
-        if stars > 5000: score += 3
-        elif stars > 1000: score += 2
-        elif stars > 500: score += 1
-        
-        # Activity (recent updates)
-        updated_at = repo.get('updated_at', '')
-        if updated_at:
-            try:
-                updated = datetime.fromisoformat(updated_at.replace('Z', '+00:00'))
-                days_ago = (datetime.now().astimezone() - updated).days
-                if days_ago < 30: score += 2
-                elif days_ago < 90: score += 1
-            except (ValueError, AttributeError):
-                pass
-        
-        # Language preference
-        language = repo.get('language', '').lower()
-        if language in ['kotlin', 'java']: score += 2
-        
-        # Topics relevance
-        topics = repo.get('topics', [])
-        android_topics = ['android', 'apk', 'mobile', 'app', 'fdroid']
-        if any(topic in topics for topic in android_topics): score += 2
-        
-        # Description quality
-        if repo.get('description') and len(repo.get('description', '')) > 20: score += 1
-        
-        return min(score, 10)
-    
-    def _has_apk_releases(self, owner: str, repo: str) -> bool:
-        """Check if repository has APK releases (check more thoroughly)"""
-        url = f"https://api.github.com/repos/{owner}/{repo}/releases"
-        data = self._make_request(url, params={'per_page': 30})  # Check more releases
-        
-        if not data or not isinstance(data, list):
-            return False
-        
-        # Check releases for APK
-        for release in data:
-            assets = release.get('assets', [])
-            for asset in assets:
-                name = asset.get('name', '').lower()
-                # Check for APK files
-                if name.endswith('.apk'):
-                    return True
-        
-        return False
-    
-    def _search_repositories(self, query: str, per_page: int = 100) -> List[Dict]:
-        """Search GitHub repositories with given query"""
-        url = "https://api.github.com/search/repositories"
-        params = {
-            'q': query,
-            'sort': 'stars',
-            'order': 'desc',
-            'per_page': per_page
-        }
-        
-        data = self._make_request(url, params)
-        if not data:
-            return []
-        
-        return data.get('items', [])
-    
-    def _should_check_repository(self, repo: Dict, full_name: str, seen: Set[str]) -> bool:
-        """Check if repository should be processed"""
-        if full_name in seen:
-            return False
-        if repo['stargazers_count'] < self.MIN_STARS:
-            return False
-        return True
-    
-    def _process_repository(self, repo: Dict, seen: Set[str]) -> Optional[RepoInfo]:
-        """Process single repository - check quality and APK availability"""
-        full_name = repo['full_name']
-        
-        if full_name in seen:
-            return None
-        
-        # Quality check
-        quality_score = self._calculate_quality_score(repo)
-        if quality_score < self.MIN_QUALITY_SCORE:
-            return None
-        
-        owner = repo['owner']['login']
-        name = repo['name']
-        
-        # APK check (most expensive operation - do last)
-        if not self._has_apk_releases(owner, name):
-            return None
-        
-        # Create RepoInfo
-        return RepoInfo(
-            id=repo['id'],
-            name=name,
-            full_name=full_name,
-            owner_login=owner,
-            owner_avatar=repo['owner']['avatar_url'],
-            description=repo.get('description'),
-            html_url=repo['html_url'],
-            stars=repo['stargazers_count'],
-            forks=repo['forks_count'],
-            language=repo.get('language'),
-            topics=repo.get('topics', []),
-            updated_at=repo['updated_at'],
-            default_branch=repo.get('default_branch', 'main'),
-            releases_url=repo.get('releases_url', '')
-        )
-    
-    def discover_apps(self) -> List[RepoInfo]:
-        """
-        Main discovery process using multi-strategy approach
-        Returns list of high-quality Android apps
-        """
-        print("\n" + "=" * 70)
-        print("🚀 Git Store - Intelligent Discovery Engine".center(70))
-        print("=" * 70 + "\n")
-        
-        discovered_apps: List[RepoInfo] = []
-        seen: Set[str] = set()
-        total_checked = 0
-        
-        for idx, query in enumerate(self.SEARCH_QUERIES, 1):
-            if len(discovered_apps) >= self.TARGET_APPS:
-                break
-            
-            print(f"\n📊 Strategy {idx}/{len(self.SEARCH_QUERIES)}")
-            print(f"🔍 Query: {query[:60]}...")
-            
-            repos = self._search_repositories(query)
-            print(f"📦 Found {len(repos)} candidates")
-            
-            for repo in repos:
-                if len(discovered_apps) >= self.TARGET_APPS:
-                    break
-                
-                total_checked += 1
-                full_name = repo['full_name']
-                
-                # Quick filters first
-                if not self._should_check_repository(repo, full_name, seen):
-                    continue
-                
-                seen.add(full_name)
-                
-                print(f"   [{len(discovered_apps)+1}/{self.TARGET_APPS}] Checking {full_name}...", end=' ')
-                
-                repo_info = self._process_repository(repo, seen)
-                if repo_info:
-                    discovered_apps.append(repo_info)
-                    print(f"✅ (⭐ {repo_info.stars})")
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = requests.get(url, headers=HEADERS, params=params, timeout=timeout)
+
+            # Success
+            if response.status_code == 200:
+                return response, None
+
+            # Rate limiting (403 or 429)
+            if response.status_code in [403, 429]:
+                retry_after = response.headers.get('Retry-After')
+                retry_after_int = int(retry_after) if retry_after and retry_after.isdigit() else None
+
+                # Check if this is actually a rate limit (GitHub returns specific message)
+                try:
+                    error_data = response.json()
+                    is_rate_limit = 'rate limit' in error_data.get('message', '').lower()
+                except:
+                    is_rate_limit = response.status_code == 429
+
+                if is_rate_limit:
+                    print(f"Rate limit hit (status {response.status_code}) for {url}")
+                    if attempt < MAX_RETRIES - 1:
+                        exponential_backoff_sleep(attempt, retry_after_int)
+                        continue
+                    else:
+                        error_msg = f"Rate limit exceeded after {MAX_RETRIES} retries"
+                        print(f"ERROR: {error_msg}", file=sys.stderr)
+                        return None, error_msg
                 else:
-                    print("❌")
-                
-                time.sleep(0.2)  # Rate limiting protection
-        
-        # Sort by stars descending
-        discovered_apps.sort(key=lambda r: r.stars, reverse=True)
-        
-        print("\n" + "=" * 70)
-        print("✅ Discovery Complete".center(70))
-        print(f"Apps Found: {len(discovered_apps)} | Repositories Checked: {total_checked}".center(70))
-        print("=" * 70 + "\n")
-        
-        return discovered_apps
-    
-    def save_results(self, repos: List[RepoInfo]):
-        """Save discovery results to structured JSON"""
-        output_data = {
-            'platform': 'android',
-            'lastUpdated': datetime.now().astimezone().isoformat(),
-            'totalCount': len(repos),
-            'discoveryMetadata': {
-                'engine_version': '2.0',
-                'strategies_used': len(self.SEARCH_QUERIES),
-                'min_quality_score': self.MIN_QUALITY_SCORE,
-                'min_stars': self.MIN_STARS
-            },
-            'repositories': [
-                {
-                    'id': r.id,
-                    'name': r.name,
-                    'fullName': r.full_name,
-                    'owner': {
-                        'login': r.owner_login,
-                        'avatarUrl': r.owner_avatar
-                    },
-                    'description': r.description,
-                    'defaultBranch': r.default_branch,
-                    'htmlUrl': r.html_url,
-                    'stargazersCount': r.stars,
-                    'forksCount': r.forks,
-                    'language': r.language,
-                    'topics': r.topics,
-                    'releasesUrl': r.releases_url,
-                    'updatedAt': r.updated_at
-                }
-                for r in repos
-            ]
-        }
-        
-        # Ensure directory exists
-        output_dir = Path('cached-data/trending')
-        output_dir.mkdir(parents=True, exist_ok=True)
-        
-        output_file = output_dir / 'android.json'
-        
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(output_data, f, indent=2, ensure_ascii=False)
-        
-        self._print_success(f"Saved to {output_file}")
-        print(f"📊 Total apps: {len(repos)}")
-        print(f"💾 File size: {output_file.stat().st_size / 1024:.1f} KB")
+                    # 403 but not rate limit (e.g., permission denied)
+                    error_msg = f"Access forbidden (403) for {url}: {response.text[:200]}"
+                    print(f"ERROR: {error_msg}", file=sys.stderr)
+                    return None, error_msg
+
+            # Server errors (5xx)
+            if 500 <= response.status_code < 600:
+                print(f"Server error {response.status_code} for {url}: {response.text[:200]}")
+                if attempt < MAX_RETRIES - 1:
+                    exponential_backoff_sleep(attempt)
+                    continue
+                else:
+                    error_msg = f"Server error {response.status_code} after {MAX_RETRIES} retries"
+                    print(f"ERROR: {error_msg}", file=sys.stderr)
+                    return None, error_msg
+
+            # Other non-200 responses (4xx except 403/429)
+            error_msg = f"Request failed with status {response.status_code} for {url}: {response.text[:200]}"
+            print(f"ERROR: {error_msg}", file=sys.stderr)
+            return None, error_msg
+
+        except requests.Timeout:
+            print(f"Timeout for {url} (attempt {attempt + 1}/{MAX_RETRIES})")
+            if attempt < MAX_RETRIES - 1:
+                exponential_backoff_sleep(attempt)
+                continue
+            else:
+                error_msg = f"Timeout after {MAX_RETRIES} attempts"
+                print(f"ERROR: {error_msg}", file=sys.stderr)
+                return None, error_msg
+
+        except Exception as e:
+            error_msg = f"Exception during request to {url}: {str(e)}"
+            print(f"ERROR: {error_msg}", file=sys.stderr)
+            if attempt < MAX_RETRIES - 1:
+                exponential_backoff_sleep(attempt)
+                continue
+            else:
+                return None, error_msg
+
+    return None, "Max retries exceeded"
+
+def calculate_quality_score(repo: Dict) -> int:
+    """Calculate relevance score for a repository"""
+    score = 5
+    topics = [t.lower() for t in repo.get('topics', [])]
+    language = (repo.get('language') or '').lower()
+    desc = (repo.get('description') or '').lower()
+
+    keywords = PLATFORM_CONFIG['score_keywords']
+
+    for keyword in keywords:
+        if keyword in topics:
+            score += 10
+        if keyword in desc:
+            score += 3
+
+    if language in ['kotlin', 'c++', 'rust', 'c#', 'swift', 'dart', 'java']:
+        score += 5
+
+    if 'cross-platform' in topics or 'multiplatform' in topics:
+        score += 8
+
+    return score
+
+def check_repo_has_apk_releases(owner: str, repo_name: str) -> bool:
+    """Check if repository has APK files in releases with retry logic"""
+    url = f'https://api.github.com/repos/{owner}/{repo_name}/releases'
+
+    response, error = make_request_with_retry(url, params={'per_page': 10}, timeout=10)
+
+    if response is None:
+        print(f"Failed to check APK releases for {owner}/{repo_name}: {error}")
+        return False
+
+    try:
+        releases = response.json()
+
+        # Find first stable release (NOT draft, NOT prerelease)
+        stable_release = None
+        for release in releases:
+            if not release.get('draft') and not release.get('prerelease'):
+                stable_release = release
+                break
+
+        if not stable_release or not stable_release.get('assets'):
+            return False
+
+        # Check for APK files
+        extensions = PLATFORM_CONFIG['installer_extensions']
+        for asset in stable_release['assets']:
+            asset_name = asset['name'].lower()
+            if any(asset_name.endswith(ext) for ext in extensions):
+                return True
+
+        return False
+
+    except Exception as e:
+        print(f"Error parsing releases for {owner}/{repo_name}: {e}")
+        return False
+
+def build_query(base_query: str, topics: List[str]) -> str:
+    """Build GitHub search query with support for multiple topics"""
+    if not topics:
+        return base_query
+
+    # Create OR condition for multiple topics
+    if len(topics) == 1:
+        topic_query = f"topic:{topics[0]}"
+    else:
+        topic_parts = [f"topic:{topic}" for topic in topics]
+        topic_query = " OR ".join(topic_parts)
+        topic_query = f"({topic_query})"
+
+    return f"{base_query} {topic_query}"
+
+def discover_android_apps(desired_count: int = 50) -> List[Dict]:
+    """Discover trending Android repositories with APK releases"""
+    print(f"\n{'='*60}")
+    print(f"🚀 DISCOVERING ANDROID APPS WITH APK RELEASES")
+    print(f"{'='*60}")
+
+    url = 'https://api.github.com/search/repositories'
+    topics = PLATFORM_CONFIG['topics']
+
+    results: List[Dict] = []
+    seen: set = set()
+    attempt = 0
+    max_attempts = 4
+    min_count = 10  # Ensure at least this many if possible
+
+    while len(results) < desired_count and attempt < max_attempts:
+        attempt += 1
+        days = 7 * (2 ** (attempt - 1))  # 7, 14, 28, 56 days
+        stars_min = max(500 // (2 ** (attempt - 1)), 50)  # 500, 250, 125, 62 -> min 50
+        current_topics = topics if attempt < 3 else []  # Drop topics on later attempts to broaden search
+
+        past_date = (datetime.utcnow() - timedelta(days=days)).strftime('%Y-%m-%d')
+        base_query = f'stars:>{stars_min} archived:false pushed:>={past_date}'
+        query = build_query(base_query, current_topics)
+
+        print(f"\n📊 Attempt {attempt}/{max_attempts}: ")
+        print(f"   ⏰ Days: {days} | ⭐ Stars>{stars_min} | 🏷️  Topics: {current_topics or 'none'}")
+        print(f"   🔍 Query: {query}")
+
+        page = 1
+        max_pages = 10  # Increased to allow more candidates
+
+        while len(results) < desired_count and page <= max_pages:
+            print(f"\n   📄 Fetching API page {page}...")
+
+            params = {
+                'q': query,
+                'sort': 'stars',
+                'order': 'desc',
+                'per_page': 100,
+                'page': page
+            }
+
+            response, error = make_request_with_retry(url, params=params, timeout=30)
+
+            if response is None:
+                print(f"   ❌ Failed to fetch page {page}: {error}")
+                break
+
+            try:
+                data = response.json()
+                items = data.get('items', [])
+
+                print(f"   📦 Got {len(items)} repositories from API")
+
+                if not items:
+                    break
+
+                # Score and filter candidates
+                candidates = []
+                for repo in items:
+                    score = calculate_quality_score(repo)
+                    if score >= 5:
+                        candidates.append((repo, score))
+
+                # Sort by score and take top 50
+                candidates.sort(key=lambda x: x[1], reverse=True)
+                candidates = [repo for repo, _ in candidates[:50]]
+
+                print(f"   ✨ Checking {len(candidates)} top candidates for APK releases...")
+
+                # Check each candidate for APK releases
+                for repo in candidates:
+                    if len(results) >= desired_count:
+                        break
+
+                    full_name = repo['full_name']
+                    if full_name in seen:
+                        continue
+
+                    owner = repo['owner']['login']
+                    name = repo['name']
+
+                    print(f"      [{len(results)+1}/{desired_count}] {owner}/{name}...", end=' ')
+
+                    if check_repo_has_apk_releases(owner, name):
+                        # Transform to summary format
+                        summary = {
+                            'id': repo['id'],
+                            'name': repo['name'],
+                            'fullName': full_name,
+                            'owner': {
+                                'login': owner,
+                                'avatarUrl': repo['owner']['avatar_url']
+                            },
+                            'description': repo.get('description'),
+                            'defaultBranch': repo.get('default_branch', 'main'),
+                            'htmlUrl': repo['html_url'],
+                            'stargazersCount': repo['stargazers_count'],
+                            'forksCount': repo['forks_count'],
+                            'language': repo.get('language'),
+                            'topics': repo.get('topics', []),
+                            'releasesUrl': repo['releases_url'],
+                            'updatedAt': repo['updated_at']
+                        }
+                        results.append(summary)
+                        seen.add(full_name)
+                        print(f"✅ FOUND (⭐ {repo['stargazers_count']})")
+                    else:
+                        print(f"❌ No stable APK")
+
+                    seen.add(full_name)  # Add to seen even if no APK to avoid rechecking
+                    time.sleep(0.5)  # Rate limit protection
+
+                page += 1
+
+            except Exception as e:
+                print(f"   ❌ Error processing page {page}: {e}", file=sys.stderr)
+                break
+
+    # Sort final results by stargazers count descending and truncate to desired count
+    results.sort(key=lambda x: x['stargazersCount'], reverse=True)
+    results = results[:desired_count]
+
+    print(f"\n{'='*60}")
+    print(f"✅ DISCOVERY COMPLETE: {len(results)} apps found")
+    print(f"{'='*60}\n")
+
+    return results
 
 def main():
-    """Main entry point"""
-    try:
-        engine = DiscoveryEngine()
-        apps = engine.discover_apps()
-        
-        if apps:
-            engine.save_results(apps)
-            print("\n🎉 Discovery completed successfully!\n")
-            return 0
-        else:
-            print("\n⚠️  No apps discovered\n", file=sys.stderr)
-            return 1
-            
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Discovery interrupted by user\n")
-        return 130
-    except Exception as e:
-        print(f"\n❌ Fatal error: {e}\n", file=sys.stderr)
-        return 1
+    """Main function to discover and save Android apps"""
+    timestamp = datetime.utcnow().isoformat() + 'Z'
+
+    print(f"\n🚀 Starting Android App Discovery...")
+
+    repos = discover_android_apps(desired_count=50)
+
+    if not repos:
+        print("⚠️  Warning: No apps discovered!", file=sys.stderr)
+        sys.exit(1)
+
+    output = {
+        'platform': 'android',
+        'lastUpdated': timestamp,
+        'totalCount': len(repos),
+        'repositories': repos
+    }
+
+    # Save to file
+    output_dir = 'cached-data/trending'
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file = f'{output_dir}/apps.json'
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
+
+    print(f"✅ Saved {len(repos)} apps to {output_file}")
+    print(f"📊 File size: {os.path.getsize(output_file) / 1024:.1f} KB")
+    print("\n🎉 Discovery completed successfully!\n")
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
