@@ -111,11 +111,10 @@ class CachedTrendingDataSource(
 }
 
 /**
- * Cached repository data for a specific platform
+ * Cached repository data (Android apps)
  */
 @Serializable
 data class CachedRepoResponse(
-    val platform: String,
     val lastUpdated: String,
     val totalCount: Int,
     val repositories: List<CachedGithubRepoSummary>

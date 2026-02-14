@@ -341,7 +341,6 @@ def main():
         sys.exit(1)
 
     output = {
-        'platform': 'android',
         'lastUpdated': timestamp,
         'totalCount': len(repos),
         'repositories': repos
