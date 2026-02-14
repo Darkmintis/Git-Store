@@ -28,7 +28,7 @@ jobs:
       run: chmod +x gradlew
       
     - name: Decode and prepare keystore
-      if: secrets.KEYSTORE_FILE
+      if: ${{ secrets.KEYSTORE_FILE }}
       run: |
         echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/gitstore-release.keystore
         echo "KEYSTORE_PATH=$GITHUB_WORKSPACE/gitstore-release.keystore" >> $GITHUB_ENV
