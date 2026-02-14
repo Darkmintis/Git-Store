@@ -21,16 +21,26 @@ val localGithubClientId =
     (localProps.getProperty("GITHUB_CLIENT_ID") ?: "Ov23linTY28VFpFjFiI9").trim()
 
 // Signing configuration from environment or local.properties
-val keystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
-val keystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.getProperty("KEYSTORE_PASSWORD")
-val keyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
-val keyPassword = System.getenv("KEY_PASSWORD") ?: localProps.getProperty("KEY_PASSWORD")
+val signingKeystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
+val signingKeystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.getProperty("KEYSTORE_PASSWORD")
+val signingKeyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
+val signingKeyPassword = System.getenv("KEY_PASSWORD") ?: localProps.getProperty("KEY_PASSWORD")
+
+// Debug logging
+println("=== Signing Config Debug ===")
+println("KEYSTORE_FILE: ${if (signingKeystorePath.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeystorePath.length} chars)"}")
+println("KEYSTORE_PASSWORD: ${if (signingKeystorePassword.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeystorePassword.length} chars)"}")
+println("KEY_ALIAS: ${if (signingKeyAlias.isNullOrBlank()) "EMPTY/NULL" else "SET ($signingKeyAlias)"}")
+println("KEY_PASSWORD: ${if (signingKeyPassword.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeyPassword.length} chars)"}")
 
 // Check if all signing credentials are available and not empty
-val hasSigningConfig = !keystorePath.isNullOrBlank() && 
-                       !keystorePassword.isNullOrBlank() && 
-                       !keyAlias.isNullOrBlank() && 
-                       !keyPassword.isNullOrBlank()
+val hasSigningConfig = !signingKeystorePath.isNullOrBlank() && 
+                       !signingKeystorePassword.isNullOrBlank() && 
+                       !signingKeyAlias.isNullOrBlank() && 
+                       !signingKeyPassword.isNullOrBlank()
+
+println("Has complete signing config: $hasSigningConfig")
+println("=========================")
 
 android {
     namespace = "com.darkmintis.gitstore"
@@ -67,11 +77,14 @@ android {
     signingConfigs {
         if (hasSigningConfig) {
             create("release") {
-                storeFile = file(keystorePath!!)
-                storePassword = keystorePassword
-                this.keyAlias = keyAlias
-                this.keyPassword = keyPassword
+                storeFile = file(signingKeystorePath!!)
+                storePassword = signingKeystorePassword
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+                println("✅ Signing config created successfully")
             }
+        } else {
+            println("⚠️ Skipping signing config - credentials not available")
         }
     }
     
