@@ -26,6 +26,12 @@ val keystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.getPrope
 val keyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
 val keyPassword = System.getenv("KEY_PASSWORD") ?: localProps.getProperty("KEY_PASSWORD")
 
+// Check if all signing credentials are available and not empty
+val hasSigningConfig = !keystorePath.isNullOrBlank() && 
+                       !keystorePassword.isNullOrBlank() && 
+                       !keyAlias.isNullOrBlank() && 
+                       !keyPassword.isNullOrBlank()
+
 android {
     namespace = "com.darkmintis.gitstore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -59,9 +65,9 @@ android {
     }
     
     signingConfigs {
-        if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+        if (hasSigningConfig) {
             create("release") {
-                storeFile = file(keystorePath)
+                storeFile = file(keystorePath!!)
                 storePassword = keystorePassword
                 this.keyAlias = keyAlias
                 this.keyPassword = keyPassword
@@ -78,7 +84,7 @@ android {
                 "proguard-rules.pro"
             )
             // Sign the APK if signing config is available
-            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+            if (hasSigningConfig) {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
