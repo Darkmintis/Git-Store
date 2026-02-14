@@ -20,6 +20,12 @@ val localProps = Properties().apply {
 val localGithubClientId =
     (localProps.getProperty("GITHUB_CLIENT_ID") ?: "Ov23linTY28VFpFjFiI9").trim()
 
+// Signing configuration from environment or local.properties
+val keystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
+val keystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.getProperty("KEYSTORE_PASSWORD")
+val keyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
+val keyPassword = System.getenv("KEY_PASSWORD") ?: localProps.getProperty("KEY_PASSWORD")
+
 android {
     namespace = "com.darkmintis.gitstore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -51,6 +57,18 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    
+    signingConfigs {
+        create("release") {
+            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+                storeFile = file(keystorePath)
+                storePassword = keystorePassword
+                keyAlias = keyAlias
+                keyPassword = keyPassword
+            }
+        }
+    }
+    
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
@@ -59,6 +77,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Sign the APK if signing config is available
+            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {

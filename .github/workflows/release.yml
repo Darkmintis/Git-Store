@@ -10,6 +10,9 @@ jobs:
   build-release:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -24,25 +27,41 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Build Release APK
+    - name: Decode and prepare keystore
+      if: ${{ secrets.KEYSTORE_FILE != '' }}
+      run: |
+        echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/gitstore-release.keystore
+        echo "KEYSTORE_PATH=$GITHUB_WORKSPACE/gitstore-release.keystore" >> $GITHUB_ENV
+      
+    - name: Build Release APK (Signed)
+      if: ${{ secrets.KEYSTORE_FILE != '' }}
+      run: ./gradlew assembleRelease --no-daemon --stacktrace
+      env:
+        KEYSTORE_FILE: ${{ env.KEYSTORE_PATH }}
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    
+    - name: Build Release APK (Unsigned)
+      if: ${{ secrets.KEYSTORE_FILE == '' }}
       run: ./gradlew assembleRelease --no-daemon --stacktrace
       
-    - name: Sign APK
-      if: ${{ secrets.KEYSTORE_FILE }}
+    - name: Rename APK
       run: |
-        echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > release.keystore
-        ./gradlew assembleRelease \
-          -Pandroid.injected.signing.store.file=release.keystore \
-          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
-          -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-          -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+        cd app/build/outputs/apk/release
+        if [ -f "app-release.apk" ]; then
+          mv app-release.apk GitStore-v${{ github.ref_name }}.apk
+        else
+          mv app-release-unsigned.apk GitStore-v${{ github.ref_name }}.apk
+        fi
       
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: |
-          app/build/outputs/apk/release/app-release.apk
+        files: app/build/outputs/apk/release/*.apk
         generate_release_notes: true
+        draft: false
+        prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
