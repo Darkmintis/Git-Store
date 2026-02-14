@@ -26,21 +26,11 @@ val signingKeystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.g
 val signingKeyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
 val signingKeyPassword = System.getenv("KEY_PASSWORD") ?: localProps.getProperty("KEY_PASSWORD")
 
-// Debug logging
-println("=== Signing Config Debug ===")
-println("KEYSTORE_FILE: ${if (signingKeystorePath.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeystorePath.length} chars)"}")
-println("KEYSTORE_PASSWORD: ${if (signingKeystorePassword.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeystorePassword.length} chars)"}")
-println("KEY_ALIAS: ${if (signingKeyAlias.isNullOrBlank()) "EMPTY/NULL" else "SET ($signingKeyAlias)"}")
-println("KEY_PASSWORD: ${if (signingKeyPassword.isNullOrBlank()) "EMPTY/NULL" else "SET (${signingKeyPassword.length} chars)"}")
-
 // Check if all signing credentials are available and not empty
 val hasSigningConfig = !signingKeystorePath.isNullOrBlank() && 
                        !signingKeystorePassword.isNullOrBlank() && 
                        !signingKeyAlias.isNullOrBlank() && 
                        !signingKeyPassword.isNullOrBlank()
-
-println("Has complete signing config: $hasSigningConfig")
-println("=========================")
 
 android {
     namespace = "com.darkmintis.gitstore"
@@ -81,10 +71,7 @@ android {
                 storePassword = signingKeystorePassword
                 keyAlias = signingKeyAlias
                 keyPassword = signingKeyPassword
-                println("✅ Signing config created successfully")
             }
-        } else {
-            println("⚠️ Skipping signing config - credentials not available")
         }
     }
     
