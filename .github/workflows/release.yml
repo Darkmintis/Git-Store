@@ -44,9 +44,9 @@ jobs:
       run: |
         cd app/build/outputs/apk/release
         if [ -f "app-release.apk" ]; then
-          mv app-release.apk GitStore-v${{ github.ref_name }}.apk
+          mv app-release.apk GitStore-${{ github.ref_name }}.apk
         else
-          mv app-release-unsigned.apk GitStore-v${{ github.ref_name }}.apk
+          mv app-release-unsigned.apk GitStore-${{ github.ref_name }}.apk
         fi
       
     - name: Create Release
