@@ -28,23 +28,18 @@ jobs:
       run: chmod +x gradlew
       
     - name: Decode and prepare keystore
-      if: ${{ secrets.KEYSTORE_FILE != '' }}
+      if: secrets.KEYSTORE_FILE
       run: |
         echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/gitstore-release.keystore
         echo "KEYSTORE_PATH=$GITHUB_WORKSPACE/gitstore-release.keystore" >> $GITHUB_ENV
       
-    - name: Build Release APK (Signed)
-      if: ${{ secrets.KEYSTORE_FILE != '' }}
+    - name: Build Release APK
       run: ./gradlew assembleRelease --no-daemon --stacktrace
       env:
         KEYSTORE_FILE: ${{ env.KEYSTORE_PATH }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-    
-    - name: Build Release APK (Unsigned)
-      if: ${{ secrets.KEYSTORE_FILE == '' }}
-      run: ./gradlew assembleRelease --no-daemon --stacktrace
       
     - name: Rename APK
       run: |
