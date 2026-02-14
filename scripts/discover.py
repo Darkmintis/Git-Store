@@ -10,7 +10,7 @@ import os
 import sys
 import json
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional, Tuple
 import time
 from pathlib import Path
@@ -69,7 +69,7 @@ def make_request_with_retry(url: str, params: Optional[Dict] = None, timeout: in
                 try:
                     error_data = response.json()
                     is_rate_limit = 'rate limit' in error_data.get('message', '').lower()
-                except:
+                except Exception:
                     is_rate_limit = response.status_code == 429
 
                 if is_rate_limit:
@@ -200,9 +200,9 @@ def build_query(base_query: str, topics: List[str]) -> str:
 
 def discover_android_apps(desired_count: int = 50) -> List[Dict]:
     """Discover trending Android repositories with APK releases"""
-    print(f"\n{'='*60}")
-    print(f"🚀 DISCOVERING ANDROID APPS WITH APK RELEASES")
-    print(f"{'='*60}")
+    print("\n" + "="*60)
+    print("🚀 DISCOVERING ANDROID APPS WITH APK RELEASES")
+    print("="*60)
 
     url = 'https://api.github.com/search/repositories'
     topics = PLATFORM_CONFIG['topics']
@@ -211,7 +211,6 @@ def discover_android_apps(desired_count: int = 50) -> List[Dict]:
     seen: set = set()
     attempt = 0
     max_attempts = 4
-    min_count = 10  # Ensure at least this many if possible
 
     while len(results) < desired_count and attempt < max_attempts:
         attempt += 1
@@ -219,7 +218,7 @@ def discover_android_apps(desired_count: int = 50) -> List[Dict]:
         stars_min = max(500 // (2 ** (attempt - 1)), 50)  # 500, 250, 125, 62 -> min 50
         current_topics = topics if attempt < 3 else []  # Drop topics on later attempts to broaden search
 
-        past_date = (datetime.utcnow() - timedelta(days=days)).strftime('%Y-%m-%d')
+        past_date = (datetime.now(timezone.utc) - timedelta(days=days)).strftime('%Y-%m-%d')
         base_query = f'stars:>{stars_min} archived:false pushed:>={past_date}'
         query = build_query(base_query, current_topics)
 
@@ -307,7 +306,7 @@ def discover_android_apps(desired_count: int = 50) -> List[Dict]:
                         seen.add(full_name)
                         print(f"✅ FOUND (⭐ {repo['stargazers_count']})")
                     else:
-                        print(f"❌ No stable APK")
+                        print("❌ No stable APK")
 
                     seen.add(full_name)  # Add to seen even if no APK to avoid rechecking
                     time.sleep(0.5)  # Rate limit protection
@@ -330,9 +329,9 @@ def discover_android_apps(desired_count: int = 50) -> List[Dict]:
 
 def main():
     """Main function to discover and save Android apps"""
-    timestamp = datetime.utcnow().isoformat() + 'Z'
+    timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
-    print(f"\n🚀 Starting Android App Discovery...")
+    print("\n🚀 Starting Android App Discovery...")
 
     repos = discover_android_apps(desired_count=50)
 

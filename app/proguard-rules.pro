@@ -8,6 +8,11 @@
 -keep class kotlinx.** { *; }
 -keepclassmembers class kotlin.** { *; }
 
+# Kotlin Time (fix for R8 missing class error)
+-keep class kotlin.time.** { *; }
+-keepclassmembers class kotlin.time.** { *; }
+-dontwarn kotlin.time.**
+
 # Coroutines
 -keep class kotlinx.coroutines.** { *; }
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
