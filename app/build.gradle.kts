@@ -59,11 +59,11 @@ android {
     }
     
     signingConfigs {
-        create("release") {
-            if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+        if (keystorePath != null && keystorePassword != null && keyAlias != null && keyPassword != null) {
+            create("release") {
                 storeFile = file(keystorePath)
                 storePassword = keystorePassword
-                keyAlias = keyAlias
+                this.keyAlias = keyAlias
                 keyPassword = keyPassword
             }
         }
