@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.androidx.room)
 }
 
-val appVersionName = "1.0.0"
-val appVersionCode = 1
+val appVersionName = "1.1.0"
+val appVersionCode = 2
 
 // Load local.properties for secrets like GITHUB_CLIENT_ID
 val localProps = Properties().apply {
@@ -76,6 +76,11 @@ android {
     }
     
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
