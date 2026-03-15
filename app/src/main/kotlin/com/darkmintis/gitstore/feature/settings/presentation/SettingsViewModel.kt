@@ -98,7 +98,10 @@ class SettingsViewModel(
             }
 
             is SettingsAction.OnBrowserOpen -> {
-                browserHelper.openUrl(url = action.url)
+                browserHelper.openUrl(
+                    url = action.url,
+                    useChooser = action.useChooser
+                )
             }
 
             is SettingsAction.OnThemeColorSelected -> {
