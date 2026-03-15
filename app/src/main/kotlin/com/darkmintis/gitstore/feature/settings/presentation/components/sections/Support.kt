@@ -35,6 +35,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsAction
 
+private const val USDT_BEACON_ADDRESS = "0xc9A505E28D0ff4C627Bd64c62e885d7f4e94c6d5"
+private const val USDT_BEACON_FALLBACK_URL = "ethereum://"
+
+private fun usdtBeaconUri(): String {
+    return if (USDT_BEACON_ADDRESS.isBlank()) {
+        USDT_BEACON_FALLBACK_URL
+    } else {
+        "ethereum:$USDT_BEACON_ADDRESS"
+    }
+}
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun LazyListScope.support(
     onAction: (SettingsAction) -> Unit,
@@ -50,12 +61,8 @@ fun LazyListScope.support(
 
         Spacer(Modifier.height(8.dp))
 
-        // Donate Card
         ElevatedCard(
-            onClick = {
-                // TODO: Add your donation URL
-                onAction(SettingsAction.OnBrowserOpen("https://github.com/sponsors/Darkmintis"))
-            },
+            onClick = { },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.elevatedCardColors(
@@ -115,7 +122,18 @@ fun LazyListScope.support(
                 Spacer(Modifier.height(16.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable {
+                            onAction(
+                                SettingsAction.OnBrowserOpen(
+                                    url = usdtBeaconUri(),
+                                    useChooser = true
+                                )
+                            )
+                        }
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -129,7 +147,7 @@ fun LazyListScope.support(
                     Spacer(Modifier.size(8.dp))
 
                     Text(
-                        text = "Buy me a coffee",
+                        text = "Donate with crypto",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary
