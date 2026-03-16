@@ -10,5 +10,10 @@ data class SettingsState(
     val isUserLoggedIn: Boolean = false,
     val isAmoledThemeEnabled: Boolean = false,
     val isDarkTheme: Boolean? = null,
+    val isCheckingGitStoreUpdate: Boolean = false,
+    val isGitStoreUpdateAvailable: Boolean = false,
+    val latestGitStoreVersion: String? = null,
+    val latestGitStoreDownloadUrl: String? = null,
+    val gitStoreUpdateErrorMessage: String? = null,
 )
 
