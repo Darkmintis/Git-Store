@@ -18,12 +18,6 @@ Git Store makes it easy to find and install Android apps published on GitHub. Br
 
 ## Roadmap
 
-### v1.1.0 (Current Focus)
-
-- Stronger app trust and update reliability
-- Better install/update experience for GitHub APK releases
-- Improved discovery quality and freshness
-
 ### v1.2.0 (Short Plan)
 
 - Background update checks with optional notifications
