@@ -122,6 +122,8 @@
     <!-- About -->
     <string name="version">Version</string>
     <string name="help_support">Help &amp; Support</string>
+    <string name="check_now">Check now</string>
+    <string name="update_check_failed">Could not check for updates</string>
 
     <!-- Account -->
     <string name="logout">Logout</string>

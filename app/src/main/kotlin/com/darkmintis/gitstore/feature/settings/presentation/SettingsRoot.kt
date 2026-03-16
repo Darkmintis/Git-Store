@@ -160,6 +160,7 @@ fun SettingsScreen(
             }
 
             about(
+                state = state,
                 onAction = onAction
             )
 
