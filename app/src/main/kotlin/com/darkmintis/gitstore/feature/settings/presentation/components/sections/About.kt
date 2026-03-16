@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material.icons.filled.SystemUpdate
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -24,10 +25,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -36,10 +39,12 @@ import androidx.compose.ui.unit.dp
 
 import androidx.compose.ui.res.stringResource
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsAction
+import com.darkmintis.gitstore.feature.settings.presentation.SettingsState
 import com.darkmintis.gitstore.feature.settings.presentation.utils.getVersionName
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun LazyListScope.about(
+    state: SettingsState,
     onAction: (SettingsAction) -> Unit,
 ) {
     item {
@@ -70,6 +75,58 @@ fun LazyListScope.about(
                         color = MaterialTheme.colorScheme.outline,
                     )
                 }
+            )
+
+            HorizontalDivider()
+
+            AboutItem(
+                icon = Icons.Filled.SystemUpdate,
+                title = stringResource(R.string.check_for_updates),
+                actions = {
+                    val actionText = when {
+                        state.isCheckingGitStoreUpdate -> stringResource(R.string.checking)
+                        state.isGitStoreUpdateAvailable -> stringResource(
+                            R.string.update_to_version,
+                            state.latestGitStoreVersion ?: ""
+                        )
+                        else -> stringResource(R.string.check_now)
+                    }
+
+                    TextButton(
+                        onClick = {
+                            if (state.isGitStoreUpdateAvailable && !state.latestGitStoreDownloadUrl.isNullOrBlank()) {
+                                onAction(
+                                    SettingsAction.OnBrowserOpen(
+                                        url = state.latestGitStoreDownloadUrl,
+                                        useChooser = false
+                                    )
+                                )
+                            } else {
+                                onAction(SettingsAction.OnCheckGitStoreUpdateClick)
+                            }
+                        },
+                        enabled = !state.isCheckingGitStoreUpdate
+                    ) {
+                        Text(text = actionText)
+                    }
+                }
+            )
+
+            val updateStatusText = when {
+                state.isCheckingGitStoreUpdate -> stringResource(R.string.checking)
+                state.gitStoreUpdateErrorMessage != null -> stringResource(R.string.update_check_failed)
+                state.isGitStoreUpdateAvailable -> stringResource(R.string.update_available)
+                else -> stringResource(R.string.no_updates_available)
+            }
+
+            Text(
+                text = updateStatusText,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
             HorizontalDivider()
