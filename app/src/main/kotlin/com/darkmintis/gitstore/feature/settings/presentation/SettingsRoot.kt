@@ -45,9 +45,11 @@ import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.appearance
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
@@ -132,6 +134,31 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
+            appearance(
+                selectedThemeColor = state.selectedThemeColor,
+                isAmoledThemeEnabled = state.isAmoledThemeEnabled,
+                onAmoledThemeToggled = { enabled ->
+                    onAction(SettingsAction.OnAmoledThemeToggled(enabled))
+                },
+                isDarkTheme = state.isDarkTheme,
+                onDarkThemeChange = { isDark ->
+                    onAction(SettingsAction.OnDarkThemeChange(isDark))
+                },
+                onThemeColorSelected = { theme ->
+                    onAction(SettingsAction.OnThemeColorSelected(theme))
+                },
+                isUsingSystemFont = state.selectedFontTheme == FontTheme.SYSTEM,
+                onUseSystemFontToggled = { useSystem ->
+                    onAction(SettingsAction.OnFontThemeSelected(
+                        if (useSystem) FontTheme.SYSTEM else FontTheme.CUSTOM
+                    ))
+                }
+            )
+
+            item {
+                Spacer(Modifier.height(24.dp))
+            }
+
             moreApps(
                 onAction = onAction
             )
