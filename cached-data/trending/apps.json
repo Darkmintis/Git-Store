@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-25T04:03:29.081074Z",
+  "lastUpdated": "2026-05-26T03:49:14.067176Z",
   "totalCount": 50,
   "repositories": [
     {
@@ -13,8 +13,8 @@
       "description": "A V2Ray client for Android, support Xray core and v2fly core",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/2dust/v2rayNG",
-      "stargazersCount": 56752,
-      "forksCount": 7461,
+      "stargazersCount": 56810,
+      "forksCount": 7463,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -31,7 +31,7 @@
         "xtls"
       ],
       "releasesUrl": "https://api.github.com/repos/2dust/v2rayNG/releases{/id}",
-      "updatedAt": "2026-05-25T03:40:34Z"
+      "updatedAt": "2026-05-26T02:55:47Z"
     },
     {
       "id": 661957079,
@@ -44,8 +44,8 @@
       "description": "基于无障碍，高级选择器，订阅规则的自定义屏幕点击安卓应用 | An Android APP with custom screen tapping based on Accessibility, Advanced Selectors, and Subscription Rules",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/gkd-kit/gkd",
-      "stargazersCount": 38872,
-      "forksCount": 1847,
+      "stargazersCount": 38900,
+      "forksCount": 1846,
       "language": "Kotlin",
       "topics": [
         "accessibility",
@@ -60,7 +60,7 @@
         "webassembly"
       ],
       "releasesUrl": "https://api.github.com/repos/gkd-kit/gkd/releases{/id}",
-      "updatedAt": "2026-05-25T03:39:18Z"
+      "updatedAt": "2026-05-26T02:39:21Z"
     },
     {
       "id": 41889031,
@@ -73,8 +73,8 @@
       "description": "A libre lightweight streaming front-end for Android.",
       "defaultBranch": "dev",
       "htmlUrl": "https://github.com/TeamNewPipe/NewPipe",
-      "stargazersCount": 38320,
-      "forksCount": 3589,
+      "stargazersCount": 38339,
+      "forksCount": 3591,
       "language": "Java",
       "topics": [
         "4k",
@@ -90,7 +90,7 @@
         "youtube-video"
       ],
       "releasesUrl": "https://api.github.com/repos/TeamNewPipe/NewPipe/releases{/id}",
-      "updatedAt": "2026-05-25T03:52:35Z"
+      "updatedAt": "2026-05-26T02:12:18Z"
     },
     {
       "id": 283211901,
@@ -103,8 +103,8 @@
       "description": "Browse media content with your own rules on Android TV",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/yuliskov/SmartTube",
-      "stargazersCount": 30210,
-      "forksCount": 1617,
+      "stargazersCount": 30223,
+      "forksCount": 1619,
       "language": "Java",
       "topics": [
         "android",
@@ -116,32 +116,34 @@
         "rxjava-android"
       ],
       "releasesUrl": "https://api.github.com/repos/yuliskov/SmartTube/releases{/id}",
-      "updatedAt": "2026-05-25T03:32:22Z"
+      "updatedAt": "2026-05-26T03:03:08Z"
     },
     {
-      "id": 471494981,
-      "name": "revanced-manager",
-      "fullName": "ReVanced/revanced-manager",
+      "id": 481797111,
+      "name": "Seal",
+      "fullName": "JunkFood02/Seal",
       "owner": {
-        "login": "ReVanced",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/101597779?v=4"
+        "login": "JunkFood02",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/69683722?v=4"
       },
-      "description": "💊 Application to use ReVanced on Android ",
+      "description": "🦭 Video/Audio Downloader for Android, based on yt-dlp",
       "defaultBranch": "main",
-      "htmlUrl": "https://github.com/ReVanced/revanced-manager",
-      "stargazersCount": 27990,
-      "forksCount": 1087,
+      "htmlUrl": "https://github.com/JunkFood02/Seal",
+      "stargazersCount": 26452,
+      "forksCount": 1195,
       "language": "Kotlin",
       "topics": [
         "android",
+        "f-droid",
         "jetpack-compose",
-        "manager",
-        "modding",
-        "patching",
-        "revanced"
+        "kotlin",
+        "material-design",
+        "youtube-dl",
+        "youtube-downloader",
+        "yt-dlp"
       ],
-      "releasesUrl": "https://api.github.com/repos/ReVanced/revanced-manager/releases{/id}",
-      "updatedAt": "2026-05-25T03:04:06Z"
+      "releasesUrl": "https://api.github.com/repos/JunkFood02/Seal/releases{/id}",
+      "updatedAt": "2026-05-26T02:54:38Z"
     },
     {
       "id": 798049841,
@@ -154,8 +156,8 @@
       "description": "基于自定义规则的番剧采集APP，支持流媒体在线观看，支持弹幕，支持实时超分辨率。",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/Predidit/Kazumi",
-      "stargazersCount": 25467,
-      "forksCount": 734,
+      "stargazersCount": 25500,
+      "forksCount": 735,
       "language": "Dart",
       "topics": [
         "android",
@@ -168,7 +170,7 @@
         "windows"
       ],
       "releasesUrl": "https://api.github.com/repos/Predidit/Kazumi/releases{/id}",
-      "updatedAt": "2026-05-25T04:00:06Z"
+      "updatedAt": "2026-05-26T02:42:00Z"
     },
     {
       "id": 311241324,
@@ -181,8 +183,8 @@
       "description": "ehviewer，用爱发电，快乐前行",
       "defaultBranch": "BiLi_PC_Gamer",
       "htmlUrl": "https://github.com/xiaojieonly/Ehviewer_CN_SXJ",
-      "stargazersCount": 24155,
-      "forksCount": 633,
+      "stargazersCount": 24168,
+      "forksCount": 634,
       "language": "C",
       "topics": [
         "android",
@@ -202,7 +204,7 @@
         "screenshot"
       ],
       "releasesUrl": "https://api.github.com/repos/xiaojieonly/Ehviewer_CN_SXJ/releases{/id}",
-      "updatedAt": "2026-05-25T03:57:55Z"
+      "updatedAt": "2026-05-26T03:19:35Z"
     },
     {
       "id": 743704912,
@@ -215,8 +217,8 @@
       "description": "Free and open source manga reader for Android",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/mihonapp/mihon",
-      "stargazersCount": 20880,
-      "forksCount": 1180,
+      "stargazersCount": 20919,
+      "forksCount": 1183,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -230,7 +232,7 @@
         "tachiyomi-alternative"
       ],
       "releasesUrl": "https://api.github.com/repos/mihonapp/mihon/releases{/id}",
-      "updatedAt": "2026-05-25T03:48:31Z"
+      "updatedAt": "2026-05-26T03:21:12Z"
     },
     {
       "id": 519845229,
@@ -243,7 +245,7 @@
       "description": "集找番、追番、看番的一站式弹幕追番平台，云收藏同步 (Bangumi)，离线缓存，BitTorrent，弹幕云过滤。100% Kotlin/Compose Multiplatform",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/open-ani/animeko",
-      "stargazersCount": 17925,
+      "stargazersCount": 17940,
       "forksCount": 478,
       "language": "Kotlin",
       "topics": [
@@ -268,7 +270,7 @@
         "windows"
       ],
       "releasesUrl": "https://api.github.com/repos/open-ani/animeko/releases{/id}",
-      "updatedAt": "2026-05-25T03:31:42Z"
+      "updatedAt": "2026-05-26T02:42:20Z"
     },
     {
       "id": 324829379,
@@ -281,8 +283,8 @@
       "description": "🍃 Organic Maps is a free Android & iOS offline maps app for more than 6M travelers, tourists, hikers, and cyclists. It uses crowd-sourced OpenStreetMap data and is developed with love by the community. No ads, no tracking, no data collection, no crapware. Please donate to support the development!",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/organicmaps/organicmaps",
-      "stargazersCount": 14122,
-      "forksCount": 1431,
+      "stargazersCount": 14129,
+      "forksCount": 1434,
       "language": "C++",
       "topics": [
         "android",
@@ -307,7 +309,7 @@
         "travelers"
       ],
       "releasesUrl": "https://api.github.com/repos/organicmaps/organicmaps/releases{/id}",
-      "updatedAt": "2026-05-25T01:07:03Z"
+      "updatedAt": "2026-05-25T19:19:47Z"
     },
     {
       "id": 1101281251,
@@ -320,8 +322,8 @@
       "description": "🩵 A free, open-source app store for GitHub releases — browse, discover, and install apps with one click. Powered by Kotlin and Compose Multiplatform for Android & Desktop (Linux, MacOS, Windows).",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/OpenHub-Store/GitHub-Store",
-      "stargazersCount": 13962,
-      "forksCount": 500,
+      "stargazersCount": 13992,
+      "forksCount": 499,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -341,7 +343,7 @@
         "windows"
       ],
       "releasesUrl": "https://api.github.com/repos/OpenHub-Store/GitHub-Store/releases{/id}",
-      "updatedAt": "2026-05-25T03:59:22Z"
+      "updatedAt": "2026-05-26T02:50:17Z"
     },
     {
       "id": 478710402,
@@ -354,7 +356,7 @@
       "description": "🖼️ Image Toolbox is a powerful app for advanced image manipulation. It offers dozens of features, from basic tools like crop and draw to filters, OCR, and a wide range of image processing options",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/T8RIN/ImageToolbox",
-      "stargazersCount": 12934,
+      "stargazersCount": 12945,
       "forksCount": 562,
       "language": "Kotlin",
       "topics": [
@@ -380,7 +382,7 @@
         "upscaling"
       ],
       "releasesUrl": "https://api.github.com/repos/T8RIN/ImageToolbox/releases{/id}",
-      "updatedAt": "2026-05-25T03:03:28Z"
+      "updatedAt": "2026-05-26T01:07:15Z"
     },
     {
       "id": 436609718,
@@ -393,8 +395,8 @@
       "description": "An alternative frontend for YouTube, for Android.",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/libre-tube/LibreTube",
-      "stargazersCount": 11958,
-      "forksCount": 602,
+      "stargazersCount": 11975,
+      "forksCount": 607,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -404,7 +406,7 @@
         "youtube"
       ],
       "releasesUrl": "https://api.github.com/repos/libre-tube/LibreTube/releases{/id}",
-      "updatedAt": "2026-05-24T20:43:46Z"
+      "updatedAt": "2026-05-26T03:25:35Z"
     },
     {
       "id": 7716883,
@@ -417,8 +419,8 @@
       "description": "AnkiDroid: Anki flashcards on Android. Your secret trick to achieve superhuman information retention.",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/ankidroid/Anki-Android",
-      "stargazersCount": 11168,
-      "forksCount": 2795,
+      "stargazersCount": 11172,
+      "forksCount": 2797,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -431,7 +433,7 @@
         "srs"
       ],
       "releasesUrl": "https://api.github.com/repos/ankidroid/Anki-Android/releases{/id}",
-      "updatedAt": "2026-05-25T03:19:04Z"
+      "updatedAt": "2026-05-25T18:24:00Z"
     },
     {
       "id": 677376114,
@@ -444,8 +446,8 @@
       "description": "YouTube Music client for Android",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/MetrolistGroup/Metrolist",
-      "stargazersCount": 9605,
-      "forksCount": 649,
+      "stargazersCount": 9627,
+      "forksCount": 653,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -470,7 +472,7 @@
         "ytmusic"
       ],
       "releasesUrl": "https://api.github.com/repos/MetrolistGroup/Metrolist/releases{/id}",
-      "updatedAt": "2026-05-25T03:50:00Z"
+      "updatedAt": "2026-05-26T02:18:02Z"
     },
     {
       "id": 628160489,
@@ -483,8 +485,8 @@
       "description": "A cross-platform music app using YouTube Music for backend",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/maxrave-dev/SimpMusic",
-      "stargazersCount": 9232,
-      "forksCount": 428,
+      "stargazersCount": 9238,
+      "forksCount": 427,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -507,7 +509,7 @@
         "youtube-music"
       ],
       "releasesUrl": "https://api.github.com/repos/maxrave-dev/SimpMusic/releases{/id}",
-      "updatedAt": "2026-05-25T02:07:12Z"
+      "updatedAt": "2026-05-26T02:05:07Z"
     },
     {
       "id": 57452143,
@@ -520,7 +522,7 @@
       "description": "Bitwarden mobile apps (Password Manager and Authenticator) for Android.",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/bitwarden/android",
-      "stargazersCount": 8879,
+      "stargazersCount": 8881,
       "forksCount": 985,
       "language": "Kotlin",
       "topics": [
@@ -531,7 +533,7 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/bitwarden/android/releases{/id}",
-      "updatedAt": "2026-05-24T23:12:51Z"
+      "updatedAt": "2026-05-25T17:29:30Z"
     },
     {
       "id": 497133950,
@@ -544,8 +546,8 @@
       "description": "Full-featured audio/video downloader for Android using yt-dlp",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/deniscerri/ytdlnis",
-      "stargazersCount": 8676,
-      "forksCount": 375,
+      "stargazersCount": 8692,
+      "forksCount": 376,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -562,7 +564,31 @@
         "yt-dlp-gui"
       ],
       "releasesUrl": "https://api.github.com/repos/deniscerri/ytdlnis/releases{/id}",
-      "updatedAt": "2026-05-25T03:28:34Z"
+      "updatedAt": "2026-05-26T02:40:07Z"
+    },
+    {
+      "id": 268006778,
+      "name": "AppManager",
+      "fullName": "MuntashirAkon/AppManager",
+      "owner": {
+        "login": "MuntashirAkon",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/8176128?v=4"
+      },
+      "description": "A full-featured package manager and viewer for Android",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/MuntashirAkon/AppManager",
+      "stargazersCount": 8127,
+      "forksCount": 469,
+      "language": "Java",
+      "topics": [
+        "adb",
+        "android",
+        "apks",
+        "material-design",
+        "package-manager"
+      ],
+      "releasesUrl": "https://api.github.com/repos/MuntashirAkon/AppManager/releases{/id}",
+      "updatedAt": "2026-05-25T17:09:50Z"
     },
     {
       "id": 681215919,
@@ -575,8 +601,8 @@
       "description": "The patching of Android kernel and Android system",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/bmax121/APatch",
-      "stargazersCount": 7500,
-      "forksCount": 719,
+      "stargazersCount": 7501,
+      "forksCount": 721,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -588,7 +614,7 @@
         "root"
       ],
       "releasesUrl": "https://api.github.com/repos/bmax121/APatch/releases{/id}",
-      "updatedAt": "2026-05-25T03:58:25Z"
+      "updatedAt": "2026-05-25T18:40:39Z"
     },
     {
       "id": 248400799,
@@ -601,7 +627,7 @@
       "description": "An app to view libraries used in apps in your device.",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/LibChecker/LibChecker",
-      "stargazersCount": 6885,
+      "stargazersCount": 6887,
       "forksCount": 424,
       "language": "Kotlin",
       "topics": [
@@ -611,7 +637,32 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/LibChecker/LibChecker/releases{/id}",
-      "updatedAt": "2026-05-24T08:46:11Z"
+      "updatedAt": "2026-05-25T22:10:42Z"
+    },
+    {
+      "id": 568329126,
+      "name": "sdmaid-se",
+      "fullName": "d4rken-org/sdmaid-se",
+      "owner": {
+        "login": "d4rken-org",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/109539113?v=4"
+      },
+      "description": "SD Maid 2/SE is Android's most thorough cleaning tool.",
+      "defaultBranch": "main",
+      "htmlUrl": "https://github.com/d4rken-org/sdmaid-se",
+      "stargazersCount": 6816,
+      "forksCount": 802,
+      "language": "Kotlin",
+      "topics": [
+        "android",
+        "cleaner",
+        "cleaner-app",
+        "filemanager",
+        "sdmaid",
+        "system-cleaner"
+      ],
+      "releasesUrl": "https://api.github.com/repos/d4rken-org/sdmaid-se/releases{/id}",
+      "updatedAt": "2026-05-26T03:21:46Z"
     },
     {
       "id": 107244490,
@@ -624,7 +675,7 @@
       "description": "Lightweight vault and password manager for Android, KeePassDX allows editing encrypted data in a single file in KeePass format and fill in the forms in a secure way.",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/Kunzisoft/KeePassDX",
-      "stargazersCount": 6799,
+      "stargazersCount": 6805,
       "forksCount": 363,
       "language": "Kotlin",
       "topics": [
@@ -640,32 +691,7 @@
         "vault"
       ],
       "releasesUrl": "https://api.github.com/repos/Kunzisoft/KeePassDX/releases{/id}",
-      "updatedAt": "2026-05-24T21:43:07Z"
-    },
-    {
-      "id": 568329126,
-      "name": "sdmaid-se",
-      "fullName": "d4rken-org/sdmaid-se",
-      "owner": {
-        "login": "d4rken-org",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/109539113?v=4"
-      },
-      "description": "SD Maid 2/SE is Android's most thorough cleaning tool.",
-      "defaultBranch": "main",
-      "htmlUrl": "https://github.com/d4rken-org/sdmaid-se",
-      "stargazersCount": 6790,
-      "forksCount": 802,
-      "language": "Kotlin",
-      "topics": [
-        "android",
-        "cleaner",
-        "cleaner-app",
-        "filemanager",
-        "sdmaid",
-        "system-cleaner"
-      ],
-      "releasesUrl": "https://api.github.com/repos/d4rken-org/sdmaid-se/releases{/id}",
-      "updatedAt": "2026-05-25T01:52:35Z"
+      "updatedAt": "2026-05-25T21:57:01Z"
     },
     {
       "id": 430540203,
@@ -678,8 +704,8 @@
       "description": "DataBackup for Android 7.0+",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/XayahSuSuSu/Android-DataBackup",
-      "stargazersCount": 6716,
-      "forksCount": 273,
+      "stargazersCount": 6721,
+      "forksCount": 274,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -689,33 +715,7 @@
         "zstd"
       ],
       "releasesUrl": "https://api.github.com/repos/XayahSuSuSu/Android-DataBackup/releases{/id}",
-      "updatedAt": "2026-05-25T02:01:41Z"
-    },
-    {
-      "id": 395236152,
-      "name": "Hail",
-      "fullName": "aistra0528/Hail",
-      "owner": {
-        "login": "aistra0528",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/55940744?v=4"
-      },
-      "description": "Disable / Hide / Suspend / Uninstall Android apps without root.",
-      "defaultBranch": "master",
-      "htmlUrl": "https://github.com/aistra0528/Hail",
-      "stargazersCount": 5871,
-      "forksCount": 203,
-      "language": "Kotlin",
-      "topics": [
-        "android",
-        "android-application",
-        "debloat",
-        "non-root",
-        "privacy",
-        "root",
-        "shizuku"
-      ],
-      "releasesUrl": "https://api.github.com/repos/aistra0528/Hail/releases{/id}",
-      "updatedAt": "2026-05-25T02:34:05Z"
+      "updatedAt": "2026-05-25T17:12:56Z"
     },
     {
       "id": 60561834,
@@ -743,7 +743,7 @@
         "opensource"
       ],
       "releasesUrl": "https://api.github.com/repos/nextcloud/android/releases{/id}",
-      "updatedAt": "2026-05-24T21:45:52Z"
+      "updatedAt": "2026-05-25T15:04:10Z"
     },
     {
       "id": 142456757,
@@ -756,7 +756,7 @@
       "description": "A Reddit client for Android",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/Docile-Alligator/Infinity-For-Reddit",
-      "stargazersCount": 5339,
+      "stargazersCount": 5338,
       "forksCount": 495,
       "language": "Java",
       "topics": [
@@ -766,33 +766,7 @@
         "reddit-client"
       ],
       "releasesUrl": "https://api.github.com/repos/Docile-Alligator/Infinity-For-Reddit/releases{/id}",
-      "updatedAt": "2026-05-24T18:26:45Z"
-    },
-    {
-      "id": 1104751416,
-      "name": "morphe-manager",
-      "fullName": "MorpheApp/morphe-manager",
-      "owner": {
-        "login": "MorpheApp",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/246280111?v=4"
-      },
-      "description": "Morphe app patcher for Android",
-      "defaultBranch": "main",
-      "htmlUrl": "https://github.com/MorpheApp/morphe-manager",
-      "stargazersCount": 5233,
-      "forksCount": 103,
-      "language": "Kotlin",
-      "topics": [
-        "android",
-        "apk",
-        "app",
-        "morphe",
-        "patcher",
-        "patches",
-        "youtube"
-      ],
-      "releasesUrl": "https://api.github.com/repos/MorpheApp/morphe-manager/releases{/id}",
-      "updatedAt": "2026-05-25T02:27:50Z"
+      "updatedAt": "2026-05-25T22:40:55Z"
     },
     {
       "id": 270683546,
@@ -805,8 +779,8 @@
       "description": "DNS over HTTPS / DNS over Tor / DNSCrypt client, WireGuard proxifier, firewall, and connection tracker for Android.",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/celzero/rethink-app",
-      "stargazersCount": 4909,
-      "forksCount": 284,
+      "stargazersCount": 4911,
+      "forksCount": 285,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -827,7 +801,7 @@
         "wireguard"
       ],
       "releasesUrl": "https://api.github.com/repos/celzero/rethink-app/releases{/id}",
-      "updatedAt": "2026-05-24T23:11:01Z"
+      "updatedAt": "2026-05-25T22:17:49Z"
     },
     {
       "id": 884278258,
@@ -840,7 +814,7 @@
       "description": "More Expressive InstallerX !",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/wxxsfxyzm/InstallerX-Revived",
-      "stargazersCount": 4887,
+      "stargazersCount": 4895,
       "forksCount": 197,
       "language": "Kotlin",
       "topics": [
@@ -855,7 +829,31 @@
         "shizuku"
       ],
       "releasesUrl": "https://api.github.com/repos/wxxsfxyzm/InstallerX-Revived/releases{/id}",
-      "updatedAt": "2026-05-24T23:14:47Z"
+      "updatedAt": "2026-05-26T03:24:36Z"
+    },
+    {
+      "id": 684744357,
+      "name": "Canta",
+      "fullName": "samolego/Canta",
+      "owner": {
+        "login": "samolego",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/34912839?v=4"
+      },
+      "description": "Uninstall any Android app without root (with power of Shizuku). Debloat your device as you wish, no PC required.",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/samolego/Canta",
+      "stargazersCount": 4863,
+      "forksCount": 113,
+      "language": "Kotlin",
+      "topics": [
+        "android",
+        "app-manager",
+        "debloater",
+        "no-root",
+        "shizuku"
+      ],
+      "releasesUrl": "https://api.github.com/repos/samolego/Canta/releases{/id}",
+      "updatedAt": "2026-05-26T02:24:05Z"
     },
     {
       "id": 948839453,
@@ -868,7 +866,7 @@
       "description": "The most powerful AI agent and AI chat software on Android/Operit是一款Android上能力最为强大、发展最久的AI Agent",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/AAswordman/Operit",
-      "stargazersCount": 4784,
+      "stargazersCount": 4793,
       "forksCount": 387,
       "language": "Kotlin",
       "topics": [
@@ -883,7 +881,7 @@
         "terminal"
       ],
       "releasesUrl": "https://api.github.com/repos/AAswordman/Operit/releases{/id}",
-      "updatedAt": "2026-05-25T03:08:07Z"
+      "updatedAt": "2026-05-26T02:07:06Z"
     },
     {
       "id": 342909700,
@@ -896,7 +894,7 @@
       "description": "A mod for the Discord Android App",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/Aliucord/Aliucord",
-      "stargazersCount": 4737,
+      "stargazersCount": 4738,
       "forksCount": 222,
       "language": "Kotlin",
       "topics": [
@@ -906,7 +904,7 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/Aliucord/Aliucord/releases{/id}",
-      "updatedAt": "2026-05-24T14:10:34Z"
+      "updatedAt": "2026-05-25T16:55:02Z"
     },
     {
       "id": 407972408,
@@ -919,7 +917,7 @@
       "description": "A search-focused Android launcher",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/MM2-0/Kvaesitso",
-      "stargazersCount": 4731,
+      "stargazersCount": 4737,
       "forksCount": 221,
       "language": "Kotlin",
       "topics": [
@@ -929,7 +927,7 @@
         "launcher"
       ],
       "releasesUrl": "https://api.github.com/repos/MM2-0/Kvaesitso/releases{/id}",
-      "updatedAt": "2026-05-25T03:54:54Z"
+      "updatedAt": "2026-05-26T03:37:47Z"
     },
     {
       "id": 516598834,
@@ -942,8 +940,8 @@
       "description": "The cross-platform open-source app built for handwriting",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/saber-notes/saber",
-      "stargazersCount": 4481,
-      "forksCount": 323,
+      "stargazersCount": 4482,
+      "forksCount": 325,
       "language": "Dart",
       "topics": [
         "android",
@@ -962,7 +960,7 @@
         "windows"
       ],
       "releasesUrl": "https://api.github.com/repos/saber-notes/saber/releases{/id}",
-      "updatedAt": "2026-05-25T02:22:32Z"
+      "updatedAt": "2026-05-26T02:00:48Z"
     },
     {
       "id": 19025014,
@@ -975,8 +973,8 @@
       "description": "AboutLibraries automatically collects all dependencies and licenses of any gradle project (Kotlin MultiPlatform), and provides easy to integrate UI components for Android and Compose Multiplatform environments ",
       "defaultBranch": "develop",
       "htmlUrl": "https://github.com/mikepenz/AboutLibraries",
-      "stargazersCount": 4302,
-      "forksCount": 555,
+      "stargazersCount": 4301,
+      "forksCount": 554,
       "language": "Kotlin",
       "topics": [
         "aboutlibraries",
@@ -999,7 +997,7 @@
         "wasm"
       ],
       "releasesUrl": "https://api.github.com/repos/mikepenz/AboutLibraries/releases{/id}",
-      "updatedAt": "2026-05-24T14:09:08Z"
+      "updatedAt": "2026-05-25T11:26:19Z"
     },
     {
       "id": 161651256,
@@ -1012,7 +1010,7 @@
       "description": "Android TV Client for Jellyfin",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/jellyfin/jellyfin-androidtv",
-      "stargazersCount": 4275,
+      "stargazersCount": 4278,
       "forksCount": 829,
       "language": "Kotlin",
       "topics": [
@@ -1023,7 +1021,7 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/jellyfin/jellyfin-androidtv/releases{/id}",
-      "updatedAt": "2026-05-25T01:29:04Z"
+      "updatedAt": "2026-05-26T00:42:13Z"
     },
     {
       "id": 5550567,
@@ -1036,8 +1034,8 @@
       "description": ":phone: The ownCloud Android App",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/owncloud/android",
-      "stargazersCount": 4130,
-      "forksCount": 3062,
+      "stargazersCount": 4131,
+      "forksCount": 3061,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -1045,7 +1043,7 @@
         "owncloud"
       ],
       "releasesUrl": "https://api.github.com/repos/owncloud/android/releases{/id}",
-      "updatedAt": "2026-05-23T19:01:56Z"
+      "updatedAt": "2026-05-25T13:06:04Z"
     },
     {
       "id": 371924281,
@@ -1058,7 +1056,7 @@
       "description": "Third-party native Jellyfin Android app",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/jarnedemeulemeester/findroid",
-      "stargazersCount": 4040,
+      "stargazersCount": 4042,
       "forksCount": 271,
       "language": "Kotlin",
       "topics": [
@@ -1067,7 +1065,7 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/jarnedemeulemeester/findroid/releases{/id}",
-      "updatedAt": "2026-05-25T04:02:25Z"
+      "updatedAt": "2026-05-25T22:24:20Z"
     },
     {
       "id": 52308441,
@@ -1080,8 +1078,8 @@
       "description": "a free (libre) open source, mobile OS for Ethereum",
       "defaultBranch": "develop",
       "htmlUrl": "https://github.com/status-im/status-legacy",
-      "stargazersCount": 4013,
-      "forksCount": 992,
+      "stargazersCount": 4014,
+      "forksCount": 993,
       "language": "Clojure",
       "topics": [
         "android",
@@ -1101,7 +1099,7 @@
         "wallet"
       ],
       "releasesUrl": "https://api.github.com/repos/status-im/status-legacy/releases{/id}",
-      "updatedAt": "2026-05-25T02:35:21Z"
+      "updatedAt": "2026-05-25T06:10:16Z"
     },
     {
       "id": 598940882,
@@ -1114,7 +1112,7 @@
       "description": "An Android native video player",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/anilbeesetti/nextplayer",
-      "stargazersCount": 3972,
+      "stargazersCount": 3973,
       "forksCount": 252,
       "language": "Kotlin",
       "topics": [
@@ -1133,7 +1131,7 @@
         "video-player"
       ],
       "releasesUrl": "https://api.github.com/repos/anilbeesetti/nextplayer/releases{/id}",
-      "updatedAt": "2026-05-25T00:51:07Z"
+      "updatedAt": "2026-05-25T22:30:39Z"
     },
     {
       "id": 743200516,
@@ -1146,8 +1144,8 @@
       "description": "Free and open source manga reader for Android",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/komikku-app/komikku",
-      "stargazersCount": 3956,
-      "forksCount": 183,
+      "stargazersCount": 3959,
+      "forksCount": 184,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -1167,7 +1165,7 @@
         "tachiyomisy"
       ],
       "releasesUrl": "https://api.github.com/repos/komikku-app/komikku/releases{/id}",
-      "updatedAt": "2026-05-25T03:35:11Z"
+      "updatedAt": "2026-05-26T02:26:49Z"
     },
     {
       "id": 288218307,
@@ -1180,8 +1178,8 @@
       "description": "A simple, rational music player for android",
       "defaultBranch": "dev",
       "htmlUrl": "https://github.com/OxygenCobalt/Auxio",
-      "stargazersCount": 3834,
-      "forksCount": 274,
+      "stargazersCount": 3842,
+      "forksCount": 273,
       "language": "Kotlin",
       "topics": [
         "album",
@@ -1203,34 +1201,7 @@
         "songs"
       ],
       "releasesUrl": "https://api.github.com/repos/OxygenCobalt/Auxio/releases{/id}",
-      "updatedAt": "2026-05-25T00:50:19Z"
-    },
-    {
-      "id": 227615179,
-      "name": "android-app",
-      "fullName": "ProtonVPN/android-app",
-      "owner": {
-        "login": "ProtonVPN",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/25028530?v=4"
-      },
-      "description": "Official ProtonVPN Android app",
-      "defaultBranch": "master",
-      "htmlUrl": "https://github.com/ProtonVPN/android-app",
-      "stargazersCount": 3631,
-      "forksCount": 471,
-      "language": "Kotlin",
-      "topics": [
-        "android",
-        "ikev2",
-        "java",
-        "kotlin",
-        "openvpn",
-        "protonvpn",
-        "strongswan",
-        "vpn"
-      ],
-      "releasesUrl": "https://api.github.com/repos/ProtonVPN/android-app/releases{/id}",
-      "updatedAt": "2026-05-24T20:37:03Z"
+      "updatedAt": "2026-05-25T22:31:04Z"
     },
     {
       "id": 179008173,
@@ -1243,8 +1214,8 @@
       "description": "Home Assistant Companion for Android",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/home-assistant/android",
-      "stargazersCount": 3619,
-      "forksCount": 972,
+      "stargazersCount": 3620,
+      "forksCount": 973,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -1258,7 +1229,7 @@
         "wear"
       ],
       "releasesUrl": "https://api.github.com/repos/home-assistant/android/releases{/id}",
-      "updatedAt": "2026-05-24T21:53:47Z"
+      "updatedAt": "2026-05-25T19:47:05Z"
     },
     {
       "id": 561396202,
@@ -1271,7 +1242,7 @@
       "description": "🥥 A fork of EhViewer, feature requests are not accepted. Forked from https://gitlab.com/NekoInverter/EhViewer",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/EhViewer-NekoInverter/EhViewer",
-      "stargazersCount": 3512,
+      "stargazersCount": 3513,
       "forksCount": 160,
       "language": "Kotlin",
       "topics": [
@@ -1284,31 +1255,31 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/EhViewer-NekoInverter/EhViewer/releases{/id}",
-      "updatedAt": "2026-05-24T16:29:22Z"
+      "updatedAt": "2026-05-25T19:12:48Z"
     },
     {
-      "id": 502586319,
-      "name": "Gallery",
-      "fullName": "FossifyOrg/Gallery",
+      "id": 291472317,
+      "name": "Smart-AutoClicker",
+      "fullName": "Nain57/Smart-AutoClicker",
       "owner": {
-        "login": "FossifyOrg",
-        "avatarUrl": "https://avatars.githubusercontent.com/u/152776864?v=4"
+        "login": "Nain57",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/8599025?v=4"
       },
-      "description": "Browse your memories without any interruptions with this photo and video gallery",
-      "defaultBranch": "main",
-      "htmlUrl": "https://github.com/FossifyOrg/Gallery",
-      "stargazersCount": 3393,
-      "forksCount": 202,
+      "description": "An open-source auto clicker on images for Android",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/Nain57/Smart-AutoClicker",
+      "stargazersCount": 3357,
+      "forksCount": 568,
       "language": "Kotlin",
       "topics": [
         "android",
-        "foss",
-        "gallery",
+        "autoclicker",
+        "fdroid",
         "kotlin",
-        "open-source"
+        "material-design"
       ],
-      "releasesUrl": "https://api.github.com/repos/FossifyOrg/Gallery/releases{/id}",
-      "updatedAt": "2026-05-25T02:29:03Z"
+      "releasesUrl": "https://api.github.com/repos/Nain57/Smart-AutoClicker/releases{/id}",
+      "updatedAt": "2026-05-26T00:14:37Z"
     },
     {
       "id": 335558932,
@@ -1321,8 +1292,8 @@
       "description": "KitchenOwl is a self-hosted grocery list and recipe manager. The backend is made with Flask and the frontend with Flutter. Easily add items to your shopping list before you go shopping. You can also create recipes and add items based on what you want to cook.",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/TomBursch/kitchenowl",
-      "stargazersCount": 3335,
-      "forksCount": 199,
+      "stargazersCount": 3337,
+      "forksCount": 200,
       "language": "Dart",
       "topics": [
         "android",
@@ -1337,7 +1308,7 @@
         "self-hosted"
       ],
       "releasesUrl": "https://api.github.com/repos/TomBursch/kitchenowl/releases{/id}",
-      "updatedAt": "2026-05-25T01:43:39Z"
+      "updatedAt": "2026-05-26T03:22:20Z"
     },
     {
       "id": 9306568,
@@ -1350,8 +1321,8 @@
       "description": "WordPress for Android",
       "defaultBranch": "trunk",
       "htmlUrl": "https://github.com/wordpress-mobile/WordPress-Android",
-      "stargazersCount": 3138,
-      "forksCount": 1360,
+      "stargazersCount": 3137,
+      "forksCount": 1359,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -1362,7 +1333,7 @@
         "wordpress"
       ],
       "releasesUrl": "https://api.github.com/repos/wordpress-mobile/WordPress-Android/releases{/id}",
-      "updatedAt": "2026-05-25T02:32:44Z"
+      "updatedAt": "2026-05-25T17:12:09Z"
     },
     {
       "id": 13862999,
@@ -1375,7 +1346,7 @@
       "description": " 📱The official Wikipedia app for Android!",
       "defaultBranch": "main",
       "htmlUrl": "https://github.com/wikimedia/apps-android-wikipedia",
-      "stargazersCount": 2937,
+      "stargazersCount": 2941,
       "forksCount": 810,
       "language": "Kotlin",
       "topics": [
@@ -1393,7 +1364,7 @@
         "wikipedia-android"
       ],
       "releasesUrl": "https://api.github.com/repos/wikimedia/apps-android-wikipedia/releases{/id}",
-      "updatedAt": "2026-05-24T21:19:29Z"
+      "updatedAt": "2026-05-26T02:17:03Z"
     },
     {
       "id": 644710160,
@@ -1406,7 +1377,7 @@
       "description": "A FOSS WireGuard & AmneziaWG Android client with auto-tunneling, lockdown & proxying.",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/wgtunnel/android",
-      "stargazersCount": 2711,
+      "stargazersCount": 2713,
       "forksCount": 150,
       "language": "Kotlin",
       "topics": [
@@ -1429,7 +1400,7 @@
         "wireguard-vpn"
       ],
       "releasesUrl": "https://api.github.com/repos/wgtunnel/android/releases{/id}",
-      "updatedAt": "2026-05-24T20:25:48Z"
+      "updatedAt": "2026-05-25T23:05:35Z"
     },
     {
       "id": 281379981,
@@ -1442,8 +1413,8 @@
       "description": "Android Client for Jellyfin",
       "defaultBranch": "master",
       "htmlUrl": "https://github.com/jellyfin/jellyfin-android",
-      "stargazersCount": 2515,
-      "forksCount": 454,
+      "stargazersCount": 2519,
+      "forksCount": 455,
       "language": "Kotlin",
       "topics": [
         "android",
@@ -1452,7 +1423,41 @@
         "kotlin"
       ],
       "releasesUrl": "https://api.github.com/repos/jellyfin/jellyfin-android/releases{/id}",
-      "updatedAt": "2026-05-24T18:26:29Z"
+      "updatedAt": "2026-05-25T16:51:08Z"
+    },
+    {
+      "id": 30260406,
+      "name": "boinc",
+      "fullName": "BOINC/boinc",
+      "owner": {
+        "login": "BOINC",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/985688?v=4"
+      },
+      "description": "Open-source software for volunteer computing and grid computing.",
+      "defaultBranch": "master",
+      "htmlUrl": "https://github.com/BOINC/boinc",
+      "stargazersCount": 2402,
+      "forksCount": 514,
+      "language": "C++",
+      "topics": [
+        "android",
+        "boinc",
+        "c-plus-plus",
+        "citizen-science",
+        "distributed-computing",
+        "grid-computing",
+        "hacktoberfest",
+        "high-performance-computing",
+        "high-throughput-computing",
+        "java",
+        "kotlin",
+        "php",
+        "science",
+        "scientific-computing",
+        "volunteer-computing"
+      ],
+      "releasesUrl": "https://api.github.com/repos/BOINC/boinc/releases{/id}",
+      "updatedAt": "2026-05-26T00:40:56Z"
     }
   ]
 }
