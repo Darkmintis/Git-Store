@@ -16,15 +16,6 @@ Git Store makes it easy to find and install Android apps published on GitHub. Br
 - Star and save your favorite projects
 - GitHub OAuth integration for personalized experience
 
-## Roadmap
-
-### v1.2.0 (Short Plan)
-
-- Background update checks with optional notifications
-- Saved searches and watchlists
-- Better trust badges and quality indicators for repositories
-- Faster startup and smoother scrolling on lower-end devices
-
 ## Installation
 
 Download the latest APK from [Releases](https://github.com/Darkmintis/Git-Store/releases)
