@@ -14,14 +14,10 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import com.darkmintis.gitstore.core.domain.Platform
 import com.darkmintis.gitstore.core.domain.model.GithubRepoSummary
 import com.darkmintis.gitstore.core.domain.model.GithubUser
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 
-class CachedTrendingDataSource(
-    private val platform: Platform
-) {
+class CachedTrendingDataSource() {
     private val json = Json {
         ignoreUnknownKeys = true
         isLenient = true

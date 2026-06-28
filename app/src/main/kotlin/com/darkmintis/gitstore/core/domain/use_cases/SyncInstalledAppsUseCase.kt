@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import com.darkmintis.gitstore.core.data.local.db.entities.InstalledApp
 import com.darkmintis.gitstore.core.data.services.PackageMonitor
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
 
 /**
@@ -20,8 +18,7 @@ import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
  */
 class SyncInstalledAppsUseCase(
     private val packageMonitor: PackageMonitor,
-    private val installedAppsRepository: InstalledAppsRepository,
-    private val platform: Platform
+    private val installedAppsRepository: InstalledAppsRepository
 ) {
     /**
      * Executes the sync operation.
@@ -95,26 +92,18 @@ class SyncInstalledAppsUseCase(
     }
 
     private suspend fun determineMigrationData(app: InstalledApp): MigrationResult {
-        return if (platform.type == PlatformType.ANDROID) {
-            val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
-            if (systemInfo != null) {
-                MigrationResult(
-                    versionName = systemInfo.versionName,
-                    versionCode = systemInfo.versionCode,
-                    source = "system package manager"
-                )
-            } else {
-                MigrationResult(
-                    versionName = app.installedVersion,
-                    versionCode = 0L,
-                    source = "fallback to release tag"
-                )
-            }
+        val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
+        return if (systemInfo != null) {
+            MigrationResult(
+                versionName = systemInfo.versionName,
+                versionCode = systemInfo.versionCode,
+                source = "system package manager"
+            )
         } else {
             MigrationResult(
                 versionName = app.installedVersion,
                 versionCode = 0L,
-                source = "desktop fallback to release tag"
+                source = "fallback to release tag"
             )
         }
     }

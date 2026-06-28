@@ -25,14 +25,11 @@ import com.darkmintis.gitstore.core.data.local.db.dao.InstalledAppDao
 import com.darkmintis.gitstore.core.data.local.db.dao.StarredRepoDao
 import com.darkmintis.gitstore.core.data.local.db.entities.StarredRepo
 import com.darkmintis.gitstore.core.data.model.GitHubStarredResponse
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.StarredRepository
 
 class StarredRepositoryImpl(
     private val dao: StarredRepoDao,
     private val installedAppsDao: InstalledAppDao,
-    private val platform: Platform,
     private val httpClient: HttpClient
 ) : StarredRepository {
 
@@ -168,11 +165,7 @@ class StarredRepositoryImpl(
             }
 
             val relevantAssets = stableRelease.assets.filter { asset ->
-                val name = asset.name.lowercase()
-                when (platform.type) {
-                    PlatformType.ANDROID -> name.endsWith(".apk")
-                    else -> false // Only Android is supported in this build
-                }
+                asset.name.lowercase().endsWith(".apk")
             }
 
             relevantAssets.isNotEmpty()

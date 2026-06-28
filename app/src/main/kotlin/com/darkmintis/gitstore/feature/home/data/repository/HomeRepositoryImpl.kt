@@ -31,8 +31,6 @@ import com.darkmintis.gitstore.core.domain.model.GithubRepoSummary
 import com.darkmintis.gitstore.core.data.mappers.toSummary
 import com.darkmintis.gitstore.core.data.model.GithubRepoNetworkModel
 import com.darkmintis.gitstore.core.data.model.GithubRepoSearchResponse
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.feature.home.data.data_source.CachedTrendingDataSource
 import com.darkmintis.gitstore.feature.home.data.data_source.toGithubRepoSummary
 import com.darkmintis.gitstore.feature.home.domain.repository.HomeRepository
@@ -42,7 +40,6 @@ import com.darkmintis.gitstore.network.safeApiCall
 
 class HomeRepositoryImpl(
     private val githubNetworkClient: HttpClient,
-    private val platform: Platform,
     private val appStateManager: AppStateManager,
     private val cachedDataSource: CachedTrendingDataSource
 ) : HomeRepository {

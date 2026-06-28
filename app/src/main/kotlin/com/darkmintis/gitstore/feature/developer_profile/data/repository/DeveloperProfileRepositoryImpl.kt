@@ -18,8 +18,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import com.darkmintis.gitstore.core.data.local.db.dao.InstalledAppDao
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.feature.developer_profile.data.dto.GitHubRepoResponse
 import com.darkmintis.gitstore.feature.developer_profile.data.dto.GitHubUserResponse
@@ -30,7 +28,6 @@ import com.darkmintis.gitstore.feature.developer_profile.domain.repository.Devel
 
 class DeveloperProfileRepositoryImpl(
     private val httpClient: HttpClient,
-    private val platform: Platform,
     private val installedAppsDao: InstalledAppDao,
     private val favouritesRepository: FavouritesRepository
 ) : DeveloperProfileRepository {
