@@ -13,7 +13,7 @@ sealed interface SettingsAction {
     data object OnLogoutDismiss : SettingsAction
     data object OnGitHubSignInClick : SettingsAction
     data object OnHelpClick : SettingsAction
-    data object OnCheckGitStoreUpdateClick : SettingsAction
+    data object OnUpdateGitStoreClick : SettingsAction
     data class OnFontThemeSelected(val fontTheme: FontTheme) : SettingsAction
     data class OnBrowserOpen(
         val url: String,
