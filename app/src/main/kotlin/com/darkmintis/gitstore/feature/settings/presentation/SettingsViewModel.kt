@@ -1,8 +1,10 @@
 package com.darkmintis.gitstore.feature.settings.presentation
 
+import android.app.Application
 import com.darkmintis.gitstore.BuildConfig
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +15,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.darkmintis.gitstore.core.data.services.Downloader
+import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.core.domain.repository.ThemesRepository
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
 import com.darkmintis.gitstore.feature.settings.domain.repository.SettingsRepository
@@ -29,10 +33,14 @@ private const val LATEST_RELEASE_API_URL = "https://api.github.com/repos/Darkmin
 class SettingsViewModel(
     private val browserHelper: BrowserHelper,
     private val themesRepository: ThemesRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val downloader: Downloader,
+    private val installer: Installer,
+    private val application: Application
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
+    private var currentDownloadJob: Job? = null
 
     private val _state = MutableStateFlow(SettingsState())
     val state = _state
@@ -219,10 +227,6 @@ class SettingsViewModel(
                 )
             }
 
-            SettingsAction.OnCheckGitStoreUpdateClick -> {
-                checkForGitStoreUpdate()
-            }
-
             is SettingsAction.OnThemeColorSelected -> {
                 viewModelScope.launch {
                     themesRepository.setThemeColor(action.themeColor)
@@ -282,7 +286,66 @@ class SettingsViewModel(
                     themesRepository.setDarkTheme(action.isDarkTheme)
                 }
             }
+
+            SettingsAction.OnUpdateGitStoreClick -> {
+                val url = _state.value.latestGitStoreDownloadUrl
+                if (url != null) {
+                    downloadAndInstallGitStoreUpdate(url)
+                }
+            }
         }
+    }
+
+    private fun downloadAndInstallGitStoreUpdate(url: String) {
+        val versionTag = _state.value.latestGitStoreVersion ?: "update"
+        val assetName = "GitStore-$versionTag.apk"
+
+        currentDownloadJob?.cancel()
+        currentDownloadJob = viewModelScope.launch {
+            try {
+                _state.update {
+                    it.copy(
+                        isDownloadingUpdate = true,
+                        updateDownloadProgress = null,
+                        updateDownloadError = null
+                    )
+                }
+
+                installer.ensurePermissionsOrThrow("apk")
+
+                downloader.download(url, assetName).collect { progress ->
+                    _state.update {
+                        it.copy(updateDownloadProgress = progress.percent)
+                    }
+                }
+
+                val filePath = downloader.getDownloadedFilePath(assetName)
+                    ?: throw IllegalStateException("Downloaded file not found")
+
+                installer.install(filePath, "apk")
+
+                _state.update {
+                    it.copy(
+                        isDownloadingUpdate = false,
+                        updateDownloadProgress = null
+                    )
+                }
+            } catch (t: Throwable) {
+                _state.update {
+                    it.copy(
+                        isDownloadingUpdate = false,
+                        updateDownloadProgress = null,
+                        updateDownloadError = t.message
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        currentDownloadJob?.cancel()
+        currentDownloadJob = null
     }
 
 }
