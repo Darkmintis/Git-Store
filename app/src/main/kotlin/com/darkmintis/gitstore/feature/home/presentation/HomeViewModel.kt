@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import android.app.Application
 import com.darkmintis.gitstore.core.data.local.db.entities.FavoriteRepo
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
 import com.darkmintis.gitstore.core.domain.repository.StarredRepository
@@ -30,7 +28,6 @@ class HomeViewModel(
     private val application: Application,
     private val homeRepository: HomeRepository,
     private val installedAppsRepository: InstalledAppsRepository,
-    private val platform: Platform,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
     private val favouritesRepository: FavouritesRepository,
     private val starredRepository: StarredRepository,
@@ -46,7 +43,6 @@ class HomeViewModel(
             if (!hasLoadedInitialData) {
                 syncSystemState()
 
-                loadPlatform()
                 loadRepos(isInitial = true)
                 observeInstalledApps()
                 observeFavourites()
@@ -71,12 +67,6 @@ class HomeViewModel(
             } catch (e: Exception) {
                 Logger.e { "Initial sync failed: ${e.message}" }
             }
-        }
-    }
-
-    private fun loadPlatform() {
-        _state.update {
-            it.copy(isAppsSectionVisible = platform.type == PlatformType.ANDROID)
         }
     }
 

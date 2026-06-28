@@ -32,8 +32,6 @@ import com.darkmintis.gitstore.core.data.services.PackageMonitor
 import com.darkmintis.gitstore.core.data.local.db.entities.FavoriteRepo
 import com.darkmintis.gitstore.core.data.local.db.entities.InstallSource
 import com.darkmintis.gitstore.core.data.local.db.entities.InstalledApp
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
@@ -49,7 +47,6 @@ class DetailsViewModel(
     private val detailsRepository: DetailsRepository,
     private val downloader: Downloader,
     private val installer: Installer,
-    private val platform: Platform,
     private val helper: BrowserHelper,
     private val installedAppsRepository: InstalledAppsRepository,
     private val favouritesRepository: FavouritesRepository,
@@ -186,8 +183,8 @@ class DetailsViewModel(
                     }
                 }
 
-                val isObtainiumEnabled = platform.type == PlatformType.ANDROID
-                val isAppManagerEnabled = platform.type == PlatformType.ANDROID
+                val isObtainiumEnabled = true
+                val isAppManagerEnabled = true
 
                 val latestRelease = latestReleaseDeferred.await()
                 val stats = statsDeferred.await()
@@ -574,20 +571,14 @@ class DetailsViewModel(
                     throw IllegalStateException("Asset type .$ext not supported")
                 }
 
-                if (platform.type == PlatformType.ANDROID) {
-                    saveInstalledAppToDatabase(
-                        assetName = assetName,
-                        assetUrl = downloadUrl,
-                        assetSize = sizeBytes,
-                        releaseTag = releaseTag,
-                        isUpdate = isUpdate,
-                        filePath = filePath
-                    )
-                } else {
-                    viewModelScope.launch {
-                        _events.send(DetailsEvent.OnMessage(application.getString(R.string.installer_saved_downloads)))
-                    }
-                }
+                saveInstalledAppToDatabase(
+                    assetName = assetName,
+                    assetUrl = downloadUrl,
+                    assetSize = sizeBytes,
+                    releaseTag = releaseTag,
+                    isUpdate = isUpdate,
+                    filePath = filePath
+                )
 
                 installer.install(filePath, ext)
 
@@ -636,7 +627,7 @@ class DetailsViewModel(
             var versionName: String? = null
             var versionCode = 0L
 
-            if (platform.type == PlatformType.ANDROID && assetName.lowercase().endsWith(".apk")) {
+            if (assetName.lowercase().endsWith(".apk")) {
                 val apkInfo = installer.getApkInfoExtractor().extractPackageInfo(filePath)
                 if (apkInfo != null) {
                     packageName = apkInfo.packageName

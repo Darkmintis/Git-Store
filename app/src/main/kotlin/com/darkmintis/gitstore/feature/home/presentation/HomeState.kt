@@ -13,7 +13,7 @@ data class HomeState(
     val errorMessage: String? = null,
     val hasMorePages: Boolean = true,
     val currentCategory: HomeCategory = HomeCategory.TRENDING,
-    val isAppsSectionVisible: Boolean = false,
+    val isAppsSectionVisible: Boolean = true,
     val isUpdateAvailable: Boolean = false,
 )
 

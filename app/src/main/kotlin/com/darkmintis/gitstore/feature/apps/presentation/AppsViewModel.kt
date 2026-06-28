@@ -37,8 +37,6 @@ import com.darkmintis.gitstore.feature.apps.presentation.model.UpdateAllProgress
 import com.darkmintis.gitstore.feature.apps.presentation.model.UpdateState
 import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.Installer
-import com.darkmintis.gitstore.core.domain.Platform
-import com.darkmintis.gitstore.core.domain.model.PlatformType
 import com.darkmintis.gitstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import com.darkmintis.gitstore.feature.details.domain.repository.DetailsRepository
 import java.io.File
@@ -50,7 +48,6 @@ class AppsViewModel(
     private val installedAppsRepository: InstalledAppsRepository,
     private val packageMonitor: PackageMonitor,
     private val detailsRepository: DetailsRepository,
-    private val platform: Platform,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
     private val application: Application
 ) : ViewModel() {
@@ -130,29 +127,17 @@ class AppsViewModel(
                         Logger.d { "App ${app.packageName} no longer installed (not in system packages), removing from DB" }
                         installedAppsRepository.deleteInstalledApp(app.packageName)
                     } else if (app.installedVersionName == null) {
-                        if (platform.type == PlatformType.ANDROID) {
-                            val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
-                            if (systemInfo != null) {
-                                installedAppsRepository.updateApp(
-                                    app.copy(
-                                        installedVersionName = systemInfo.versionName,
-                                        installedVersionCode = systemInfo.versionCode,
-                                        latestVersionName = systemInfo.versionName,
-                                        latestVersionCode = systemInfo.versionCode
-                                    )
+                        val systemInfo = packageMonitor.getInstalledPackageInfo(app.packageName)
+                        if (systemInfo != null) {
+                            installedAppsRepository.updateApp(
+                                app.copy(
+                                    installedVersionName = systemInfo.versionName,
+                                    installedVersionCode = systemInfo.versionCode,
+                                    latestVersionName = systemInfo.versionName,
+                                    latestVersionCode = systemInfo.versionCode
                                 )
-                                Logger.d { "Migrated ${app.packageName}: set versionName/code from system" }
-                            } else {
-                                installedAppsRepository.updateApp(
-                                    app.copy(
-                                        installedVersionName = app.installedVersion,
-                                        installedVersionCode = 0L,
-                                        latestVersionName = app.installedVersion,
-                                        latestVersionCode = 0L
-                                    )
-                                )
-                                Logger.d { "Migrated ${app.packageName}: fallback to tag as versionName" }
-                            }
+                            )
+                            Logger.d { "Migrated ${app.packageName}: set versionName/code from system" }
                         } else {
                             installedAppsRepository.updateApp(
                                 app.copy(
@@ -162,7 +147,7 @@ class AppsViewModel(
                                     latestVersionCode = 0L
                                 )
                             )
-                            Logger.d { "Migrated ${app.packageName} (desktop): fallback to tag as versionName" }
+                            Logger.d { "Migrated ${app.packageName}: fallback to tag as versionName" }
                         }
                     }
                 }
