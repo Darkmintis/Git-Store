@@ -50,7 +50,6 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
-import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
 fun SettingsRoot(
@@ -134,6 +133,17 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
+            // GitHub sign-in button (only show if not logged in)
+            if (!state.isUserLoggedIn) {
+                signInWithGitHub(
+                    onAction = onAction
+                )
+
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
+            }
+
             appearance(
                 selectedThemeColor = state.selectedThemeColor,
                 isAmoledThemeEnabled = state.isAmoledThemeEnabled,
@@ -170,17 +180,6 @@ fun SettingsScreen(
             support(
                 onAction = onAction
             )
-
-            // GitHub sign-in button (only show if not logged in)
-            if (!state.isUserLoggedIn) {
-                item {
-                    Spacer(Modifier.height(24.dp))
-                }
-
-                signInWithGitHub(
-                    onAction = onAction
-                )
-            }
 
             item {
                 Spacer(Modifier.height(24.dp))
