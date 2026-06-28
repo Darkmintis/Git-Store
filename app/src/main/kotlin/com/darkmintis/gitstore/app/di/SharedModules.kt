@@ -273,7 +273,10 @@ val settingsModule: Module = module {
         SettingsViewModel(
             browserHelper = get(),
             themesRepository = get(),
-            settingsRepository = get()
+            settingsRepository = get(),
+            downloader = get(),
+            installer = get(),
+            application = get()
         )
     }
 }
