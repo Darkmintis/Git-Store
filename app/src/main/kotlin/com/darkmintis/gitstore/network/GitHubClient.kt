@@ -68,7 +68,7 @@ fun buildGitHubHttpClient(
             url("https://api.github.com")
             header(HttpHeaders.Accept, "application/vnd.github+json")
             header("X-GitHub-Api-Version", "2022-11-28")
-            header(HttpHeaders.UserAgent, "GithubStore/1.0 (KMP)")
+            header(HttpHeaders.UserAgent, "GithubStore/1.0 (Android)")
 
             val token = getAccessToken()?.trim().orEmpty()
             if (token.isNotEmpty()) {
