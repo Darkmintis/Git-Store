@@ -25,6 +25,7 @@ koin = "4.1.1"
 koinComposeMultiplatform = "4.1.1"
 landscapist = "2.4.2"
 liquid = "1.1.0"
+material3 = "1.9.0-alpha04"
 multiplatformMarkdownRenderer = "0.39.0"
 datastore = "1.2.0"
 kotest = "6.0.7"
@@ -71,7 +72,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 # Navigation
-material3 = { module = "androidx.compose.material3:material3" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 
 # Liquid effect
 liquid = { module = "io.github.fletchmckee.liquid:liquid", version.ref = "liquid" }
