@@ -147,9 +147,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     // Navigation 3
-    implementation(libs.navigation.compose)
     implementation(libs.jetbrains.navigation3.ui)
-    implementation(libs.jetbrains.lifecycle.viewmodel.compose)
     implementation(libs.jetbrains.lifecycle.viewmodel)
     implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
 
