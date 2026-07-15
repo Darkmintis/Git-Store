@@ -293,14 +293,26 @@ fun UpdateAllProgressCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(
-                        R.string.updating_x_of_y,
-                        progress.current,
-                        progress.total
-                    ),
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Column {
+                    Text(
+                        text = stringResource(
+                            R.string.updating_x_of_y,
+                            progress.current,
+                            progress.total
+                        ),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    if (progress.succeeded > 0 || progress.failed > 0) {
+                        Text(
+                            text = "${progress.succeeded} succeeded, ${progress.failed} failed",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = if (progress.failed > 0)
+                                MaterialTheme.colorScheme.error
+                            else
+                                MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
                 IconButton(onClick = onCancel) {
                     Icon(
                         Icons.Default.Close,

@@ -55,6 +55,7 @@ class AppsViewModel(
     private var hasLoadedInitialData = false
     private val activeUpdates = mutableMapOf<String, Job>()
     private var updateAllJob: Job? = null
+    private var isBatchUpdating = false
 
     private val _state = MutableStateFlow(AppsState())
     val state = _state
@@ -356,14 +357,16 @@ class AppsViewModel(
                     app.packageName,
                     UpdateState.Error(e.message ?: "Update failed")
                 )
-                _events.send(
-                    AppsEvent.ShowError(
-                        application.getString(
-                            R.string.failed_to_update,
-                            app.appName, e.message ?: ""
+                if (!isBatchUpdating) {
+                    _events.send(
+                        AppsEvent.ShowError(
+                            application.getString(
+                                R.string.failed_to_update,
+                                app.appName, e.message ?: ""
+                            )
                         )
                     )
-                )
+                }
             } finally {
                 activeUpdates.remove(app.packageName)
             }
@@ -380,6 +383,7 @@ class AppsViewModel(
 
         updateAllJob = viewModelScope.launch {
             try {
+                isBatchUpdating = true
                 _state.update { it.copy(isUpdatingAll = true) }
 
                 val appsToUpdate = _state.value.apps.filter {
@@ -394,18 +398,25 @@ class AppsViewModel(
 
                 Logger.d { "Starting update all for ${appsToUpdate.size} apps" }
 
+                var succeeded = 0
+                var failed = 0
+
                 appsToUpdate.forEachIndexed { index, appItem ->
                     if (!isActive) {
                         Logger.d { "Update all cancelled" }
                         return@launch
                     }
 
+                    val previousStates = appsToUpdate.map { it.installedApp.packageName to it.updateState }.toMap()
+
                     _state.update {
                         it.copy(
                             updateAllProgress = UpdateAllProgress(
                                 current = index + 1,
                                 total = appsToUpdate.size,
-                                currentAppName = appItem.installedApp.appName
+                                currentAppName = appItem.installedApp.appName,
+                                succeeded = succeeded,
+                                failed = failed
                             )
                         )
                     }
@@ -415,25 +426,43 @@ class AppsViewModel(
                     updateSingleApp(appItem.installedApp)
                     activeUpdates[appItem.installedApp.packageName]?.join()
 
+                    val currentItem = _state.value.apps.find {
+                        it.installedApp.packageName == appItem.installedApp.packageName
+                    }
+                    if (currentItem?.updateState is UpdateState.Success) {
+                        succeeded++
+                    } else if (currentItem?.updateState is UpdateState.Error) {
+                        failed++
+                    }
+
+                    _state.update {
+                        it.copy(
+                            updateAllProgress = UpdateAllProgress(
+                                current = index + 1,
+                                total = appsToUpdate.size,
+                                currentAppName = appItem.installedApp.appName,
+                                succeeded = succeeded,
+                                failed = failed
+                            )
+                        )
+                    }
+
                     delay(1000)
                 }
 
-                Logger.d { "Update all completed successfully" }
-                _events.send(AppsEvent.ShowSuccess(application.getString(R.string.all_apps_updated_successfully)))
+                Logger.d { "Update all completed: $succeeded succeeded, $failed failed" }
+                if (failed == 0) {
+                    _events.send(AppsEvent.ShowSuccess(application.getString(R.string.all_apps_updated_successfully)))
+                } else {
+                    _events.send(AppsEvent.ShowError(application.getString(R.string.update_all_failed, "$succeeded updated, $failed failed")))
+                }
 
             } catch (e: CancellationException) {
                 Logger.d { "Update all cancelled" }
             } catch (e: Exception) {
                 Logger.e { "Update all failed: ${e.message}" }
-                _events.send(
-                    AppsEvent.ShowError(
-                        application.getString(
-                            R.string.update_all_failed,
-                            e.message
-                        )
-                    )
-                )
             } finally {
+                isBatchUpdating = false
                 _state.update {
                     it.copy(
                         isUpdatingAll = false,
