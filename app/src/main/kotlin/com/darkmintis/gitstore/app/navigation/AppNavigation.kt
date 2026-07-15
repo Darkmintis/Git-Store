@@ -31,6 +31,7 @@ import com.darkmintis.gitstore.feature.developer_profile.presentation.DeveloperP
 import com.darkmintis.gitstore.feature.favourites.presentation.FavouritesRoot
 import com.darkmintis.gitstore.feature.home.presentation.HomeRoot
 import com.darkmintis.gitstore.feature.search.presentation.SearchRoot
+import com.darkmintis.gitstore.feature.download_manager.presentation.DownloadManagerRoot
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsRoot
 import com.darkmintis.gitstore.feature.starred_repos.presentation.StarredReposRoot
 
@@ -218,6 +219,10 @@ fun AppNavigation(
                                 )
                             }
                         )
+                    }
+
+                    entry<GithubStoreGraph.DownloadsScreen> {
+                        DownloadManagerRoot()
                     }
                 },
                 entryDecorators = listOf(

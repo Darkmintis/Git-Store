@@ -3,6 +3,7 @@ package com.darkmintis.gitstore.app.navigation
 import com.darkmintis.gitstore.R
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
@@ -40,6 +41,11 @@ object BottomNavigationUtils {
                 titleRes = R.string.search,
                 iconRes = Icons.Filled.Search,
                 screen = GithubStoreGraph.SearchScreen
+            ),
+            BottomNavigationItem(
+                titleRes = R.string.downloads,
+                iconRes = Icons.Filled.Download,
+                screen = GithubStoreGraph.DownloadsScreen
             )
         )
     }
@@ -49,7 +55,8 @@ object BottomNavigationUtils {
             GithubStoreGraph.HomeScreen,
             GithubStoreGraph.SearchScreen,
             GithubStoreGraph.AppsScreen,
-            GithubStoreGraph.FavouritesScreen
+            GithubStoreGraph.FavouritesScreen,
+            GithubStoreGraph.DownloadsScreen
         )
     }
 }

@@ -7,6 +7,7 @@
     <string name="home">Home</string>
     <string name="installed_apps">Installed Apps</string>
     <string name="navigate_back">Navigate back</string>
+    <string name="downloads">Downloads</string>
     <string name="updates">Updates</string>
     <string name="up_to_date">Up to date</string>
     <string name="check_for_updates">Check for updates</string>
