@@ -17,7 +17,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             detailsModule,
             repoAuthorModule,
             settingsModule,
-            appsModule
+            appsModule,
+            downloadManagerModule
         )
     }
 }

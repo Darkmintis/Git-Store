@@ -27,6 +27,7 @@ import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.FileLocationsProvider
 import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.core.data.services.LocalizationManager
+import com.darkmintis.gitstore.core.presentation.utils.ConnectivityObserver
 
 val platformModule: Module = module {
     single<Downloader> {
@@ -79,6 +80,10 @@ val platformModule: Module = module {
 
     single<AppLauncher> {
         AndroidAppLauncher(androidContext())
+    }
+
+    single {
+        ConnectivityObserver(androidContext())
     }
 }
 

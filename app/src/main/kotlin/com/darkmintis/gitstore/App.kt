@@ -2,6 +2,7 @@ package com.darkmintis.gitstore
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,11 +18,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.koinInject
 import com.darkmintis.gitstore.app.app_state.components.RateLimitDialog
 import com.darkmintis.gitstore.app.navigation.AppNavigation
 import com.darkmintis.gitstore.app.navigation.GithubStoreGraph
+import com.darkmintis.gitstore.core.presentation.components.OfflineBanner
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ApplyAndroidSystemBars
+import com.darkmintis.gitstore.core.presentation.utils.ConnectivityObserver
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -30,6 +35,8 @@ fun App(
 ) {
     val viewModel: MainViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val connectivityObserver: ConnectivityObserver = koinInject()
+    val isOnline by connectivityObserver.isOnline.collectAsStateWithLifecycle(initialValue = true)
 
     val navBackStack = rememberSerializable(
         serializer = SnapshotStateListSerializer<GithubStoreGraph>()
@@ -62,26 +69,31 @@ fun App(
             return@GithubStoreTheme
         }
 
+        Column(modifier = Modifier.fillMaxSize()) {
+            OfflineBanner(isOffline = !isOnline)
 
-        if (state.showRateLimitDialog && state.rateLimitInfo != null) {
-            RateLimitDialog(
-                rateLimitInfo = state.rateLimitInfo,
-                isAuthenticated = state.isLoggedIn,
-                onDismiss = {
-                    viewModel.onAction(MainAction.DismissRateLimitDialog)
-                },
-                onSignIn = {
-                    viewModel.onAction(MainAction.DismissRateLimitDialog)
+            Box(modifier = Modifier.weight(1f)) {
+                if (state.showRateLimitDialog && state.rateLimitInfo != null) {
+                    RateLimitDialog(
+                        rateLimitInfo = state.rateLimitInfo,
+                        isAuthenticated = state.isLoggedIn,
+                        onDismiss = {
+                            viewModel.onAction(MainAction.DismissRateLimitDialog)
+                        },
+                        onSignIn = {
+                            viewModel.onAction(MainAction.DismissRateLimitDialog)
 
-                    navBackStack.clear()
-                    navBackStack.add(GithubStoreGraph.AuthenticationScreen)
+                            navBackStack.clear()
+                            navBackStack.add(GithubStoreGraph.AuthenticationScreen)
+                        }
+                    )
                 }
-            )
-        }
 
-        AppNavigation(
-            navBackStack = navBackStack
-        )
+                AppNavigation(
+                    navBackStack = navBackStack
+                )
+            }
+        }
     }
 }
 
