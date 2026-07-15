@@ -12,6 +12,8 @@ interface Downloader {
     suspend fun getDownloadedFilePath(fileName: String): String?
 
     suspend fun cancelDownload(fileName: String): Boolean
+
+    fun getActiveDownloadIds(): Map<String, Long>
 }
 
 

@@ -155,6 +155,10 @@ class AndroidDownloader(
             }
         }
 
+    override fun getActiveDownloadIds(): Map<String, Long> {
+        return activeDownloads.toMap()
+    }
+
     override suspend fun cancelDownload(fileName: String): Boolean =
         withContext(Dispatchers.IO) {
 

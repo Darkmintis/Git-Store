@@ -48,6 +48,7 @@ import com.darkmintis.gitstore.feature.search.domain.repository.SearchRepository
 import com.darkmintis.gitstore.feature.search.presentation.SearchViewModel
 import com.darkmintis.gitstore.feature.settings.data.repository.SettingsRepositoryImpl
 import com.darkmintis.gitstore.feature.settings.domain.repository.SettingsRepository
+import com.darkmintis.gitstore.feature.download_manager.presentation.DownloadManagerViewModel
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsViewModel
 import com.darkmintis.gitstore.feature.starred_repos.presentation.StarredReposViewModel
 import com.darkmintis.gitstore.network.RateLimitHandler
@@ -321,6 +322,17 @@ val appsModule: Module = module {
             detailsRepository = get(),
             syncInstalledAppsUseCase = get(),
             application = get()
+        )
+    }
+}
+
+val downloadManagerModule: Module = module {
+    viewModel {
+        DownloadManagerViewModel(
+            context = androidContext(),
+            downloader = get(),
+            installer = get(),
+            files = get()
         )
     }
 }
