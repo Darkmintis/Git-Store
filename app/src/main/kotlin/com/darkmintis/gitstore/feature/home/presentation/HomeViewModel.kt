@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import android.app.Application
+import com.darkmintis.gitstore.core.presentation.utils.AndroidStringProvider
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
 import com.darkmintis.gitstore.core.data.local.db.entities.FavoriteRepo
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
@@ -32,6 +34,9 @@ class HomeViewModel(
     private val favouritesRepository: FavouritesRepository,
     private val starredRepository: StarredRepository,
 ) : ViewModel() {
+
+    private val stringProvider = AndroidStringProvider(application)
+
 
     private var hasLoadedInitialData = false
     private var currentJob: Job? = null
@@ -189,8 +194,7 @@ class HomeViewModel(
                     it.copy(
                         isLoading = false,
                         isLoadingMore = false,
-                        errorMessage = t.message
-                            ?: application.getString(R.string.home_failed_to_load_repositories)
+                        errorMessage = ErrorMapper.message(t, stringProvider)
                     )
                 }
             }
@@ -251,6 +255,8 @@ class HomeViewModel(
                         )
 
                         favouritesRepository.toggleFavorite(favoriteRepo)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to toggle favorite: ${t.message}" }
                     }

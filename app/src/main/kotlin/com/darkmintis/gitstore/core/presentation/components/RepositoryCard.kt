@@ -102,19 +102,26 @@ fun RepositoryCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(12.dp)
-                    .clickable { onToggleFavorite() }
+                    .padding(4.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favorite",
-                    tint = if (discoveryRepository.isFavourite) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    },
-                    modifier = Modifier.size(24.dp)
-                )
+                IconButton(onClick = onToggleFavorite) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = stringResource(
+                            if (discoveryRepository.isFavourite) {
+                                R.string.remove_from_favourites
+                            } else {
+                                R.string.add_to_favourites
+                            }
+                        ),
+                        tint = if (discoveryRepository.isFavourite) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        },
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
                 Text(
                     text = "${discoveryRepository.repository.stargazersCount}",
                     style = MaterialTheme.typography.labelSmall,

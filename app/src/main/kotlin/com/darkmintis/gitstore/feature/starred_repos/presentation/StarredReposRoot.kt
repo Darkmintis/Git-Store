@@ -64,6 +64,7 @@ import kotlinx.collections.immutable.persistentListOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import com.darkmintis.gitstore.core.presentation.components.EmptyState
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.starred_repos.presentation.components.StarredRepositoryItem
 
@@ -114,7 +115,7 @@ fun StarredScreen(
         ) {
             when {
                 !state.isAuthenticated -> {
-                    EmptyStateContent(
+                    EmptyState(
                         title = stringResource(R.string.sign_in_required),
                         message = stringResource(R.string.sign_in_with_github_for_stars),
                         icon = Icons.Default.Star,
@@ -129,7 +130,7 @@ fun StarredScreen(
                 }
 
                 state.starredRepositories.isEmpty() && !state.isSyncing -> {
-                    EmptyStateContent(
+                    EmptyState(
                         title = stringResource(R.string.no_starred_repos),
                         message = stringResource(R.string.star_repos_hint),
                         icon = Icons.Default.Star,
@@ -269,55 +270,6 @@ private fun StarredTopBar(
                 }
             }
         )
-    }
-}
-
-@Composable
-private fun EmptyStateContent(
-    title: String,
-    message: String,
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    actionText: String? = null,
-    onActionClick: (() -> Unit)? = null
-) {
-    Column(
-        modifier = modifier.padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-
-        if (actionText != null && onActionClick != null) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = onActionClick) {
-                Text(actionText)
-            }
-        }
     }
 }
 

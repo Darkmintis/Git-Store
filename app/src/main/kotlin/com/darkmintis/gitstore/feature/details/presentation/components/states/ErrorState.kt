@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 
 
 import androidx.compose.ui.res.stringResource
-import com.darkmintis.gitstore.core.presentation.components.GithubStoreButton
+import com.darkmintis.gitstore.core.presentation.components.RetryErrorState
 import com.darkmintis.gitstore.feature.details.presentation.DetailsAction
 
 @Composable
@@ -24,31 +24,11 @@ fun ErrorState(
     errorMessage: String,
     onAction: (DetailsAction) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.error_loading_details),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = errorMessage,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.error,
-        )
-
-        GithubStoreButton(
-            text = stringResource(R.string.retry),
-            onClick = {
-                onAction(DetailsAction.Retry)
-            }
-        )
-    }
+    RetryErrorState(
+        title = stringResource(R.string.error_loading_details),
+        message = errorMessage,
+        onRetry = { onAction(DetailsAction.Retry) }
+    )
 }
 
 

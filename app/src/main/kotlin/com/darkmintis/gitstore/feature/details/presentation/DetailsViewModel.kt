@@ -3,15 +3,11 @@ package com.darkmintis.gitstore.feature.details.presentation
 import kotlinx.datetime.Clock as DateClock
 import kotlinx.datetime.Instant as DateInstant
 
-import android.app.Application
 import com.darkmintis.gitstore.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-
-
-
-
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
@@ -35,6 +31,8 @@ import com.darkmintis.gitstore.core.data.local.db.entities.InstalledApp
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.core.domain.repository.StarredRepository
@@ -51,7 +49,7 @@ class DetailsViewModel(
     private val installedAppsRepository: InstalledAppsRepository,
     private val favouritesRepository: FavouritesRepository,
     private val starredRepository: StarredRepository,
-    private val application: Application,
+    private val stringProvider: StringProvider,
     private val packageMonitor: PackageMonitor,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase
 ) : ViewModel() {
@@ -80,7 +78,7 @@ class DetailsViewModel(
         private fun loadInitial() {
         viewModelScope.launch {
             try {
-                _state.value = _state.value.copy(isLoading = true, errorMessage = null)
+                _state.value = _state.value.copy(isLoading = true, errorMessage = null, warningMessage = null)
 
                 val syncResult = syncInstalledAppsUseCase()
                 if (syncResult.isFailure) {
@@ -91,6 +89,8 @@ class DetailsViewModel(
                 val isFavoriteDeferred = async {
                     try {
                         favouritesRepository.isFavoriteSync(repo.id)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to load if repo is favourite: ${t.localizedMessage}" }
                         false
@@ -100,6 +100,8 @@ class DetailsViewModel(
                 val isStarredDeferred = async {
                     try {
                         starredRepository.isStarred(repo.id)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to load if repo is starred: ${t.localizedMessage}" }
                         false
@@ -116,6 +118,7 @@ class DetailsViewModel(
                     isStarred = isStarred,
                 )
 
+                var releaseLoadFailed = false
                 val latestReleaseDeferred = async {
                     try {
                         detailsRepository.getLatestPublishedRelease(
@@ -123,8 +126,11 @@ class DetailsViewModel(
                             repo = name,
                             defaultBranch = repo.defaultBranch
                         )
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.w { "Failed to load latest release: ${t.message}" }
+                        releaseLoadFailed = true
                         null
                     }
                 }
@@ -132,6 +138,8 @@ class DetailsViewModel(
                 val statsDeferred = async {
                     try {
                         detailsRepository.getRepoStats(owner, name)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (_: Throwable) {
                         null
                     }
@@ -144,6 +152,8 @@ class DetailsViewModel(
                             repo = name,
                             defaultBranch = repo.defaultBranch
                         )
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (_: Throwable) {
                         null
                     }
@@ -152,6 +162,8 @@ class DetailsViewModel(
                 val userProfileDeferred = async {
                     try {
                         detailsRepository.getUserProfile(owner)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.w { "Failed to load user profile: ${t.message}" }
                         null
@@ -206,6 +218,9 @@ class DetailsViewModel(
                 _state.value = _state.value.copy(
                     isLoading = false,
                     errorMessage = null,
+                    warningMessage = if (releaseLoadFailed) {
+                        stringProvider.getString(R.string.details_warning_release)
+                    } else null,
                     repository = repo,
                     latestRelease = latestRelease,
                     stats = stats,
@@ -221,11 +236,13 @@ class DetailsViewModel(
                     isAppManagerEnabled = isAppManagerEnabled,
                     installedApp = installedApp,
                 )
+            } catch (t: CancellationException) {
+                throw t
             } catch (t: Throwable) {
                 Logger.e { "Details load failed: ${t.message}" }
                 _state.value = _state.value.copy(
                     isLoading = false,
-                    errorMessage = t.message ?: "Failed to load details"
+                    errorMessage = ErrorMapper.message(t, stringProvider)
                 )
             }
         }
@@ -319,7 +336,7 @@ class DetailsViewModel(
 
                         _events.send(
                             element = DetailsEvent.OnMessage(
-                                message = application.getString(
+                                message = stringProvider.getString(
                                     if (newFavoriteState) {
                                         R.string.added_to_favourites
                                     } else {
@@ -329,8 +346,17 @@ class DetailsViewModel(
                             )
                         )
 
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to toggle favorite: ${t.message}" }
+                        viewModelScope.launch {
+                            _events.send(
+                                DetailsEvent.OnMessage(
+                                    message = stringProvider.getString(R.string.error_favourite_toggle)
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -349,8 +375,15 @@ class DetailsViewModel(
                                 installedAppsRepository.getAppByPackage(installedApp.packageName)
                             _state.value = _state.value.copy(installedApp = updatedApp)
                         }
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to check for updates: ${t.message}" }
+                        _events.send(
+                            DetailsEvent.OnMessage(
+                                message = stringProvider.getString(R.string.error_check_updates)
+                            )
+                        )
                     }
                 }
             }
@@ -471,11 +504,13 @@ class DetailsViewModel(
                                 result = LogResult.OpenedInAppManager
                             )
                         }
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to open in AppManager: ${t.message}" }
                         _state.value = _state.value.copy(
                             downloadStage = DownloadStage.IDLE,
-                            installError = t.message
+                            installError = ErrorMapper.message(t, stringProvider)
                         )
                         currentAssetName = null
 
@@ -593,12 +628,14 @@ class DetailsViewModel(
                     } else LogResult.Installed
                 )
 
+            } catch (t: CancellationException) {
+                throw t
             } catch (t: Throwable) {
                 Logger.e { "Install failed: ${t.message}" }
                 t.printStackTrace()
                 _state.value = _state.value.copy(
                     downloadStage = DownloadStage.IDLE,
-                    installError = t.message
+                    installError = ErrorMapper.message(t, stringProvider, R.string.error_install_failed)
                 )
                 currentAssetName = null
                 appendLog(
@@ -746,10 +783,12 @@ class DetailsViewModel(
                     result = LogResult.Downloaded
                 )
 
+            } catch (t: CancellationException) {
+                throw t
             } catch (t: Throwable) {
                 _state.value = _state.value.copy(
                     isDownloading = false,
-                    downloadError = t.message
+                    downloadError = ErrorMapper.message(t, stringProvider)
                 )
                 currentAssetName = null
                 appendLog(

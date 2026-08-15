@@ -1,5 +1,7 @@
 package com.darkmintis.gitstore.core.presentation.components
 
+import com.darkmintis.gitstore.R
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -43,7 +46,7 @@ fun OfflineBanner(
                 tint = MaterialTheme.colorScheme.onErrorContainer
             )
             Text(
-                text = "You are offline",
+                text = stringResource(R.string.you_are_offline),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier.padding(start = 8.dp)

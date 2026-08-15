@@ -148,7 +148,7 @@ fun StarredRepositoryItem(
                 StatChip(
                     icon = Icons.Default.Star,
                     label = formatCount(repository.stargazersCount),
-                    contentDescription = "${repository.stargazersCount} ${stringResource(R.string.stars)}"
+                    contentDescription = stringResource(R.string.stargazer_count, repository.stargazersCount)
                 )
 
                 StatChip(

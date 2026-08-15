@@ -20,6 +20,7 @@ data class InstallLogItem(
 data class DetailsState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
+    val warningMessage: String? = null,
 
     val repository: GithubRepoSummary? = null,
     val latestRelease: GithubRelease? = null,

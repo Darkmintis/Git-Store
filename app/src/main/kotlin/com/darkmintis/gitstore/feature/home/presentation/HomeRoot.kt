@@ -73,6 +73,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.app.navigation.LocalBottomNavigationLiquid
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreButton
 import com.darkmintis.gitstore.core.presentation.components.RepositoryCard
+import com.darkmintis.gitstore.core.presentation.components.RetryErrorState
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.home.presentation.components.HomeFilterChips
 import com.darkmintis.gitstore.feature.home.presentation.model.HomeCategory
@@ -295,30 +296,12 @@ private fun ErrorState(
     onAction: (HomeAction) -> Unit
 ) {
     if (state.errorMessage != null && state.repos.isEmpty()) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = state.errorMessage,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                GithubStoreButton(
-                    text = stringResource(R.string.home_retry),
-                    onClick = {
-                        onAction(HomeAction.Retry)
-                    }
-                )
-            }
-        }
+        RetryErrorState(
+            title = stringResource(R.string.home_failed_to_load_repositories),
+            message = state.errorMessage,
+            onRetry = { onAction(HomeAction.Retry) },
+            retryText = stringResource(R.string.home_retry)
+        )
     }
 }
 
