@@ -22,7 +22,8 @@ data class RateLimitInfo(
                 val limit = headers["X-RateLimit-Limit"]?.toIntOrNull() ?: return null
                 val remaining = headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: return null
                 val reset = headers["X-RateLimit-Reset"]?.toLongOrNull()?.let {
-                    DateInstant.fromEpochMilliseconds(it)
+                    // GitHub sends epoch seconds
+                    DateInstant.fromEpochSeconds(it)
                 } ?: return null
                 val resource = headers["X-RateLimit-Resource"] ?: "core"
 

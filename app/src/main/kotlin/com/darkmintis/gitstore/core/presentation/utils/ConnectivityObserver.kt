@@ -9,20 +9,24 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 
 class ConnectivityObserver(private val context: Context) {
 
     val isOnline: Flow<Boolean> = callbackFlow {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        val checkInitial = { current: ConnectivityManager ->
-            current.getNetworkCapabilities(current.activeNetwork)?.hasCapability(
-                NetworkCapabilities.NET_CAPABILITY_INTERNET
-            ) == true
+        fun currentlyOnline(): Boolean {
+            return try {
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                    ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+            } catch (_: SecurityException) {
+                // Missing ACCESS_NETWORK_STATE — assume online so the app can still run.
+                true
+            }
         }
 
-        trySend(checkInitial(connectivityManager))
+        trySend(currentlyOnline())
 
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
@@ -30,21 +34,32 @@ class ConnectivityObserver(private val context: Context) {
             }
 
             override fun onLost(network: Network) {
-                trySend(false)
+                trySend(currentlyOnline())
             }
 
-            override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) {
+            override fun onCapabilitiesChanged(
+                network: Network,
+                capabilities: NetworkCapabilities
+            ) {
                 trySend(capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
             }
         }
 
-        connectivityManager.registerNetworkCallback(
-            NetworkRequest.Builder().build(),
-            callback
-        )
+        try {
+            connectivityManager.registerNetworkCallback(
+                NetworkRequest.Builder().build(),
+                callback
+            )
+        } catch (_: SecurityException) {
+            trySend(true)
+            awaitClose { }
+            return@callbackFlow
+        }
 
         awaitClose {
-            connectivityManager.unregisterNetworkCallback(callback)
+            runCatching {
+                connectivityManager.unregisterNetworkCallback(callback)
+            }
         }
     }.distinctUntilChanged()
 }
