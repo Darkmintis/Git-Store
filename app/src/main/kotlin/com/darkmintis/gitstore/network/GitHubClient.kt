@@ -131,9 +131,14 @@ suspend inline fun <reified T> HttpClient.safeApiCall(
             Result.success(response.body<T>())
         } else {
             Result.failure(
-                Exception("HTTP ${response.status.value}: ${response.status.description}")
+                HttpApiException(
+                    statusCode = response.status.value,
+                    statusDescription = response.status.description
+                )
             )
         }
+    } catch (e: kotlinx.coroutines.CancellationException) {
+        throw e
     } catch (e: RateLimitException) {
         Result.failure(e)
     } catch (e: Exception) {

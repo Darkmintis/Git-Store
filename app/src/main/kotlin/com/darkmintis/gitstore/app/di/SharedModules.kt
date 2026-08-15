@@ -149,7 +149,7 @@ val authModule: Module = module {
             browserHelper = get(),
             clipboardHelper = get(),
             scope = get(),
-            application = get()
+            stringProvider = get()
         )
     }
 }
@@ -194,7 +194,7 @@ val searchModule: Module = module {
     // ViewModel
     viewModel {
         SearchViewModel(
-            application = get(),
+            stringProvider = get(),
             searchRepository = get(),
             installedAppsRepository = get(),
             syncInstalledAppsUseCase = get(),
@@ -236,7 +236,7 @@ val detailsModule: Module = module {
             packageMonitor = get<PackageMonitor>(),
             syncInstalledAppsUseCase = get(),
             starredRepository = get(),
-            application = get()
+            stringProvider = get()
         )
     }
 }
@@ -321,7 +321,7 @@ val appsModule: Module = module {
             packageMonitor = get(),
             detailsRepository = get(),
             syncInstalledAppsUseCase = get(),
-            application = get()
+            stringProvider = get()
         )
     }
 }
@@ -332,7 +332,8 @@ val downloadManagerModule: Module = module {
             context = androidContext(),
             downloader = get(),
             installer = get(),
-            files = get()
+            files = get(),
+            stringProvider = get()
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.darkmintis.gitstore.feature.auth.presentation
 
-import android.app.Application
 import com.darkmintis.gitstore.R
 
 import androidx.lifecycle.ViewModel
@@ -24,6 +23,8 @@ import kotlinx.coroutines.withContext
 import com.darkmintis.gitstore.core.domain.model.DeviceStart
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
 import com.darkmintis.gitstore.core.presentation.utils.ClipboardHelper
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 import com.darkmintis.gitstore.feature.auth.domain.repository.AuthenticationRepository
 
 class AuthenticationViewModel(
@@ -31,7 +32,7 @@ class AuthenticationViewModel(
     private val browserHelper: BrowserHelper,
     private val clipboardHelper: ClipboardHelper,
     private val scope: CoroutineScope,
-    private val application: Application
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -103,7 +104,7 @@ class AuthenticationViewModel(
 
                     try {
                         clipboardHelper.copy(
-                            label = application.getString(R.string.enter_code_on_github),
+                            label = stringProvider.getString(R.string.enter_code_on_github),
                             text = start.userCode
                         )
                         _state.update { it.copy(copied = true) }
@@ -128,7 +129,7 @@ class AuthenticationViewModel(
                     _state.update {
                         it.copy(
                             loginState = AuthLoginState.Error(
-                                t.message ?: application.getString(R.string.error_unknown)
+                                ErrorMapper.message(t, stringProvider)
                             )
                         )
                     }

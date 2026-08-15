@@ -27,9 +27,15 @@ import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.FileLocationsProvider
 import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.core.data.services.LocalizationManager
+import com.darkmintis.gitstore.core.presentation.utils.AndroidStringProvider
 import com.darkmintis.gitstore.core.presentation.utils.ConnectivityObserver
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 
 val platformModule: Module = module {
+    single<StringProvider> {
+        AndroidStringProvider(androidContext())
+    }
+
     single<Downloader> {
         AndroidDownloader(
             context = get(),
