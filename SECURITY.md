@@ -6,8 +6,8 @@ Currently supported versions for security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.5.x   | :white_check_mark: |
-| < 1.5   | :x:                |
+| latest  | :white_check_mark: |
+| older   | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -17,15 +17,16 @@ We take security seriously. If you discover a security vulnerability, please fol
 
 Instead:
 
-1. **Email**: Send details to [your-email@example.com] with subject "Git Store Security Vulnerability"
+1. **GitHub Security Advisory**: Use private reporting at [GitHub Security Advisories](https://github.com/Darkmintis/Git-Store/security/advisories/new)
+2. **Email fallback**: If advisory reporting is unavailable, open a private maintainer contact request through [GitHub Issues](https://github.com/Darkmintis/Git-Store/issues/new)
 
-2. **Include**:
+3. **Include**:
    - Description of the vulnerability
    - Steps to reproduce
    - Potential impact
    - Suggested fix (if any)
 
-3. **Response Time**:
+4. **Response Time**:
    - Initial response: Within 48 hours
    - Status update: Within 7 days
    - Fix timeline: Depends on severity
@@ -54,8 +55,7 @@ Instead:
 
 Git Store implements:
 - HTTPS-only connections
-- Certificate pinning for API calls
-- Secure token storage using Android DataStore
+- Secure token storage on device via encrypted storage wrappers
 - No tracking or analytics
 - Open source code for transparency
 

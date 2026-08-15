@@ -92,7 +92,7 @@ We welcome feature suggestions! Please:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under GNU GPL v3.0.
+By contributing, you agree that your contributions will be licensed under Apache License 2.0.
 
 ---
 
