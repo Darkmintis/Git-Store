@@ -174,7 +174,7 @@ fun LazyListScope.about(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.help_support),
                             modifier = Modifier.size(24.dp),
                         )
                     }

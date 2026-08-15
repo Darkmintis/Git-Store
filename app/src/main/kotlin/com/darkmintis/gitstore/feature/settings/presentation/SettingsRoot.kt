@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import com.darkmintis.gitstore.core.presentation.model.FontTheme
+import com.darkmintis.gitstore.core.presentation.model.AppTheme
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
@@ -49,12 +49,14 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.starredRepos
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
 fun SettingsRoot(
     onNavigateBack: () -> Unit,
     onNavigateToAuth: () -> Unit,
+    onNavigateToStarredRepos: () -> Unit,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -89,6 +91,10 @@ fun SettingsRoot(
 
                 SettingsAction.OnGitHubSignInClick -> {
                     onNavigateToAuth()
+                }
+
+                SettingsAction.OnOpenStarredReposClick -> {
+                    onNavigateToStarredRepos()
                 }
 
                 else -> {
@@ -156,12 +162,6 @@ fun SettingsScreen(
                 },
                 onThemeColorSelected = { theme ->
                     onAction(SettingsAction.OnThemeColorSelected(theme))
-                },
-                isUsingSystemFont = state.selectedFontTheme == FontTheme.SYSTEM,
-                onUseSystemFontToggled = { useSystem ->
-                    onAction(SettingsAction.OnFontThemeSelected(
-                        if (useSystem) FontTheme.SYSTEM else FontTheme.CUSTOM
-                    ))
                 }
             )
 
@@ -191,6 +191,10 @@ fun SettingsScreen(
             )
 
             if (state.isUserLoggedIn) {
+                starredRepos(
+                    onAction = onAction
+                )
+
                 item {
                     Spacer(Modifier.height(16.dp))
                 }

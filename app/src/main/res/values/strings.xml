@@ -5,6 +5,7 @@
 
     <!-- Apps feature - Navigation / Top bar -->
     <string name="home">Home</string>
+    <string name="apps">Apps</string>
     <string name="installed_apps">Installed Apps</string>
     <string name="navigate_back">Navigate back</string>
     <string name="downloads">Downloads</string>
@@ -107,9 +108,15 @@
 
     <string name="search_failed">Search failed</string>
     <string name="no_repositories_found">No repositories found</string>
+    <string name="search_try_different_filters">Try a different keyword, language, or sort option.</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_sign_in_github_title">Sign in with GitHub</string>
+    <string name="settings_sign_in_github_description">Connect your GitHub account to sync favorites and increase API rate limits from 60 to 5000 requests per hour</string>
+    <string name="support_development_title">Support Development</string>
+    <string name="support_development_description">Help keep Git Store free and ad-free. Your support helps maintain and improve the app.</string>
+    <string name="donate_with_crypto">Donate with crypto</string>
 
     <!-- Sections -->
     <string name="section_appearance">APPEARANCE</string>
@@ -248,9 +255,6 @@
     <string name="rate_limit_ok">OK</string>
     <string name="rate_limit_close">Close</string>
 
-    <string name="system_font">System font</string>
-    <string name="system_font_description">Match your device\'s font for better readability</string>
-
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_system">System</string>
@@ -330,4 +334,39 @@
     <!-- Developer Profile - Count Formatting -->
     <string name="count_millions">%1$dM</string>
     <string name="count_thousands">%1$dk</string>
+
+    <!-- Shared empty / offline / downloads polish -->
+    <string name="you_are_offline">You are offline</string>
+    <string name="no_downloads_yet">No downloads yet</string>
+    <string name="no_downloads_yet_message">Downloaded APKs will appear here for install or cleanup.</string>
+    <string name="install">Install</string>
+    <string name="delete">Delete</string>
+    <string name="favourites_empty_message">Save repositories you care about to find them quickly later.</string>
+    <string name="apps_empty_message">Install an open-source app from GitHub releases to manage updates here.</string>
+    <string name="search_idle_title">Find open-source apps</string>
+    <string name="search_idle_message">Search GitHub repositories with Android releases by name, language, or sort.</string>
+    <string name="owner_avatar">Owner avatar</string>
+    <string name="update_progress_summary">%1$d succeeded, %2$d failed</string>
+    <string name="more_apps_by_darkmintis">More Apps by Darkmintis</string>
+    <string name="promo_app_blink">Blink</string>
+    <string name="unable_to_check_for_updates">Unable to check for updates</string>
+    <string name="stargazer_count">%1$d stars</string>
+
+    <!-- User-facing errors -->
+    <string name="error_rate_limit">GitHub rate limit reached. Sign in or wait a few minutes, then try again.</string>
+    <string name="error_timeout">The request timed out. Check your connection and try again.</string>
+    <string name="error_offline">You appear to be offline. Check your internet connection and try again.</string>
+    <string name="error_network">Network error. Please try again.</string>
+    <string name="error_unauthorized">Authentication failed. Sign in with GitHub and try again.</string>
+    <string name="error_forbidden">Access denied. You may need to sign in or this resource is private.</string>
+    <string name="error_not_found">We couldn\'t find that repository or resource.</string>
+    <string name="error_server">GitHub is having trouble right now. Please try again later.</string>
+    <string name="error_http_generic">Something went wrong (error %1$d). Please try again.</string>
+    <string name="error_download_failed">Download failed. Please try again.</string>
+    <string name="error_install_failed">Installation failed. Please try again.</string>
+    <string name="error_load_apps">Couldn\'t load installed apps. Please try again.</string>
+    <string name="error_favourite_toggle">Couldn\'t update favourites. Please try again.</string>
+    <string name="error_check_updates">Couldn\'t check for updates. Please try again.</string>
+    <string name="error_logout_failed">Couldn\'t log out. Please try again.</string>
+    <string name="details_warning_release">Repository loaded, but release info couldn\'t be fetched.</string>
 </resources>

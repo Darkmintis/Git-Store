@@ -104,7 +104,7 @@ fun LazyListScope.support(
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Support Development",
+                    text = stringResource(R.string.support_development_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -113,7 +113,7 @@ fun LazyListScope.support(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Help keep Git Store free and ad-free! Your support helps maintain and improve the app.",
+                    text = stringResource(R.string.support_development_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -139,7 +139,7 @@ fun LazyListScope.support(
                 ) {
                     Icon(
                         imageVector = Icons.Default.LocalCafe,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.donate_with_crypto),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(20.dp)
                     )
@@ -147,7 +147,7 @@ fun LazyListScope.support(
                     Spacer(Modifier.size(8.dp))
 
                     Text(
-                        text = "Donate with crypto",
+                        text = stringResource(R.string.donate_with_crypto),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary

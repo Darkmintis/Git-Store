@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,14 +46,14 @@ fun LazyListScope.signInWithGitHub(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Sign in with GitHub",
+                    text = stringResource(R.string.settings_sign_in_github_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 
                 Text(
-                    text = "Connect your GitHub account to sync favorites and increase API rate limits from 60 to 5000 requests per hour",
+                    text = stringResource(R.string.settings_sign_in_github_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
                 )
@@ -73,11 +74,11 @@ fun LazyListScope.signInWithGitHub(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_github),
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.sign_in_with_github),
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
-                            text = "Sign in with GitHub",
+                            text = stringResource(R.string.sign_in_with_github),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold
                         )

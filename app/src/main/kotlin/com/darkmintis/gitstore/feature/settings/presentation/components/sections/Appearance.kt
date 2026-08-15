@@ -83,8 +83,6 @@ fun LazyListScope.appearance(
     isDarkTheme: Boolean?,
     onDarkThemeChange: (Boolean?) -> Unit,
     onThemeColorSelected: (AppTheme) -> Unit,
-    isUsingSystemFont: Boolean,
-    onUseSystemFontToggled: (Boolean) -> Unit,
 ) {
     item {
         SectionHeader(stringResource(R.string.section_appearance))
@@ -116,13 +114,6 @@ fun LazyListScope.appearance(
 
             VerticalSpacer(16.dp)
         }
-
-        ToggleSettingCard(
-            title = stringResource(R.string.system_font),
-            description = stringResource(R.string.system_font_description),
-            checked = isUsingSystemFont,
-            onCheckedChange = onUseSystemFontToggled
-        )
     }
 }
 

@@ -43,6 +43,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.net.URL
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.darkmintis.gitstore.R
 
 private const val PROMO_APPS_URL = "https://darkmintis.dev/promo-apps.json"
 private const val PREFS_NAME = "promo_apps_cache"
@@ -121,7 +123,7 @@ fun LazyListScope.moreApps(
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "More Apps by Darkmintis",
+                    text = stringResource(R.string.more_apps_by_darkmintis),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
@@ -200,7 +202,7 @@ private fun PromoSlotsRow(
                     if (isBlinkSlot) {
                         AsyncImage(
                             model = blinkIconUrl,
-                            contentDescription = "Blink",
+                            contentDescription = stringResource(R.string.promo_app_blink),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(RoundedCornerShape(14.dp))

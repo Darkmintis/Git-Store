@@ -1,6 +1,10 @@
 package com.darkmintis.gitstore.feature.settings.presentation
 
+import com.darkmintis.gitstore.R
+
 import android.app.Application
+import com.darkmintis.gitstore.core.presentation.utils.AndroidStringProvider
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
 import com.darkmintis.gitstore.BuildConfig
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,6 +42,9 @@ class SettingsViewModel(
     private val installer: Installer,
     private val application: Application
 ) : ViewModel() {
+
+    private val stringProvider = AndroidStringProvider(application)
+
 
     private var hasLoadedInitialData = false
     private var currentDownloadJob: Job? = null
@@ -95,14 +102,6 @@ class SettingsViewModel(
                 }
             }
         }
-
-        viewModelScope.launch {
-            themesRepository.getFontTheme().collect { fontTheme ->
-                _state.update {
-                    it.copy(selectedFontTheme = fontTheme)
-                }
-            }
-        }
     }
 
     private fun checkForGitStoreUpdate() {
@@ -121,7 +120,7 @@ class SettingsViewModel(
                     it.copy(
                         isCheckingGitStoreUpdate = false,
                         isGitStoreUpdateAvailable = false,
-                        gitStoreUpdateErrorMessage = "Unable to check for updates"
+                        gitStoreUpdateErrorMessage = application.getString(R.string.unable_to_check_for_updates)
                     )
                 }
                 return@launch
@@ -220,6 +219,10 @@ class SettingsViewModel(
                 // Handled in composable - navigation to AuthenticationScreen
             }
 
+            SettingsAction.OnOpenStarredReposClick -> {
+                // Handled in composable - navigation to StarredReposScreen
+            }
+
             is SettingsAction.OnBrowserOpen -> {
                 browserHelper.openUrl(
                     url = action.url,
@@ -256,9 +259,11 @@ class SettingsViewModel(
                         _events.send(SettingsEvent.OnLogoutSuccessful)
                     }.onFailure { error ->
                         _state.update { it.copy(isLogoutDialogVisible = false) }
-                        error.message?.let {
-                            _events.send(OnLogoutError(it))
-                        }
+                        _events.send(
+                            OnLogoutError(
+                                ErrorMapper.message(error, stringProvider, R.string.error_logout_failed)
+                            )
+                        )
                     }
                 }
             }
@@ -273,12 +278,6 @@ class SettingsViewModel(
 
             SettingsAction.OnNavigateBackClick -> {
                 /* Handed in composable */
-            }
-
-            is SettingsAction.OnFontThemeSelected -> {
-                viewModelScope.launch {
-                    themesRepository.setFontTheme(action.fontTheme)
-                }
             }
 
             is SettingsAction.OnDarkThemeChange -> {
@@ -330,12 +329,14 @@ class SettingsViewModel(
                         updateDownloadProgress = null
                     )
                 }
+            } catch (t: kotlinx.coroutines.CancellationException) {
+                throw t
             } catch (t: Throwable) {
                 _state.update {
                     it.copy(
                         isDownloadingUpdate = false,
                         updateDownloadProgress = null,
-                        updateDownloadError = t.message
+                        updateDownloadError = ErrorMapper.message(t, stringProvider)
                     )
                 }
             }
