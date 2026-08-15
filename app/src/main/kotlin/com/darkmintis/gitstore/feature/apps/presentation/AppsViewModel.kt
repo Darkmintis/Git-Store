@@ -1,18 +1,10 @@
 package com.darkmintis.gitstore.feature.apps.presentation
 
-import android.app.Application
 import com.darkmintis.gitstore.R
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-
-
-
-
-
-
-
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,6 +23,8 @@ import kotlinx.coroutines.withContext
 import com.darkmintis.gitstore.core.data.services.PackageMonitor
 import com.darkmintis.gitstore.core.data.local.db.entities.InstalledApp
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 import com.darkmintis.gitstore.feature.apps.domain.repository.AppsRepository
 import com.darkmintis.gitstore.feature.apps.presentation.model.AppItem
 import com.darkmintis.gitstore.feature.apps.presentation.model.UpdateAllProgress
@@ -49,7 +43,7 @@ class AppsViewModel(
     private val packageMonitor: PackageMonitor,
     private val detailsRepository: DetailsRepository,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
-    private val application: Application
+    private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -101,16 +95,22 @@ class AppsViewModel(
                         it.copy(
                             apps = appItems,
                             isLoading = false,
+                            errorMessage = null,
                             updateAllButtonEnabled = appItems.any { item ->
                                 item.installedApp.isUpdateAvailable
                             }
                         )
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Logger.e { "Failed to load apps: ${e.message}" }
                 _state.update {
-                    it.copy(isLoading = false)
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = ErrorMapper.message(e, stringProvider)
+                    )
                 }
             }
         }
@@ -166,8 +166,15 @@ class AppsViewModel(
                 syncInstalledAppsUseCase()
 
                 installedAppsRepository.checkAllForUpdates()
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Logger.e { "Check all for updates failed: ${e.message}" }
+                _events.send(
+                    AppsEvent.ShowError(
+                        ErrorMapper.message(e, stringProvider)
+                    )
+                )
             }
         }
     }
@@ -210,6 +217,10 @@ class AppsViewModel(
                     _events.send(AppsEvent.NavigateToRepo(action.repoId))
                 }
             }
+
+            AppsAction.OnRetry -> {
+                loadApps()
+            }
         }
     }
 
@@ -222,7 +233,7 @@ class AppsViewModel(
                         viewModelScope.launch {
                             _events.send(
                                 AppsEvent.ShowError(
-                                    application.getString(
+                                    stringProvider.getString(
                                         R.string.cannot_launch,
                                         app.appName
                                     )
@@ -231,14 +242,13 @@ class AppsViewModel(
                         }
                     }
                 )
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 Logger.e { "Failed to open app: ${e.message}" }
                 _events.send(
                     AppsEvent.ShowError(
-                        application.getString(
-                            R.string.failed_to_open,
-                            app.appName
-                        )
+                        ErrorMapper.message(e, stringProvider)
                     )
                 )
             }
@@ -355,14 +365,14 @@ class AppsViewModel(
                 cleanupUpdate(app.packageName, app.latestAssetName)
                 updateAppState(
                     app.packageName,
-                    UpdateState.Error(e.message ?: "Update failed")
+                    UpdateState.Error(ErrorMapper.message(e, stringProvider))
                 )
                 if (!isBatchUpdating) {
                     _events.send(
                         AppsEvent.ShowError(
-                            application.getString(
+                            stringProvider.getString(
                                 R.string.failed_to_update,
-                                app.appName, e.message ?: ""
+                                app.appName, ErrorMapper.message(e, stringProvider)
                             )
                         )
                     )
@@ -392,7 +402,7 @@ class AppsViewModel(
                 }
 
                 if (appsToUpdate.isEmpty()) {
-                    _events.send(AppsEvent.ShowError(application.getString(R.string.no_updates_available)))
+                    _events.send(AppsEvent.ShowError(stringProvider.getString(R.string.no_updates_available)))
                     return@launch
                 }
 
@@ -452,15 +462,17 @@ class AppsViewModel(
 
                 Logger.d { "Update all completed: $succeeded succeeded, $failed failed" }
                 if (failed == 0) {
-                    _events.send(AppsEvent.ShowSuccess(application.getString(R.string.all_apps_updated_successfully)))
+                    _events.send(AppsEvent.ShowSuccess(stringProvider.getString(R.string.all_apps_updated_successfully)))
                 } else {
-                    _events.send(AppsEvent.ShowError(application.getString(R.string.update_all_failed, "$succeeded updated, $failed failed")))
+                    _events.send(AppsEvent.ShowError(stringProvider.getString(R.string.update_all_failed, "$succeeded updated, $failed failed")))
                 }
 
             } catch (e: CancellationException) {
                 Logger.d { "Update all cancelled" }
+                throw e
             } catch (e: Exception) {
                 Logger.e { "Update all failed: ${e.message}" }
+                _events.send(AppsEvent.ShowError(ErrorMapper.message(e, stringProvider)))
             } finally {
                 isBatchUpdating = false
                 _state.update {

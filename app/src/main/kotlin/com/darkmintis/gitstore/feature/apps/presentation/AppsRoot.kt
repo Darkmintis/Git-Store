@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.GetApp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Update
@@ -59,6 +60,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.LoadingState
+import com.darkmintis.gitstore.core.presentation.components.RetryErrorState
 
 
 
@@ -233,21 +237,23 @@ fun AppsScreen(
 
             when {
                 state.isLoading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    LoadingState()
+                }
+
+                state.errorMessage != null && state.apps.isEmpty() -> {
+                    RetryErrorState(
+                        title = stringResource(R.string.error_load_apps),
+                        message = state.errorMessage,
+                        onRetry = { onAction(AppsAction.OnRetry) }
+                    )
                 }
 
                 filteredApps.isEmpty() -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(stringResource(R.string.no_apps_found))
-                    }
+                    EmptyState(
+                        title = stringResource(R.string.no_apps_found),
+                        message = stringResource(R.string.apps_empty_message),
+                        icon = Icons.Default.GetApp
+                    )
                 }
 
                 else -> {
@@ -304,7 +310,7 @@ fun UpdateAllProgressCard(
                     )
                     if (progress.succeeded > 0 || progress.failed > 0) {
                         Text(
-                            text = "${progress.succeeded} succeeded, ${progress.failed} failed",
+                            text = stringResource(R.string.update_progress_summary, progress.succeeded, progress.failed),
                             style = MaterialTheme.typography.labelSmall,
                             color = if (progress.failed > 0)
                                 MaterialTheme.colorScheme.error
@@ -365,7 +371,7 @@ fun AppItemCard(
             ) {
                 AsyncImage(
                     model = app.repoOwnerAvatarUrl,
-                    contentDescription = "Owner avatar",
+                    contentDescription = stringResource(R.string.owner_avatar),
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
