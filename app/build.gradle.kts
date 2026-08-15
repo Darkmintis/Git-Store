@@ -18,7 +18,7 @@ val localProps = Properties().apply {
     if (file.exists()) file.inputStream().use { this.load(it) }
 }
 val localGithubClientId =
-    (localProps.getProperty("GITHUB_CLIENT_ID") ?: "Ov23linTY28VFpFjFiI9").trim()
+    localProps.getProperty("GITHUB_CLIENT_ID")?.trim().orEmpty()
 
 // Signing configuration from environment or local.properties
 val signingKeystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
@@ -105,6 +105,11 @@ android {
         buildConfig = true
         compose = true
     }
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -173,8 +178,20 @@ dependencies {
 
     // Testing
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.kotest.framework.engine)
     testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mockk)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 configurations.all {
