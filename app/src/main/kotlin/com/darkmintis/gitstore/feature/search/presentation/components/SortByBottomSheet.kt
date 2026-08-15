@@ -1,5 +1,6 @@
 package com.darkmintis.gitstore.feature.search.presentation.components
 
+import com.darkmintis.gitstore.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +27,12 @@ fun SortByBottomSheet(
         confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(text = "Close")
+                Text(text = stringResource(R.string.close))
             }
         },
         title = {
             Text(
-                text = "Sort by",
+                text = stringResource(R.string.sort_by),
                 style = MaterialTheme.typography.titleMedium
             )
         },

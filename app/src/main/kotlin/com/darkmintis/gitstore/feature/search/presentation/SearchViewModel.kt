@@ -1,7 +1,5 @@
 package com.darkmintis.gitstore.feature.search.presentation
 
-import com.darkmintis.gitstore.R
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -18,16 +16,17 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.app.Application
 import com.darkmintis.gitstore.core.domain.repository.FavouritesRepository
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
 import com.darkmintis.gitstore.core.domain.repository.StarredRepository
 import com.darkmintis.gitstore.core.domain.use_cases.SyncInstalledAppsUseCase
 import com.darkmintis.gitstore.core.presentation.model.DiscoveryRepository
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 import com.darkmintis.gitstore.feature.search.domain.repository.SearchRepository
 
 class SearchViewModel(
-    private val application: Application,
+    private val stringProvider: StringProvider,
     private val searchRepository: SearchRepository,
     private val installedAppsRepository: InstalledAppsRepository,
     private val syncInstalledAppsUseCase: SyncInstalledAppsUseCase,
@@ -170,7 +169,6 @@ class SearchViewModel(
                 searchRepository
                     .searchRepositories(
                         query = _state.value.query,
-                        searchPlatformType = _state.value.selectedSearchPlatformType,
                         language = _state.value.selectedLanguage,
                         page = currentPage
                     )
@@ -219,9 +217,7 @@ class SearchViewModel(
                                 repositories = allRepos,
                                 hasMorePages = paginatedRepos.hasMore,
                                 totalCount = allRepos.size,
-                                errorMessage = if (allRepos.isEmpty() && !paginatedRepos.hasMore) {
-                                    application.getString(R.string.no_repositories_found)
-                                } else null
+                                errorMessage = null
                             )
                         }
                     }
@@ -231,13 +227,14 @@ class SearchViewModel(
                 }
             } catch (e: CancellationException) {
                 Logger.d { "Search cancelled (expected): ${e.message}" }
+                throw e
             } catch (e: Exception) {
                 Logger.e { "Search failed: ${e.message}" }
                 _state.update {
                     it.copy(
                         isLoading = false,
                         isLoadingMore = false,
-                        errorMessage = e.message ?: application.getString(R.string.search_failed)
+                        errorMessage = ErrorMapper.message(e, stringProvider)
                     )
                 }
             }
@@ -246,21 +243,13 @@ class SearchViewModel(
 
     fun onAction(action: SearchAction) {
         when (action) {
-            is SearchAction.OnPlatformTypeSelected -> {
-                if (_state.value.selectedSearchPlatformType != action.searchPlatformType) {
-                    _state.update {
-                        it.copy(selectedSearchPlatformType = action.searchPlatformType)
-                    }
-                    currentPage = 1
-                    searchDebounceJob?.cancel()
-                    performSearch(isInitial = true)
-                }
-            }
-
             is SearchAction.OnLanguageSelected -> {
                 if (_state.value.selectedLanguage != action.language) {
                     _state.update {
-                        it.copy(selectedLanguage = action.language)
+                        it.copy(
+                            selectedLanguage = action.language,
+                            isLanguageSheetVisible = false
+                        )
                     }
                     currentPage = 1
                     searchDebounceJob?.cancel()
@@ -311,11 +300,20 @@ class SearchViewModel(
             is SearchAction.OnSortBySelected -> {
                 if (_state.value.selectedSortBy != action.sortBy) {
                     _state.update {
-                        it.copy(selectedSortBy = action.sortBy)
+                        it.copy(
+                            selectedSortBy = action.sortBy,
+                            isSortSheetVisible = false
+                        )
                     }
                     currentPage = 1
                     searchDebounceJob?.cancel()
                     performSearch(isInitial = true)
+                }
+            }
+
+            SearchAction.OnToggleSortSheetVisibility -> {
+                _state.update {
+                    it.copy(isSortSheetVisible = !it.isSortSheetVisible)
                 }
             }
 
@@ -362,6 +360,8 @@ class SearchViewModel(
                         )
 
                         favouritesRepository.toggleFavorite(favoriteRepo)
+                    } catch (t: CancellationException) {
+                        throw t
                     } catch (t: Throwable) {
                         Logger.e { "Failed to toggle favorite: ${t.message}" }
                     }

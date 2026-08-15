@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -69,10 +70,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.domain.model.GithubRepoSummary
+import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.LoadingState
 import com.darkmintis.gitstore.core.presentation.components.RepositoryCard
+import com.darkmintis.gitstore.core.presentation.components.RetryErrorState
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.search.domain.model.ProgrammingLanguage
+import com.darkmintis.gitstore.feature.search.domain.model.SortBy
 import com.darkmintis.gitstore.feature.search.presentation.components.LanguageFilterBottomSheet
+import com.darkmintis.gitstore.feature.search.presentation.components.SortByBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,6 +98,19 @@ fun SearchRoot(
             },
             onDismissRequest = {
                 viewModel.onAction(SearchAction.OnToggleLanguageSheetVisibility)
+            }
+        )
+    }
+
+    if (state.isSortSheetVisible) {
+        SortByBottomSheet(
+            sortByOptions = SortBy.entries,
+            selectedSortBy = state.selectedSortBy,
+            onSortBySelected = { sortBy ->
+                viewModel.onAction(SearchAction.OnSortBySelected(sortBy))
+            },
+            onDismissRequest = {
+                viewModel.onAction(SearchAction.OnToggleSortSheetVisibility)
             }
         )
     }
@@ -196,32 +215,56 @@ fun SearchScreen(
                     focusRequester = focusRequester
                 )
                 // Language filter chip
-                Row(
+                LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    FilterChip(
-                        selected = state.selectedLanguage != ProgrammingLanguage.All,
-                        onClick = { onAction(SearchAction.OnToggleLanguageSheetVisibility) },
-                        label = {
-                            Text(
-                                text = if (state.selectedLanguage == ProgrammingLanguage.All) {
-                                    stringResource(R.string.language_all)
-                                } else {
-                                    stringResource(state.selectedLanguage.label())
-                                }
-                            )
-                        },
-                        trailingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.KeyboardArrowDown,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    )
+                    item {
+                        FilterChip(
+                            selected = state.selectedLanguage != ProgrammingLanguage.All,
+                            onClick = { onAction(SearchAction.OnToggleLanguageSheetVisibility) },
+                            label = {
+                                Text(
+                                    text = if (state.selectedLanguage == ProgrammingLanguage.All) {
+                                        stringResource(R.string.language_all)
+                                    } else {
+                                        stringResource(state.selectedLanguage.label())
+                                    }
+                                )
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        )
+                    }
+
+                    item {
+                        FilterChip(
+                            selected = state.selectedSortBy != SortBy.BestMatch,
+                            onClick = { onAction(SearchAction.OnToggleSortSheetVisibility) },
+                            label = { Text(stringResource(state.selectedSortBy.label())) },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Sort,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -247,33 +290,39 @@ fun SearchScreen(
             }
 
             Box(Modifier.fillMaxSize()) {
-                if (state.isLoading && state.repositories.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize().imePadding(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularWavyProgressIndicator()
+                when {
+                    state.isLoading && state.repositories.isEmpty() -> {
+                        LoadingState(modifier = Modifier.imePadding())
                     }
-                }
 
-                if (state.errorMessage != null && state.repositories.isEmpty()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = state.errorMessage
-                            )
+                    state.errorMessage != null && state.repositories.isEmpty() -> {
+                        RetryErrorState(
+                            title = stringResource(R.string.search_failed),
+                            message = state.errorMessage!!,
+                            onRetry = { onAction(SearchAction.Retry) }
+                        )
+                    }
 
-                            Spacer(Modifier.height(8.dp))
+                    !state.isLoading &&
+                        state.errorMessage == null &&
+                        state.repositories.isEmpty() &&
+                        state.query.isBlank() -> {
+                        EmptyState(
+                            title = stringResource(R.string.search_idle_title),
+                            message = stringResource(R.string.search_idle_message),
+                            icon = Icons.Default.Search
+                        )
+                    }
 
-                            Button(onClick = { onAction(SearchAction.Retry) }) {
-                                Text(
-                                    text = stringResource(R.string.retry)
-                                )
-                            }
-                        }
+                    !state.isLoading &&
+                        state.errorMessage == null &&
+                        state.repositories.isEmpty() &&
+                        state.query.isNotBlank() -> {
+                        EmptyState(
+                            title = stringResource(R.string.no_repositories_found),
+                            message = stringResource(R.string.search_try_different_filters),
+                            icon = Icons.Default.Search
+                        )
                     }
                 }
 
