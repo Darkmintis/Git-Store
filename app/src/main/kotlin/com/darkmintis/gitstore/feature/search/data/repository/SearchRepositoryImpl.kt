@@ -29,7 +29,6 @@ import com.darkmintis.gitstore.feature.home.domain.model.PaginatedRepos
 import com.darkmintis.gitstore.feature.search.data.repository.dto.GithubReleaseNetworkModel
 import com.darkmintis.gitstore.feature.search.data.repository.utils.LruCache
 import com.darkmintis.gitstore.feature.search.domain.model.ProgrammingLanguage
-import com.darkmintis.gitstore.feature.search.domain.model.SearchPlatformType
 import com.darkmintis.gitstore.feature.search.domain.repository.SearchRepository
 import com.darkmintis.gitstore.network.RateLimitException
 import com.darkmintis.gitstore.network.safeApiCall
@@ -43,12 +42,11 @@ class SearchRepositoryImpl(
 
     override fun searchRepositories(
         query: String,
-        searchPlatformType: SearchPlatformType,
         language: ProgrammingLanguage,
         page: Int
     ): Flow<PaginatedRepos> = channelFlow {
         val perPage = 30
-        val searchQuery = buildSearchQuery(query, searchPlatformType, language)
+        val searchQuery = buildSearchQuery(query, language)
 
         try {
             val responseResult = githubNetworkClient.safeApiCall<GithubRepoSearchResponse>(
@@ -87,7 +85,6 @@ class SearchRepositoryImpl(
                     searchQuery = searchQuery,
                     perPage = perPage,
                     startPage = page,
-                    searchPlatformType = searchPlatformType,
                     targetCount = tunedTargetCount,
                     minFirstEmit = tunedMinFirstEmit,
                     verifyConcurrency = tunedVerifyConcurrency,
@@ -128,7 +125,7 @@ class SearchRepositoryImpl(
                                 try {
                                     semaphore.withPermit {
                                         withTimeoutOrNull(timeoutMs) {
-                                            checkRepoHasInstallersCached(repo, searchPlatformType)
+                                            checkRepoHasInstallersCached(repo)
                                         }
                                     }
                                 } catch (_: CancellationException) {
@@ -189,7 +186,6 @@ class SearchRepositoryImpl(
 
     private fun buildSearchQuery(
         userQuery: String,
-        searchPlatformType: SearchPlatformType,
         language: ProgrammingLanguage
     ): String {
         val clean = userQuery.trim()
@@ -201,18 +197,13 @@ class SearchRepositoryImpl(
         val scope = " in:name,description,readme"
         val common = " archived:false fork:false"
 
-        val platformHints = when (searchPlatformType) {
-            SearchPlatformType.All -> ""
-            SearchPlatformType.Android -> " (topic:android OR apk in:name,description,readme)"
-        }
-
         val languageFilter = if (language != ProgrammingLanguage.All && language.queryValue != null) {
             " language:${language.queryValue}"
         } else {
             ""
         }
 
-        return ("$q$scope$common" + platformHints + languageFilter).trim()
+        return ("$q$scope$common" + languageFilter).trim()
     }
 
     private data class StrictResult(
@@ -226,7 +217,6 @@ class SearchRepositoryImpl(
         searchQuery: String,
         perPage: Int,
         startPage: Int,
-        searchPlatformType: SearchPlatformType,
         targetCount: Int,
         minFirstEmit: Int,
         verifyConcurrency: Int,
@@ -261,7 +251,7 @@ class SearchRepositoryImpl(
                             try {
                                 semaphore.withPermit {
                                     withTimeoutOrNull(perCheckTimeoutMs) {
-                                        checkRepoHasInstallersCached(repo, searchPlatformType)
+                                        checkRepoHasInstallersCached(repo)
                                     }
                                 }
                             } catch (_: CancellationException) {
@@ -348,17 +338,8 @@ class SearchRepositoryImpl(
     }
 
     private suspend fun checkRepoHasInstallers(
-        repo: GithubRepoNetworkModel,
-        targetPlatform: SearchPlatformType
+        repo: GithubRepoNetworkModel
     ): GithubRepoSummary? {
-        fun assetMatchesForPlatform(nameRaw: String, platform: SearchPlatformType): Boolean {
-            val name = nameRaw.lowercase()
-            return when (platform) {
-                SearchPlatformType.All -> name.endsWith(".apk")
-                SearchPlatformType.Android -> name.endsWith(".apk")
-            }
-        }
-
         return try {
             val releasesResult = githubNetworkClient.safeApiCall<List<GithubReleaseNetworkModel>>(
                 rateLimitHandler = appStateManager.rateLimitHandler,
@@ -387,10 +368,7 @@ class SearchRepositoryImpl(
             }
 
             val hasRelevantAssets = stableRelease.assets.any { asset ->
-                assetMatchesForPlatform(
-                    asset.name,
-                    targetPlatform
-                )
+                asset.name.lowercase().endsWith(".apk")
             }
 
             if (hasRelevantAssets) repo.toSummary() else null
@@ -400,10 +378,9 @@ class SearchRepositoryImpl(
     }
 
     private suspend fun checkRepoHasInstallersCached(
-        repo: GithubRepoNetworkModel,
-        targetPlatform: SearchPlatformType
+        repo: GithubRepoNetworkModel
     ): GithubRepoSummary? {
-        val key = "${repo.owner.login}/${repo.name}:LATEST_PLATFORM_${targetPlatform.name}"
+        val key = "${repo.owner.login}/${repo.name}"
         val cached = cacheMutex.withLock {
             if (releaseCheckCache.contains(key)) releaseCheckCache.get(key) else null
         }
@@ -415,7 +392,7 @@ class SearchRepositoryImpl(
             return cached
         }
 
-        val result = checkRepoHasInstallers(repo, targetPlatform)
+        val result = checkRepoHasInstallers(repo)
         cacheMutex.withLock {
             releaseCheckCache.put(key, result)
         }
