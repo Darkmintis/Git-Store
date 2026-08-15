@@ -18,7 +18,7 @@ import com.darkmintis.gitstore.core.data.local.db.entities.UpdateHistory
         UpdateHistory::class,
         StarredRepo::class,
     ],
-    version = 1,
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
