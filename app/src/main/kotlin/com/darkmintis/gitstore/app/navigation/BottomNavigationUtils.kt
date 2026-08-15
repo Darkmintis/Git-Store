@@ -3,19 +3,19 @@ package com.darkmintis.gitstore.app.navigation
 import com.darkmintis.gitstore.R
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material.icons.filled.GetApp
 
 data class BottomNavigationItem(
     val titleRes: Int,
-    val iconRes: ImageVector,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
     val screen: GithubStoreGraph
 )
 
@@ -24,28 +24,27 @@ object BottomNavigationUtils {
         return listOf(
             BottomNavigationItem(
                 titleRes = R.string.home,
-                iconRes = Icons.Filled.Home,
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
                 screen = GithubStoreGraph.HomeScreen
             ),
             BottomNavigationItem(
                 titleRes = R.string.favourites,
-                iconRes = Icons.Filled.Favorite,
+                selectedIcon = Icons.Filled.Favorite,
+                unselectedIcon = Icons.Outlined.FavoriteBorder,
                 screen = GithubStoreGraph.FavouritesScreen
             ),
             BottomNavigationItem(
-                titleRes = R.string.installed_apps,
-                iconRes = Icons.Filled.GetApp,
-                screen = GithubStoreGraph.AppsScreen
+                titleRes = R.string.downloads,
+                selectedIcon = Icons.Filled.Download,
+                unselectedIcon = Icons.Filled.Download,
+                screen = GithubStoreGraph.DownloadsScreen
             ),
             BottomNavigationItem(
                 titleRes = R.string.search,
-                iconRes = Icons.Filled.Search,
+                selectedIcon = Icons.Filled.Search,
+                unselectedIcon = Icons.Outlined.Search,
                 screen = GithubStoreGraph.SearchScreen
-            ),
-            BottomNavigationItem(
-                titleRes = R.string.downloads,
-                iconRes = Icons.Filled.Download,
-                screen = GithubStoreGraph.DownloadsScreen
             )
         )
     }
@@ -53,13 +52,9 @@ object BottomNavigationUtils {
     fun allowedScreens(): List<GithubStoreGraph> {
         return listOf(
             GithubStoreGraph.HomeScreen,
-            GithubStoreGraph.SearchScreen,
-            GithubStoreGraph.AppsScreen,
             GithubStoreGraph.FavouritesScreen,
-            GithubStoreGraph.DownloadsScreen
+            GithubStoreGraph.DownloadsScreen,
+            GithubStoreGraph.SearchScreen
         )
     }
 }
-
-
-

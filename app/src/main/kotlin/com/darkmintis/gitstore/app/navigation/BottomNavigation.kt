@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+
 @Composable
 fun BottomNavigation(
     currentScreen: GithubStoreGraph,
@@ -24,10 +25,11 @@ fun BottomNavigation(
             BottomNavigationUtils
                 .items()
                 .forEach { item ->
+                    val selected = item.screen == currentScreen
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                imageVector = item.iconRes,
+                                imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                                 contentDescription = stringResource(item.titleRes)
                             )
                         },
@@ -37,7 +39,7 @@ fun BottomNavigation(
                                 style = MaterialTheme.typography.labelSmall
                             )
                         },
-                        selected = item.screen == currentScreen,
+                        selected = selected,
                         onClick = {
                             onNavigate(item.screen)
                         }
@@ -46,5 +48,3 @@ fun BottomNavigation(
         }
     }
 }
-
-
