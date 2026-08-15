@@ -12,29 +12,24 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
-
-
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.LoadingState
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.favourites.presentation.components.FavouriteRepositoryItem
 
@@ -67,7 +62,6 @@ fun FavouritesRoot(
     )
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FavouritesScreen(
     state: FavouritesState,
@@ -84,39 +78,49 @@ fun FavouritesScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(
-                    350.dp
-                ),
-                verticalItemSpacing = 12.dp,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(
-                    items = state.favouriteRepositories,
-                    key = { it.repoId }
-                ) { repo ->
-                    FavouriteRepositoryItem(
-                        favouriteRepository = repo,
-                        onToggleFavouriteClick = {
-                            onAction(FavouritesAction.OnToggleFavorite(repo))
-                        },
-                        onItemClick = {
-                            onAction(FavouritesAction.OnRepositoryClick(repo))
-                        },
-                        onDevProfileClick = {
-                            onAction(FavouritesAction.OnDeveloperProfileClick(repo.repoOwner))
-                        },
-                        modifier = Modifier.Companion.animateItem()
+            when {
+                state.isLoading && state.favouriteRepositories.isEmpty() -> {
+                    LoadingState()
+                }
+
+                state.favouriteRepositories.isEmpty() -> {
+                    EmptyState(
+                        title = stringResource(R.string.no_favorite_repos),
+                        message = stringResource(R.string.favourites_empty_message),
+                        icon = Icons.Outlined.FavoriteBorder
                     )
                 }
-            }
 
-            if (state.isLoading) {
-                CircularWavyProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                else -> {
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Adaptive(
+                            350.dp
+                        ),
+                        verticalItemSpacing = 12.dp,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            items = state.favouriteRepositories,
+                            key = { it.repoId }
+                        ) { repo ->
+                            FavouriteRepositoryItem(
+                                favouriteRepository = repo,
+                                onToggleFavouriteClick = {
+                                    onAction(FavouritesAction.OnToggleFavorite(repo))
+                                },
+                                onItemClick = {
+                                    onAction(FavouritesAction.OnRepositoryClick(repo))
+                                },
+                                onDevProfileClick = {
+                                    onAction(FavouritesAction.OnDeveloperProfileClick(repo.repoOwner))
+                                },
+                                modifier = Modifier.Companion.animateItem()
+                            )
+                        }
+                    }
+                }
             }
         }
     }
