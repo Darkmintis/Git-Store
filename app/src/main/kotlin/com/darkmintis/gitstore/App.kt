@@ -45,7 +45,6 @@ fun App(
     }
 
     GithubStoreTheme(
-        fontTheme = state.currentFontTheme,
         appTheme = state.currentColorTheme,
         isAmoledTheme = state.isAmoledTheme,
         isDarkTheme = state.isDarkTheme ?: isSystemInDarkTheme()

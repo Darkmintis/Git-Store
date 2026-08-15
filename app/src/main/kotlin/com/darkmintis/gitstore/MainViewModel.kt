@@ -88,15 +88,6 @@ class MainViewModel(
                 }
             }
         }
-        viewModelScope.launch {
-            themesRepository
-                .getFontTheme()
-                .collect { fontTheme ->
-                    _state.update {
-                        it.copy(currentFontTheme = fontTheme)
-                    }
-                }
-        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val installedPackageNames = packageMonitor.getAllInstalledPackageNames()

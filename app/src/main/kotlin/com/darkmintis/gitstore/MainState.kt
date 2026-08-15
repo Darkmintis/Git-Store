@@ -1,7 +1,6 @@
 package com.darkmintis.gitstore
 
 import com.darkmintis.gitstore.core.presentation.model.AppTheme
-import com.darkmintis.gitstore.core.presentation.model.FontTheme
 import com.darkmintis.gitstore.network.RateLimitInfo
 
 data class MainState(
@@ -12,7 +11,6 @@ data class MainState(
     val currentColorTheme: AppTheme = AppTheme.OCEAN,
     val isAmoledTheme: Boolean = false,
     val isDarkTheme: Boolean? = null,
-    val currentFontTheme: FontTheme = FontTheme.CUSTOM,
 )
 
 

@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import com.darkmintis.gitstore.core.domain.repository.ThemesRepository
 import com.darkmintis.gitstore.core.presentation.model.AppTheme
-import com.darkmintis.gitstore.core.presentation.model.FontTheme
 
 class ThemesRepositoryImpl(
     private val preferences: DataStore<Preferences>
@@ -17,7 +16,6 @@ class ThemesRepositoryImpl(
     private val THEME_KEY = stringPreferencesKey("app_theme")
     private val AMOLED_KEY = booleanPreferencesKey("amoled_theme")
     private val IS_DARK_THEME_KEY = booleanPreferencesKey("is_dark_theme")
-    private val FONT_KEY = stringPreferencesKey("font_theme")
 
     override fun getThemeColor(): Flow<AppTheme> {
         return preferences.data.map { prefs ->
@@ -58,19 +56,6 @@ class ThemesRepositoryImpl(
     override suspend fun setAmoledTheme(enabled: Boolean) {
         preferences.edit { prefs ->
             prefs[AMOLED_KEY] = enabled
-        }
-    }
-
-    override fun getFontTheme(): Flow<FontTheme> {
-        return preferences.data.map { prefs ->
-            val fontName = prefs[FONT_KEY]
-            FontTheme.fromName(fontName)
-        }
-    }
-
-    override suspend fun setFontTheme(fontTheme: FontTheme) {
-        preferences.edit { prefs ->
-            prefs[FONT_KEY] = fontTheme.name
         }
     }
 }

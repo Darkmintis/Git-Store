@@ -11,7 +11,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.darkmintis.gitstore.core.presentation.model.AppTheme
-import com.darkmintis.gitstore.core.presentation.model.FontTheme
 
 val oceanBlueLight = lightColorScheme(
     primary = primaryLight,
@@ -407,7 +406,6 @@ val amberOrangeDark = darkColorScheme(
 fun GithubStoreTheme(
     isDarkTheme: Boolean = true,
     appTheme: AppTheme = AppTheme.OCEAN,
-    fontTheme: FontTheme = FontTheme.CUSTOM,
     isAmoledTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -428,7 +426,7 @@ fun GithubStoreTheme(
 
     MaterialExpressiveTheme(
         colorScheme = colorScheme,
-        typography = getAppTypography(fontTheme),
+        typography = appTypography,
         motionScheme = MotionScheme.expressive(),
         shapes = MaterialTheme.shapes,
         content = content
