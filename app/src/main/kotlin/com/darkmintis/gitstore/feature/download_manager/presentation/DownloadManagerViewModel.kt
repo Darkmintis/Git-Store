@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.FileLocationsProvider
 import com.darkmintis.gitstore.core.data.services.Installer
+import com.darkmintis.gitstore.core.presentation.utils.ErrorMapper
+import com.darkmintis.gitstore.core.presentation.utils.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +24,7 @@ class DownloadManagerViewModel(
     private val downloader: Downloader,
     private val installer: Installer,
     private val files: FileLocationsProvider,
+    private val stringProvider: StringProvider,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DownloadManagerState())
@@ -106,10 +109,21 @@ class DownloadManagerViewModel(
     fun installApk(filePath: String) {
         viewModelScope.launch {
             try {
+                _state.update { it.copy(errorMessage = null) }
                 val ext = filePath.substringAfterLast('.', "").lowercase()
                 installer.install(filePath, ext)
-            } catch (_: Exception) { }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(errorMessage = ErrorMapper.message(e, stringProvider))
+                }
+            }
         }
+    }
+
+    fun clearError() {
+        _state.update { it.copy(errorMessage = null) }
     }
 
     fun deleteFile(filePath: String) {

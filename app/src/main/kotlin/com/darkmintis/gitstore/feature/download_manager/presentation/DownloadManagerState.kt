@@ -3,6 +3,7 @@ package com.darkmintis.gitstore.feature.download_manager.presentation
 data class DownloadManagerState(
     val downloads: List<DownloadItem> = emptyList(),
     val isLoading: Boolean = true,
+    val errorMessage: String? = null,
 )
 
 data class DownloadItem(
