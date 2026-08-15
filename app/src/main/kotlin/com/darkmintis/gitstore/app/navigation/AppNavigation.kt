@@ -28,10 +28,10 @@ import com.darkmintis.gitstore.feature.apps.presentation.AppsRoot
 import com.darkmintis.gitstore.feature.auth.presentation.AuthenticationRoot
 import com.darkmintis.gitstore.feature.details.presentation.DetailsRoot
 import com.darkmintis.gitstore.feature.developer_profile.presentation.DeveloperProfileRoot
+import com.darkmintis.gitstore.feature.download_manager.presentation.DownloadManagerRoot
 import com.darkmintis.gitstore.feature.favourites.presentation.FavouritesRoot
 import com.darkmintis.gitstore.feature.home.presentation.HomeRoot
 import com.darkmintis.gitstore.feature.search.presentation.SearchRoot
-import com.darkmintis.gitstore.feature.download_manager.presentation.DownloadManagerRoot
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsRoot
 import com.darkmintis.gitstore.feature.starred_repos.presentation.StarredReposRoot
 
@@ -50,7 +50,9 @@ fun AppNavigation(
             NavDisplay(
                 backStack = navBackStack,
                 onBack = {
-                    navBackStack.removeLastOrNull()
+                    if (navBackStack.size > 1) {
+                        navBackStack.removeLastOrNull()
+                    }
                 },
                 entryProvider = entryProvider {
                     entry<GithubStoreGraph.HomeScreen> {
@@ -148,9 +150,13 @@ fun AppNavigation(
 
                     entry<GithubStoreGraph.AuthenticationScreen> {
                         AuthenticationRoot(
-                            onNavigateToHome = {
-                                navBackStack.clear()
-                                navBackStack.add(GithubStoreGraph.HomeScreen)
+                            onAuthenticationComplete = {
+                                if (navBackStack.size > 1) {
+                                    navBackStack.removeLastOrNull()
+                                } else {
+                                    navBackStack.clear()
+                                    navBackStack.add(GithubStoreGraph.HomeScreen)
+                                }
                             }
                         )
                     }
@@ -202,6 +208,9 @@ fun AppNavigation(
                             },
                             onNavigateToAuth = {
                                 navBackStack.add(GithubStoreGraph.AuthenticationScreen)
+                            },
+                            onNavigateToStarredRepos = {
+                                navBackStack.add(GithubStoreGraph.StarredReposScreen)
                             }
                         )
                     }
@@ -262,12 +271,31 @@ fun AppNavigation(
             BottomNavigation(
                 currentScreen = navBackStack.last(),
                 onNavigate = {
-                    navBackStack.add(it)
+                    navBackStack.navigateToTabRoot(it)
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
             )
         }
+    }
+}
+
+private fun SnapshotStateList<GithubStoreGraph>.navigateToTabRoot(
+    destination: GithubStoreGraph
+) {
+    if (isEmpty()) {
+        add(destination)
+        return
+    }
+
+    val existingRootIndex = indexOfFirst { it == destination }
+    if (existingRootIndex == -1) {
+        add(destination)
+        return
+    }
+
+    while (size - 1 > existingRootIndex) {
+        removeLastOrNull()
     }
 }
 

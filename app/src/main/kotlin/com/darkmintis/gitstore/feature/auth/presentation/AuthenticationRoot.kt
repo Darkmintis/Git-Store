@@ -64,7 +64,7 @@ import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 
 @Composable
 fun AuthenticationRoot(
-    onNavigateToHome: () -> Unit,
+    onAuthenticationComplete: () -> Unit,
     viewModel: AuthenticationViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -72,7 +72,7 @@ fun AuthenticationRoot(
     ObserveAsEvents(viewModel.events) { event ->
         when (event) {
             AuthenticationEvents.OnNavigateToMain -> {
-                onNavigateToHome()
+                onAuthenticationComplete()
             }
         }
     }
