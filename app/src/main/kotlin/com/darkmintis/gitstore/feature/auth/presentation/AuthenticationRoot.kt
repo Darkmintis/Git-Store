@@ -59,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.domain.model.DeviceStart
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreButton
+import com.darkmintis.gitstore.core.presentation.components.ReportIssueButton
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 
@@ -169,6 +170,10 @@ fun AuthenticationScreen(
                         },
                         modifier = Modifier.fillMaxWidth(.7f)
                     )
+
+                    if (authState.message == stringResource(R.string.error_unknown)) {
+                        ReportIssueButton()
+                    }
                     Spacer(Modifier.weight(2f))
                 }
             }

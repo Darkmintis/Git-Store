@@ -23,6 +23,7 @@ import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.core.domain.repository.ThemesRepository
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
+import com.darkmintis.gitstore.core.presentation.utils.GitStoreLinks
 import com.darkmintis.gitstore.feature.settings.domain.repository.SettingsRepository
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsEvent.*
 import kotlinx.serialization.json.jsonArray
@@ -211,7 +212,7 @@ class SettingsViewModel(
         when (action) {
             SettingsAction.OnHelpClick -> {
                 browserHelper.openUrl(
-                    url = "https://github.com/Darkmintis/Git-Store/issues"
+                    url = GitStoreLinks.NEW_BUG_REPORT
                 )
             }
 

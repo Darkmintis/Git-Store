@@ -58,6 +58,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreBodyText
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreButtonText
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreTitleText
+import com.darkmintis.gitstore.core.presentation.components.ReportIssueButton
 import com.darkmintis.gitstore.feature.developer_profile.domain.model.RepoFilterType
 import com.darkmintis.gitstore.feature.developer_profile.presentation.components.DeveloperRepoItem
 import com.darkmintis.gitstore.feature.developer_profile.presentation.components.FilterSortControls
@@ -348,6 +349,10 @@ private fun ErrorContent(
             GithubStoreButtonText(
                 text = stringResource(R.string.retry)
             )
+        }
+
+        if (message == stringResource(R.string.error_unknown)) {
+            ReportIssueButton()
         }
     }
 }
