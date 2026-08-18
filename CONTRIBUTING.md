@@ -14,14 +14,6 @@ Thank you for your interest in contributing to Git Store! This document provides
 - JDK 17 or higher
 - Android Studio (latest stable version)
 - Git
-- GitHub OAuth Client ID (for authentication features)
-
-### Configuration
-1. Create `local.properties` in the root directory
-2. Add your GitHub Client ID:
-   ```
-   GITHUB_CLIENT_ID=your_client_id_here
-   ```
 
 ## Code Style
 

@@ -35,6 +35,7 @@ jobs:
     - name: Build Release APK
       run: ./gradlew assembleRelease --no-daemon --stacktrace
       env:
+        OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
         KEYSTORE_FILE: ${{ env.KEYSTORE_PATH }}
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}

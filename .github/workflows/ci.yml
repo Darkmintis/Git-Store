@@ -26,3 +26,5 @@ jobs:
 
       - name: Unit tests and debug assemble
         run: ./gradlew test assembleDebug --stacktrace
+        env:
+          OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}

@@ -17,8 +17,11 @@ val localProps = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { this.load(it) }
 }
-val localGithubClientId =
-    localProps.getProperty("GITHUB_CLIENT_ID")?.trim().orEmpty()
+val githubClientId = (
+    System.getenv("OAUTH_CLIENT_ID")
+        ?: System.getenv("GITHUB_CLIENT_ID")
+        ?: localProps.getProperty("GITHUB_CLIENT_ID")
+)?.trim().orEmpty()
 
 // Signing configuration from environment or local.properties
 val signingKeystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
@@ -55,7 +58,7 @@ android {
         versionCode = appVersionCode
         versionName = appVersionName
 
-        buildConfigField("String", "GITHUB_CLIENT_ID", "\"${localGithubClientId}\"")
+        buildConfigField("String", "GITHUB_CLIENT_ID", "\"${githubClientId}\"")
         buildConfigField("String", "VERSION_NAME", "\"${appVersionName}\"")
     }
     packaging {
@@ -108,6 +111,20 @@ android {
     testOptions {
         unitTests.all {
             it.useJUnitPlatform()
+        }
+    }
+}
+
+listOf("assembleRelease", "bundleRelease").forEach { releaseTaskName ->
+    tasks.matching { it.name == releaseTaskName }.configureEach {
+        doFirst {
+            if (githubClientId.isBlank()) {
+                throw org.gradle.api.GradleException(
+                    "OAuth Client ID is required for release builds. " +
+                        "Add GITHUB_CLIENT_ID to local.properties or set the " +
+                        "OAUTH_CLIENT_ID GitHub Actions secret."
+                )
+            }
         }
     }
 }
