@@ -14,7 +14,6 @@ import com.darkmintis.gitstore.testing.FakeStarredRepository
 import com.darkmintis.gitstore.testing.FakeStringProvider
 import com.darkmintis.gitstore.testing.MainDispatcherTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -23,7 +22,7 @@ import kotlin.test.assertNotNull
 class DetailsViewModelTest : MainDispatcherTest() {
 
     @Test
-    fun `loads repository summary on start`() = runTest {
+    fun `loads repository summary on start`() = runViewModelTest {
         val installed = FakeInstalledAppsRepository()
         val detailsRepository = FakeDetailsRepository()
         val viewModel = DetailsViewModel(

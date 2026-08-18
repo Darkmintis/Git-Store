@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import com.darkmintis.gitstore.core.domain.model.DeviceStart
 import com.darkmintis.gitstore.core.presentation.utils.BrowserHelper
 import com.darkmintis.gitstore.core.presentation.utils.ClipboardHelper
@@ -92,49 +91,39 @@ class AuthenticationViewModel(
             try {
                 _state.update { it.copy(loginState = AuthLoginState.Pending) }
 
-                val start = withContext(Dispatchers.IO) {
-                    authenticationRepository.startDeviceFlow()
+                val start = authenticationRepository.startDeviceFlow()
+
+                _state.update {
+                    it.copy(
+                        loginState = AuthLoginState.DevicePrompt(start),
+                        copied = false
+                    )
                 }
 
-                withContext(Dispatchers.Main.immediate) {
-                    _state.update {
-                        it.copy(
-                            loginState = AuthLoginState.DevicePrompt(start),
-                            copied = false
-                        )
-                    }
-
-                    try {
-                        clipboardHelper.copy(
-                            label = stringProvider.getString(R.string.enter_code_on_github),
-                            text = start.userCode
-                        )
-                        _state.update { it.copy(copied = true) }
-                    } catch (e: Exception) {
-                        Logger.d { "⚠️ Failed to copy to clipboard: ${e.message}" }
-                    }
+                try {
+                    clipboardHelper.copy(
+                        label = stringProvider.getString(R.string.enter_code_on_github),
+                        text = start.userCode
+                    )
+                    _state.update { it.copy(copied = true) }
+                } catch (e: Exception) {
+                    Logger.d { "⚠️ Failed to copy to clipboard: ${e.message}" }
                 }
 
-                withContext(Dispatchers.IO) {
-                    authenticationRepository.awaitDeviceToken(start = start)
-                }
+                authenticationRepository.awaitDeviceToken(start = start)
 
-                withContext(Dispatchers.Main.immediate) {
-                    _state.update { it.copy(loginState = AuthLoginState.LoggedIn) }
-                    _events.trySend(AuthenticationEvents.OnNavigateToMain)
-                }
+                _state.update { it.copy(loginState = AuthLoginState.LoggedIn) }
+                _events.trySend(AuthenticationEvents.OnNavigateToMain)
 
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                withContext(Dispatchers.Main.immediate) {
-                    _state.update {
-                        it.copy(
-                            loginState = AuthLoginState.Error(
-                                ErrorMapper.message(t, stringProvider)
-                            )
+                _state.update {
+                    it.copy(
+                        loginState = AuthLoginState.Error(
+                            ErrorMapper.message(t, stringProvider)
                         )
-                    }
+                    )
                 }
             }
         }

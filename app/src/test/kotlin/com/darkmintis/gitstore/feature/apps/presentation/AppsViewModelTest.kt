@@ -12,7 +12,6 @@ import com.darkmintis.gitstore.testing.FakePackageMonitor
 import com.darkmintis.gitstore.testing.FakeStringProvider
 import com.darkmintis.gitstore.testing.MainDispatcherTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -21,7 +20,7 @@ import kotlin.test.assertTrue
 class AppsViewModelTest : MainDispatcherTest() {
 
     @Test
-    fun `loads installed apps and enables update all when updates exist`() = runTest {
+    fun `loads installed apps and enables update all when updates exist`() = runViewModelTest {
         val updateApp = FakeInstalledAppsRepository.sampleApp(
             packageName = "com.update",
             isUpdateAvailable = true
@@ -60,7 +59,7 @@ class AppsViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `search query is stored in state`() = runTest {
+    fun `search query is stored in state`() = runViewModelTest {
         val installed = FakeInstalledAppsRepository()
         val viewModel = AppsViewModel(
             appsRepository = FakeAppsRepository(),

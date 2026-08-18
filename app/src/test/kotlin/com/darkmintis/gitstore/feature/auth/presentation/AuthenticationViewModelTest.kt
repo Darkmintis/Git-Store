@@ -7,14 +7,13 @@ import com.darkmintis.gitstore.testing.FakeBrowserHelper
 import com.darkmintis.gitstore.testing.FakeClipboardHelper
 import com.darkmintis.gitstore.testing.FakeStringProvider
 import com.darkmintis.gitstore.testing.MainDispatcherTest
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthenticationViewModelTest : MainDispatcherTest() {
@@ -26,7 +25,7 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
             authenticationRepository = authRepo,
             browserHelper = FakeBrowserHelper(),
             clipboardHelper = FakeClipboardHelper(),
-            scope = CoroutineScope(SupervisorJob() + kotlinx.coroutines.Dispatchers.Main),
+            scope = CoroutineScope(SupervisorJob() + testDispatcher),
             stringProvider = FakeStringProvider(
                 mapOf(
                     R.string.enter_code_on_github to "Enter code",
@@ -37,8 +36,10 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `start login moves to device prompt then logged in and emits navigate`() = runTest {
-        val authRepo = FakeAuthenticationRepository()
+    fun `start login moves to device prompt then logged in and emits navigate`() = runViewModelTest {
+        val authRepo = FakeAuthenticationRepository().apply {
+            awaitGate = CompletableDeferred()
+        }
         val viewModel = createViewModel(authRepo)
 
         viewModel.events.test {
@@ -48,19 +49,17 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
 
                 var sawPrompt = false
                 var sawLoggedIn = false
-                for (i in 0 until 10) {
+                while (!sawPrompt || !sawLoggedIn) {
                     when (val loginState = awaitItem().loginState) {
                         is AuthLoginState.DevicePrompt -> {
                             sawPrompt = true
                             assertEquals("ABCD-EFGH", loginState.start.userCode)
+                            authRepo.awaitGate?.complete(Unit)
                         }
                         AuthLoginState.LoggedIn -> sawLoggedIn = true
                         else -> Unit
                     }
-                    if (sawPrompt && sawLoggedIn) break
                 }
-                assertTrue(sawPrompt)
-                assertTrue(sawLoggedIn)
                 cancelAndIgnoreRemainingEvents()
             }
 
@@ -73,7 +72,7 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `start login failure surfaces error state`() = runTest {
+    fun `start login failure surfaces error state`() = runViewModelTest {
         val authRepo = FakeAuthenticationRepository().apply {
             failStartWith = IllegalStateException("device flow failed")
         }
@@ -84,11 +83,10 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
             viewModel.onAction(AuthenticationAction.StartLogin)
 
             var error: AuthLoginState.Error? = null
-            for (i in 0 until 10) {
+            while (error == null) {
                 val loginState = awaitItem().loginState
                 if (loginState is AuthLoginState.Error) {
                     error = loginState
-                    break
                 }
             }
             assertIs<AuthLoginState.Error>(error)

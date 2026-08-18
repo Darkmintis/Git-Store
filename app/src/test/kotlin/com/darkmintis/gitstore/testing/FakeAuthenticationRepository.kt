@@ -3,6 +3,7 @@ package com.darkmintis.gitstore.testing
 import com.darkmintis.gitstore.core.domain.model.DeviceStart
 import com.darkmintis.gitstore.core.domain.model.DeviceTokenSuccess
 import com.darkmintis.gitstore.feature.auth.domain.repository.AuthenticationRepository
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -27,6 +28,7 @@ class FakeAuthenticationRepository(
     )
     var failStartWith: Throwable? = null
     var failAwaitWith: Throwable? = null
+    var awaitGate: CompletableDeferred<Unit>? = null
 
     override val accessTokenFlow: Flow<String?> = token
     override val isAuthenticatedFlow: Flow<Boolean> =
@@ -41,6 +43,7 @@ class FakeAuthenticationRepository(
     override suspend fun awaitDeviceToken(start: DeviceStart): DeviceTokenSuccess {
         awaitCalls++
         failAwaitWith?.let { throw it }
+        awaitGate?.await()
         token.value = nextToken.accessToken
         return nextToken
     }
