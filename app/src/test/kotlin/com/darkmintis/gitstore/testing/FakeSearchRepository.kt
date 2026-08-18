@@ -12,6 +12,7 @@ class FakeSearchRepository : SearchRepository {
     var lastQuery: String? = null
     var lastLanguage: ProgrammingLanguage? = null
     var lastPage: Int? = null
+    var searchCount: Int = 0
     var results: PaginatedRepos = PaginatedRepos(
         repos = emptyList(),
         hasMore = false,
@@ -28,6 +29,7 @@ class FakeSearchRepository : SearchRepository {
         lastQuery = query
         lastLanguage = language
         lastPage = page
+        searchCount += 1
         error?.let { throw it }
         emit(results)
     }

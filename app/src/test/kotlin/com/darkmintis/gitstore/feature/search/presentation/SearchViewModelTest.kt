@@ -13,7 +13,6 @@ import com.darkmintis.gitstore.testing.FakeStarredRepository
 import com.darkmintis.gitstore.testing.FakeStringProvider
 import com.darkmintis.gitstore.testing.MainDispatcherTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -44,7 +43,7 @@ class SearchViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `blank query clears results without searching`() = runTest {
+    fun `blank query clears results without searching`() = runViewModelTest {
         val searchRepository = FakeSearchRepository()
         val viewModel = createViewModel(searchRepository)
 
@@ -67,7 +66,7 @@ class SearchViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `empty search results keep errorMessage null for the empty state`() = runTest {
+    fun `empty search results keep errorMessage null for the empty state`() = runViewModelTest {
         val searchRepository = FakeSearchRepository().apply {
             results = PaginatedRepos(
                 repos = emptyList(),
@@ -98,7 +97,7 @@ class SearchViewModelTest : MainDispatcherTest() {
     }
 
     @Test
-    fun `changing sort triggers a new search`() = runTest {
+    fun `changing sort triggers a new search`() = runViewModelTest {
         val searchRepository = FakeSearchRepository().apply {
             results = PaginatedRepos(
                 repos = listOf(FakeSearchRepository.sampleRepo()),
@@ -113,17 +112,30 @@ class SearchViewModelTest : MainDispatcherTest() {
             awaitItem()
             viewModel.onAction(SearchAction.OnSearchChange("gitstore"))
             viewModel.onAction(SearchAction.OnSearchImeClick)
+
+            var firstSearchFinished = false
+            for (i in 0 until 20) {
+                val state = awaitItem()
+                if (!state.isLoading) {
+                    firstSearchFinished = true
+                    break
+                }
+            }
+            assertTrue(firstSearchFinished)
+            val searchesAfterQuery = searchRepository.searchCount
+
             viewModel.onAction(SearchAction.OnSortBySelected(SortBy.MostStars))
 
             var sawExpected = false
             for (i in 0 until 20) {
                 val state = awaitItem()
-                if (state.selectedSortBy == SortBy.MostStars) {
+                if (state.selectedSortBy == SortBy.MostStars && !state.isLoading) {
                     sawExpected = true
                     break
                 }
             }
             assertTrue(sawExpected)
+            assertTrue(searchRepository.searchCount > searchesAfterQuery)
             cancelAndIgnoreRemainingEvents()
         }
     }
