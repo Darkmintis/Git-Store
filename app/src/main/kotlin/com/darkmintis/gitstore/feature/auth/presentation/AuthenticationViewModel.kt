@@ -90,6 +90,8 @@ class AuthenticationViewModel(
     private fun startLogin() {
         viewModelScope.launch {
             try {
+                _state.update { it.copy(loginState = AuthLoginState.Pending) }
+
                 val start = withContext(Dispatchers.IO) {
                     authenticationRepository.startDeviceFlow()
                 }

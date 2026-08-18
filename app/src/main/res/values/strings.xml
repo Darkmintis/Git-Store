@@ -363,6 +363,7 @@
     <string name="error_server">GitHub is having trouble right now. Please try again later.</string>
     <string name="error_http_generic">Something went wrong (error %1$d). Please try again.</string>
     <string name="error_download_failed">Download failed. Please try again.</string>
+    <string name="error_auth_not_configured">GitHub sign-in is not configured in this build.</string>
     <string name="error_install_failed">Installation failed. Please try again.</string>
     <string name="error_load_apps">Couldn\'t load installed apps. Please try again.</string>
     <string name="error_favourite_toggle">Couldn\'t update favourites. Please try again.</string>

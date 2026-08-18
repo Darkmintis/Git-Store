@@ -47,7 +47,10 @@ object GitHubAuthApi {
         }
     }
 
-    suspend fun startDeviceFlow(clientId: String): DeviceStart {
+    suspend fun startDeviceFlow(
+        clientId: String,
+        scopes: String
+    ): DeviceStart {
         return withRetry(maxAttempts = 3, initialDelay = 1000) {
             val res = http.post("https://github.com/login/device/code") {
                 accept(ContentType.Application.Json)
@@ -57,6 +60,7 @@ object GitHubAuthApi {
                     FormDataContent(
                         Parameters.build {
                             append("client_id", clientId)
+                            append("scope", scopes)
                         }
                     )
                 )

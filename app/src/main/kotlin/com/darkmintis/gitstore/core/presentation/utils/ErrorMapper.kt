@@ -1,6 +1,7 @@
 package com.darkmintis.gitstore.core.presentation.utils
 
 import com.darkmintis.gitstore.R
+import com.darkmintis.gitstore.feature.auth.data.MissingGithubClientIdException
 import com.darkmintis.gitstore.network.HttpApiException
 import com.darkmintis.gitstore.network.RateLimitException
 import io.ktor.client.plugins.HttpRequestTimeoutException
@@ -38,6 +39,8 @@ object ErrorMapper {
             is UnknownHostException,
             is ConnectException -> strings.getString(R.string.error_offline)
 
+            is MissingGithubClientIdException -> strings.getString(R.string.error_auth_not_configured)
+
             is IOException -> strings.getString(R.string.error_network)
 
             else -> {
@@ -69,6 +72,7 @@ object ErrorMapper {
             if (
                 cause is RateLimitException ||
                 cause is HttpApiException ||
+                cause is MissingGithubClientIdException ||
                 cause is IOException ||
                 cause is HttpRequestTimeoutException ||
                 cause is TimeoutException

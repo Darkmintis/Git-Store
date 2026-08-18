@@ -15,6 +15,8 @@ import com.darkmintis.gitstore.core.data.data_source.TokenDataSource
 import com.darkmintis.gitstore.core.domain.model.DeviceStart
 import com.darkmintis.gitstore.core.domain.model.DeviceTokenSuccess
 import com.darkmintis.gitstore.feature.auth.data.network.GitHubAuthApi
+import com.darkmintis.gitstore.feature.auth.data.GITHUB_OAUTH_SCOPES
+import com.darkmintis.gitstore.feature.auth.data.MissingGithubClientIdException
 import com.darkmintis.gitstore.feature.auth.data.getGithubClientId
 import com.darkmintis.gitstore.feature.auth.domain.repository.AuthenticationRepository
 
@@ -38,14 +40,21 @@ class AuthenticationRepositoryImpl(
     override suspend fun startDeviceFlow(): DeviceStart =
         withContext(Dispatchers.IO) {
             val clientId = getGithubClientId()
-            require(clientId.isNotBlank()) {
-                "Missing GitHub CLIENT_ID. Add GITHUB_CLIENT_ID to local.properties."
+            if (clientId.isBlank()) {
+                throw MissingGithubClientIdException()
             }
 
             try {
-                val result = GitHubAuthApi.startDeviceFlow(clientId)
+                val result = GitHubAuthApi.startDeviceFlow(
+                    clientId = clientId,
+                    scopes = GITHUB_OAUTH_SCOPES
+                )
                 Logger.d { "✅ Device flow started. User code: ${result.userCode}" }
                 result
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: MissingGithubClientIdException) {
+                throw e
             } catch (e: Exception) {
                 Logger.d { "❌ Failed to start device flow: ${e.message}" }
                 throw Exception(

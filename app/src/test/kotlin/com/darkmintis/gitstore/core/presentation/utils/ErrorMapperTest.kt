@@ -1,6 +1,7 @@
 package com.darkmintis.gitstore.core.presentation.utils
 
 import com.darkmintis.gitstore.R
+import com.darkmintis.gitstore.feature.auth.data.MissingGithubClientIdException
 import com.darkmintis.gitstore.network.HttpApiException
 import com.darkmintis.gitstore.network.RateLimitException
 import com.darkmintis.gitstore.network.RateLimitInfo
@@ -24,6 +25,7 @@ class ErrorMapperTest {
             R.string.error_server to "server",
             R.string.error_http_generic to "http-%s",
             R.string.error_download_failed to "download-failed",
+            R.string.error_auth_not_configured to "auth-not-configured",
             R.string.error_unknown to "unknown"
         )
     )
@@ -70,5 +72,13 @@ class ErrorMapperTest {
     @Test
     fun `falls back to unknown`() {
         assertEquals("unknown", ErrorMapper.message(IllegalStateException("boom"), strings))
+    }
+
+    @Test
+    fun `maps missing github client id`() {
+        assertEquals(
+            "auth-not-configured",
+            ErrorMapper.message(MissingGithubClientIdException(), strings)
+        )
     }
 }
