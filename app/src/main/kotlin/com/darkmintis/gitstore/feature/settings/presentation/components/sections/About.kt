@@ -2,6 +2,7 @@ package com.darkmintis.gitstore.feature.settings.presentation.components.section
 
 import com.darkmintis.gitstore.R
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +16,11 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.QuestionMark
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.SystemUpdate
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.dp
 
 
 import androidx.compose.ui.res.stringResource
+import com.darkmintis.gitstore.core.presentation.utils.GitStoreLinks
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsAction
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsState
 import com.darkmintis.gitstore.feature.settings.presentation.utils.getVersionName
@@ -159,25 +163,31 @@ fun LazyListScope.about(
 
             HorizontalDivider()
 
-            AboutItem(
-                icon = Icons.Filled.QuestionMark,
-                title = stringResource(R.string.help_support),
-                actions = {
-                    IconButton(
-                        shape = IconButtonDefaults.shapes().shape,
-                        onClick = {
-                            onAction(SettingsAction.OnHelpClick)
-                        },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = stringResource(R.string.help_support),
-                            modifier = Modifier.size(24.dp),
-                        )
-                    }
+            AboutLinkItem(
+                icon = Icons.Filled.Star,
+                title = stringResource(R.string.star_git_store),
+                onClick = {
+                    onAction(SettingsAction.OnBrowserOpen(url = GitStoreLinks.REPOSITORY))
+                }
+            )
+
+            HorizontalDivider()
+
+            AboutLinkItem(
+                icon = Icons.Filled.Code,
+                title = stringResource(R.string.view_source_code),
+                onClick = {
+                    onAction(SettingsAction.OnBrowserOpen(url = GitStoreLinks.REPOSITORY))
+                }
+            )
+
+            HorizontalDivider()
+
+            AboutLinkItem(
+                icon = Icons.Filled.BugReport,
+                title = stringResource(R.string.report_an_issue),
+                onClick = {
+                    onAction(SettingsAction.OnHelpClick)
                 }
             )
         }
@@ -186,15 +196,52 @@ fun LazyListScope.about(
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
+private fun AboutLinkItem(
+    icon: ImageVector,
+    title: String,
+    onClick: () -> Unit
+) {
+    AboutItem(
+        icon = icon,
+        title = title,
+        onClick = onClick,
+        actions = {
+            IconButton(
+                shape = IconButtonDefaults.shapes().shape,
+                onClick = onClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = title,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
 private fun AboutItem(
     icon: ImageVector,
     title: String,
     actions: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                }
+            )
             .padding(8.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,

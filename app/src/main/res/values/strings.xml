@@ -132,7 +132,8 @@
     <!-- About -->
     <string name="version">Version</string>
     <string name="report_an_issue">Report an issue</string>
-    <string name="help_support">Help &amp; Support</string>
+    <string name="star_git_store">Star Git Store</string>
+    <string name="view_source_code">View source code</string>
     <string name="check_now">Check now</string>
     <string name="update_check_failed">Could not check for updates</string>
 

@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocalCafe
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -30,9 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import com.darkmintis.gitstore.core.presentation.utils.GitStoreLinks
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsAction
 
 private const val USDT_BEACON_ADDRESS = "0xc9A505E28D0ff4C627Bd64c62e885d7f4e94c6d5"
@@ -121,39 +124,64 @@ fun LazyListScope.support(
 
                 Spacer(Modifier.height(16.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable {
-                            onAction(
-                                SettingsAction.OnBrowserOpen(
-                                    url = usdtBeaconUri(),
-                                    useChooser = true
-                                )
+                SupportActionRow(
+                    icon = Icons.Default.Star,
+                    label = stringResource(R.string.star_git_store),
+                    onClick = {
+                        onAction(
+                            SettingsAction.OnBrowserOpen(url = GitStoreLinks.REPOSITORY)
+                        )
+                    }
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                SupportActionRow(
+                    icon = Icons.Default.LocalCafe,
+                    label = stringResource(R.string.donate_with_crypto),
+                    onClick = {
+                        onAction(
+                            SettingsAction.OnBrowserOpen(
+                                url = usdtBeaconUri(),
+                                useChooser = true
                             )
-                        }
-                        .padding(horizontal = 12.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocalCafe,
-                        contentDescription = stringResource(R.string.donate_with_crypto),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
-                    )
-
-                    Spacer(Modifier.size(8.dp))
-
-                    Text(
-                        text = stringResource(R.string.donate_with_crypto),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                        )
+                    }
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun SupportActionRow(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(20.dp)
+        )
+
+        Spacer(Modifier.size(8.dp))
+
+        Text(
+            text = label,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }
