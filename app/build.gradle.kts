@@ -115,17 +115,24 @@ android {
     }
 }
 
-listOf("assembleRelease", "bundleRelease").forEach { releaseTaskName ->
-    tasks.matching { it.name == releaseTaskName }.configureEach {
-        doFirst {
-            if (githubClientId.isBlank()) {
-                throw org.gradle.api.GradleException(
-                    "OAuth Client ID is required for release builds. " +
-                        "Add GITHUB_CLIENT_ID to local.properties or set the " +
-                        "OAUTH_CLIENT_ID GitHub Actions secret."
-                )
-            }
+val oauthClientIdForReleaseCheck = githubClientId
+
+tasks.register("requireOauthClientIdForRelease") {
+    val clientId = oauthClientIdForReleaseCheck
+    doLast {
+        if (clientId.isBlank()) {
+            throw org.gradle.api.GradleException(
+                "OAuth Client ID is required for release builds. " +
+                    "Add GITHUB_CLIENT_ID to local.properties or set the " +
+                    "OAUTH_CLIENT_ID GitHub Actions secret."
+            )
         }
+    }
+}
+
+arrayOf("assembleRelease", "bundleRelease").forEach { releaseTaskName ->
+    tasks.matching { it.name == releaseTaskName }.configureEach {
+        dependsOn("requireOauthClientIdForRelease")
     }
 }
 
