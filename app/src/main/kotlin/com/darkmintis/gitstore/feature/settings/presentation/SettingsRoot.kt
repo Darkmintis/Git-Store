@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -32,15 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-
-
-
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import com.darkmintis.gitstore.core.presentation.model.AppTheme
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
@@ -128,7 +123,10 @@ fun SettingsScreen(
             SnackbarHost(hostState = snackbarState)
         },
         topBar = {
-            TopAppBar(onAction)
+            TopAppBar(
+                isUserLoggedIn = state.isUserLoggedIn,
+                onAction = onAction
+            )
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
@@ -138,15 +136,20 @@ fun SettingsScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            // GitHub sign-in button (only show if not logged in)
-            if (!state.isUserLoggedIn) {
+            // Sign in or Account section at the top
+            if (state.isUserLoggedIn) {
+                account(
+                    state = state,
+                    onAction = onAction
+                )
+            } else {
                 signInWithGitHub(
                     onAction = onAction
                 )
+            }
 
-                item {
-                    Spacer(Modifier.height(24.dp))
-                }
+            item {
+                Spacer(Modifier.height(24.dp))
             }
 
             appearance(
@@ -188,24 +191,16 @@ fun SettingsScreen(
                 state = state,
                 onAction = onAction
             )
-
-            if (state.isUserLoggedIn) {
-                item {
-                    Spacer(Modifier.height(24.dp))
-                }
-
-                account(
-                    state = state,
-                    onAction = onAction
-                )
-            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun TopAppBar(onAction: (SettingsAction) -> Unit) {
+private fun TopAppBar(
+    isUserLoggedIn: Boolean,
+    onAction: (SettingsAction) -> Unit
+) {
     TopAppBar(
         navigationIcon = {
             IconButton(
@@ -228,6 +223,23 @@ private fun TopAppBar(onAction: (SettingsAction) -> Unit) {
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
+        },
+        actions = {
+            if (isUserLoggedIn) {
+                IconButton(
+                    shapes = IconButtonDefaults.shapes(),
+                    onClick = {
+                        onAction(SettingsAction.OnLogoutClick)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = stringResource(R.string.logout),
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         }
     )
 }
@@ -243,6 +255,3 @@ private fun Preview() {
         )
     }
 }
-
-
-
