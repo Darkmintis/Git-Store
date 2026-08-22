@@ -45,11 +45,10 @@ import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.account
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.appearance
-import com.darkmintis.gitstore.feature.settings.presentation.components.sections.logout
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
-import com.darkmintis.gitstore.feature.settings.presentation.components.sections.starredRepos
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 
 @Composable
@@ -191,15 +190,12 @@ fun SettingsScreen(
             )
 
             if (state.isUserLoggedIn) {
-                starredRepos(
-                    onAction = onAction
-                )
-
                 item {
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(24.dp))
                 }
 
-                logout(
+                account(
+                    state = state,
                     onAction = onAction
                 )
             }
