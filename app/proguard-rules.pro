@@ -1,61 +1,50 @@
-# === CRITICAL: Keep Everything for Networking ===
--keeppackagenames io.ktor.**
--keeppackagenames okhttp3.**
--keeppackagenames okio.**
-
-# Kotlin
+# === Kotlin ===
 -keep class kotlin.** { *; }
 -keep class kotlinx.** { *; }
 -keepclassmembers class kotlin.** { *; }
-
-# Kotlin Time (fix for R8 missing class error)
 -keep class kotlin.time.** { *; }
 -keepclassmembers class kotlin.time.** { *; }
 -dontwarn kotlin.time.**
 
-# Coroutines
+# === Coroutines ===
 -keep class kotlinx.coroutines.** { *; }
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 -keepclassmembernames class kotlinx.** { volatile <fields>; }
 
-# === Ktor - Keep EVERYTHING ===
+# === Ktor ===
 -keep class io.ktor.** { *; }
 -keep interface io.ktor.** { *; }
 -keepclassmembers class io.ktor.** { *; }
 -keepnames class io.ktor.** { *; }
 -dontwarn io.ktor.**
-
-# Ktor Debug
 -dontwarn java.lang.management.**
 
-# === OkHttp - Keep EVERYTHING ===
+# === OkHttp ===
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -keepclassmembers class okhttp3.** { *; }
 -keepnames class okhttp3.** { *; }
 -dontwarn okhttp3.**
 
-# === Okio - Keep EVERYTHING ===
+# === Okio ===
 -keep class okio.** { *; }
 -keepclassmembers class okio.** { *; }
 -keepnames class okio.** { *; }
 -dontwarn okio.**
 
-# === Network Stack - Keep EVERYTHING ===
+# === Network Stack ===
 -keep class java.net.** { *; }
 -keep class javax.net.** { *; }
 -keep class sun.security.ssl.** { *; }
 -keepclassmembers class java.net.** { *; }
 -keepclassmembers class javax.net.** { *; }
-
-# DNS Resolution
 -keep class java.net.InetAddress { *; }
 -keep class java.net.Inet4Address { *; }
 -keep class java.net.Inet6Address { *; }
 -keep class java.net.InetSocketAddress { *; }
 
-# SSL/TLS
+# === SSL/TLS ===
 -keep class javax.net.ssl.** { *; }
 -keep class org.conscrypt.** { *; }
 -dontwarn org.conscrypt.**
@@ -68,30 +57,6 @@
 -keepclassmembers @kotlinx.serialization.Serializable class com.darkmintis.gitstore.** {
     *** Companion;
 }
-
-# Keep your models
--keep class com.darkmintis.gitstore.core.domain.model.** { *; }
-
-# === AndroidX Security ===
--keep class androidx.security.crypto.** { *; }
--keep class com.google.crypto.tink.** { *; }
--dontwarn com.google.crypto.tink.**
--dontwarn com.google.errorprone.annotations.**
-
-# BuildConfig
--keep class com.darkmintis.gitstore.BuildConfig { *; }
-
-# General
--keepattributes Signature
--keepattributes Exceptions
--keepattributes *Annotation*
--keepattributes SourceFile,LineNumberTable
-
-# === START: Auth Fix ===
--dontoptimize
--keepattributes *Annotation*,Signature,Exception,InnerClasses,EnclosingMethod
-
-# Keep serialization infrastructure
 -keep class kotlinx.serialization.** { *; }
 -keep class **$$serializer { *; }
 -keepclassmembers @kotlinx.serialization.Serializable class ** {
@@ -100,30 +65,70 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Keep Ktor plugins
--keep class io.ktor.client.plugins.** { *; }
--keep class io.ktor.serialization.** { *; }
-
-# Keep your entire core package (narrow this down later)
--keep class com.darkmintis.gitstore.core.** { *; }
--keepclassmembers class com.darkmintis.gitstore.core.** { *; }
-# === END: Auth Fix ===
-
+# === App Models ===
+-keep class com.darkmintis.gitstore.core.domain.model.** { *; }
 -keep class com.darkmintis.gitstore.core.data.remote.dto.** { *; }
--keep class com.darkmintis.gitstore.core.domain.model.auth.** { *; }
-
-# If your models are in different packages, list them:
 -keep class com.darkmintis.gitstore.**.*DeviceStart* { *; }
 -keep class com.darkmintis.gitstore.**.*DeviceToken* { *; }
 -keep class com.darkmintis.gitstore.**.*AuthConfig* { *; }
+-keepclassmembers class com.darkmintis.gitstore.**.DeviceStart { public static ** Companion; }
+-keepclassmembers class com.darkmintis.gitstore.**.DeviceTokenSuccess { public static ** Companion; }
+-keepclassmembers class com.darkmintis.gitstore.**.DeviceTokenError { public static ** Companion; }
 
-# Keep the companion objects explicitly
--keepclassmembers class com.darkmintis.gitstore.**.DeviceStart {
-    public static ** Companion;
+# === AndroidX Security ===
+-keep class androidx.security.crypto.** { *; }
+-keep class com.google.crypto.tink.** { *; }
+-dontwarn com.google.crypto.tink.**
+-dontwarn com.google.errorprone.annotations.**
+
+# === BuildConfig ===
+-keep class com.darkmintis.gitstore.BuildConfig { *; }
+
+# === Room ===
+-keep class * extends androidx.room.RoomDatabase { *; }
+-keep class * extends androidx.room.Dao { *; }
+-keepclassmembers class * {
+    @androidx.room.* <fields>;
+    @androidx.room.* <methods>;
 }
--keepclassmembers class com.darkmintis.gitstore.**.DeviceTokenSuccess {
-    public static ** Companion;
+-keep class com.darkmintis.gitstore.core.data.local.db.** { *; }
+-keep class com.darkmintis.gitstore.core.data.local.db.entities.** { *; }
+-keep class com.darkmintis.gitstore.core.data.local.db.dao.** { *; }
+
+# === Koin ===
+-keep class org.koin.** { *; }
+-keep class com.darkmintis.gitstore.app.di.** { *; }
+-keepclassmembers class * {
+    public <init>(...);
 }
--keepclassmembers class com.darkmintis.gitstore.**.DeviceTokenError {
-    public static ** Companion;
-}
+
+# === Coil ===
+-keep class coil3.** { *; }
+-dontwarn coil3.**
+
+# === Compose ===
+-keep class androidx.compose.** { *; }
+-keep class androidx.compose.runtime.** { *; }
+-keep class androidx.compose.ui.** { *; }
+
+# === Navigation3 ===
+-keep class androidx.navigation3.** { *; }
+-keep class org.jetbrains.** { *; }
+
+# === Liquid ===
+-keep class com.liquid.** { *; }
+-dontwarn com.liquid.**
+
+# === Markdown ===
+-keep class com.mikepenz.** { *; }
+-dontwarn com.mikepenz.**
+
+# === DataStore ===
+-keep class androidx.datastore.** { *; }
+
+# === General ===
+-dontoptimize
+-keepattributes Signature
+-keepattributes Exceptions
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
