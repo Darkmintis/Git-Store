@@ -10,7 +10,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.vector.ImageVector
+
+fun <T> SnapshotStateList<T>.replaceAll(element: T) {
+    clear()
+    add(element)
+}
 
 data class BottomNavigationItem(
     val titleRes: Int,

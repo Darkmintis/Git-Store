@@ -22,6 +22,7 @@ import org.koin.compose.koinInject
 import com.darkmintis.gitstore.app.app_state.components.RateLimitDialog
 import com.darkmintis.gitstore.app.navigation.AppNavigation
 import com.darkmintis.gitstore.app.navigation.GithubStoreGraph
+import com.darkmintis.gitstore.app.navigation.replaceAll
 import com.darkmintis.gitstore.core.presentation.components.OfflineBanner
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ApplyAndroidSystemBars
@@ -81,9 +82,7 @@ fun App(
                         },
                         onSignIn = {
                             viewModel.onAction(MainAction.DismissRateLimitDialog)
-
-                            navBackStack.clear()
-                            navBackStack.add(GithubStoreGraph.AuthenticationScreen)
+                            navBackStack.replaceAll(GithubStoreGraph.AuthenticationScreen)
                         }
                     )
                 }

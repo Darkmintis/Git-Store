@@ -151,12 +151,7 @@ fun AppNavigation(
                     entry<GithubStoreGraph.AuthenticationScreen> {
                         AuthenticationRoot(
                             onAuthenticationComplete = {
-                                if (navBackStack.size > 1) {
-                                    navBackStack.removeLastOrNull()
-                                } else {
-                                    navBackStack.clear()
-                                    navBackStack.add(GithubStoreGraph.HomeScreen)
-                                }
+                                navBackStack.replaceAll(GithubStoreGraph.HomeScreen)
                             }
                         )
                     }
@@ -268,14 +263,16 @@ fun AppNavigation(
                 modifier = Modifier.background(MaterialTheme.colorScheme.background)
             )
 
-            BottomNavigation(
-                currentScreen = navBackStack.last(),
-                onNavigate = {
-                    navBackStack.navigateToTabRoot(it)
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-            )
+            if (navBackStack.isNotEmpty()) {
+                BottomNavigation(
+                    currentScreen = navBackStack.last(),
+                    onNavigate = {
+                        navBackStack.navigateToTabRoot(it)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                )
+            }
         }
     }
 }
