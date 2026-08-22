@@ -8,9 +8,7 @@ import com.darkmintis.gitstore.testing.FakeClipboardHelper
 import com.darkmintis.gitstore.testing.FakeStringProvider
 import com.darkmintis.gitstore.testing.MainDispatcherTest
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -25,7 +23,6 @@ class AuthenticationViewModelTest : MainDispatcherTest() {
             authenticationRepository = authRepo,
             browserHelper = FakeBrowserHelper(),
             clipboardHelper = FakeClipboardHelper(),
-            scope = CoroutineScope(SupervisorJob() + testDispatcher),
             stringProvider = FakeStringProvider(
                 mapOf(
                     R.string.enter_code_on_github to "Enter code",
