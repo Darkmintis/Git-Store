@@ -12,18 +12,14 @@ plugins {
 val appVersionName = "1.2.1"
 val appVersionCode = 5
 
-// Load local.properties for secrets like GITHUB_CLIENT_ID
+// GitHub OAuth Client ID (public for Device Flow)
+val githubClientId = "Ov23linXkLavDNV3zFMB"
+
+// Signing configuration from environment or local.properties
 val localProps = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { this.load(it) }
 }
-val githubClientId = (
-    System.getenv("OAUTH_CLIENT_ID")
-        ?: System.getenv("GITHUB_CLIENT_ID")
-        ?: localProps.getProperty("GITHUB_CLIENT_ID")
-)?.trim().orEmpty()
-
-// Signing configuration from environment or local.properties
 val signingKeystorePath = System.getenv("KEYSTORE_FILE") ?: localProps.getProperty("KEYSTORE_FILE")
 val signingKeystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: localProps.getProperty("KEYSTORE_PASSWORD")
 val signingKeyAlias = System.getenv("KEY_ALIAS") ?: localProps.getProperty("KEY_ALIAS")
@@ -112,27 +108,6 @@ android {
         unitTests.all {
             it.useJUnitPlatform()
         }
-    }
-}
-
-val oauthClientIdForReleaseCheck = githubClientId
-
-tasks.register("requireOauthClientIdForRelease") {
-    val clientId = oauthClientIdForReleaseCheck
-    doLast {
-        if (clientId.isBlank()) {
-            throw org.gradle.api.GradleException(
-                "OAuth Client ID is required for release builds. " +
-                    "Add GITHUB_CLIENT_ID to local.properties or set the " +
-                    "OAUTH_CLIENT_ID GitHub Actions secret."
-            )
-        }
-    }
-}
-
-arrayOf("assembleRelease", "bundleRelease").forEach { releaseTaskName ->
-    tasks.matching { it.name == releaseTaskName }.configureEach {
-        dependsOn("requireOauthClientIdForRelease")
     }
 }
 
