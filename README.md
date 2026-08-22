@@ -1,6 +1,14 @@
-# Git Store
+<p align="center">
+  <img src="GitStore.png" alt="Git Store Logo" width="150"/>
+</p>
 
-A modern Android app to discover, download, and manage open-source apps directly from GitHub releases.
+<h1 align="center">Git Store</h1>
+
+<p align="center">
+  A modern Android app to discover, download, and manage open-source apps directly from GitHub releases.
+</p>
+
+---
 
 ## About
 
