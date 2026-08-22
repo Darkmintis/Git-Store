@@ -49,12 +49,24 @@ jobs:
           mv app-release-unsigned.apk GitStore-${{ github.ref_name }}.apk
         fi
       
+    - name: Read release notes
+      id: notes
+      run: |
+        if [ -f "RELEASE_NOTES.md" ]; then
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        else
+          echo "body=Release ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        fi
+      
     - name: Create Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: app/build/outputs/apk/release/*.apk
-        draft: true
+        body: ${{ steps.notes.outputs.body }}
+        draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
