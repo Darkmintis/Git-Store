@@ -9,7 +9,6 @@ import co.touchlab.kermit.Logger
 
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,6 @@ class AuthenticationViewModel(
     private val authenticationRepository: AuthenticationRepository,
     private val browserHelper: BrowserHelper,
     private val clipboardHelper: ClipboardHelper,
-    private val scope: CoroutineScope,
     private val stringProvider: StringProvider
 ) : ViewModel() {
 
@@ -45,7 +43,7 @@ class AuthenticationViewModel(
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
-                scope.launch {
+                viewModelScope.launch {
                     authenticationRepository.accessTokenFlow.collect { token ->
                         _state.update {
                             it.copy(

@@ -1,9 +1,6 @@
 package com.darkmintis.gitstore.app.di
 
 import android.app.Application
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -87,10 +84,6 @@ val coreModule: Module = module {
         )
     }
 
-    single {
-        CoroutineScope(Dispatchers.IO + SupervisorJob())
-    }
-
     // Database DAOs (kept for repositories that need them)
     single { get<AppDatabase>().installedAppDao }
     single { get<AppDatabase>().favoriteRepoDao }
@@ -120,7 +113,6 @@ val coreModule: Module = module {
             historyDao = get(),
             detailsRepository = get(),
             installer = get(),
-            downloader = get()
         )
     }
 
@@ -148,7 +140,6 @@ val authModule: Module = module {
             authenticationRepository = get(),
             browserHelper = get(),
             clipboardHelper = get(),
-            scope = get(),
             stringProvider = get()
         )
     }
