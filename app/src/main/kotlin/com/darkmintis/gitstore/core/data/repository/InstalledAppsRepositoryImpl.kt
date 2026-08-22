@@ -15,10 +15,8 @@ import com.darkmintis.gitstore.core.data.local.db.entities.InstallSource
 import com.darkmintis.gitstore.core.data.local.db.entities.InstalledApp
 import com.darkmintis.gitstore.core.data.local.db.entities.UpdateHistory
 import com.darkmintis.gitstore.core.domain.repository.InstalledAppsRepository
-import com.darkmintis.gitstore.core.data.services.Downloader
 import com.darkmintis.gitstore.core.data.services.Installer
 import com.darkmintis.gitstore.feature.details.domain.repository.DetailsRepository
-import java.io.File
 
 class InstalledAppsRepositoryImpl(
     private val database: AppDatabase,
@@ -26,7 +24,6 @@ class InstalledAppsRepositoryImpl(
     private val historyDao: UpdateHistoryDao,
     private val detailsRepository: DetailsRepository,
     private val installer: Installer,
-    private val downloader: Downloader
 ) : InstalledAppsRepository {
 
     override suspend fun <R> executeInTransaction(block: suspend () -> R): R {
@@ -74,61 +71,17 @@ class InstalledAppsRepositoryImpl(
                 val normalizedInstalledTag = normalizeVersion(app.installedVersion)
                 val normalizedLatestTag = normalizeVersion(latestRelease.tagName)
 
-                if (normalizedInstalledTag == normalizedLatestTag) {
-                    dao.updateVersionInfo(
-                        packageName = packageName,
-                        available = false,
-                        version = latestRelease.tagName,
-                        assetName = app.latestAssetName,
-                        assetUrl = app.latestAssetUrl,
-                        assetSize = app.latestAssetSize,
-                        releaseNotes = latestRelease.description ?: "",
-                        timestamp = DateClock.System.now().toEpochMilliseconds(),
-                        latestVersionName = app.latestVersionName,
-                        latestVersionCode = app.latestVersionCode
-                    )
-                    return false
-                }
-
                 val installableAssets = latestRelease.assets.filter { asset ->
                     installer.isAssetInstallable(asset.name)
                 }
 
                 val primaryAsset = installer.choosePrimaryAsset(installableAssets)
 
-                var isUpdateAvailable = true
-                var latestVersionName: String? = null
-                var latestVersionCode: Long? = null
-
-                if (primaryAsset != null) {
-                    val tempAssetName = primaryAsset.name + ".tmp"
-                    downloader.download(primaryAsset.downloadUrl, tempAssetName).collect { }
-
-                    val tempPath = downloader.getDownloadedFilePath(tempAssetName)
-                    if (tempPath != null) {
-                        val latestInfo = installer.getApkInfoExtractor().extractPackageInfo(tempPath)
-                        File(tempPath).delete()
-
-                        if (latestInfo != null) {
-                            latestVersionName = latestInfo.versionName
-                            latestVersionCode = latestInfo.versionCode
-                            isUpdateAvailable = latestVersionCode > app.installedVersionCode
-                        } else {
-                            isUpdateAvailable = false
-                            latestVersionName = latestRelease.tagName
-                        }
-                    } else {
-                        isUpdateAvailable = false
-                        latestVersionName = latestRelease.tagName
-                    }
-                } else {
-                    isUpdateAvailable = false
-                    latestVersionName = latestRelease.tagName
-                }
+                val isUpdateAvailable = normalizedInstalledTag != normalizedLatestTag
 
                 Logger.d {
                     "Update check for ${app.appName}: currentTag=${app.installedVersion}, latestTag=${latestRelease.tagName}, " +
-                            "currentCode=${app.installedVersionCode}, latestCode=$latestVersionCode, isUpdate=$isUpdateAvailable, " +
+                            "currentCode=${app.installedVersionCode}, isUpdate=$isUpdateAvailable, " +
                             "primaryAsset=${primaryAsset?.name}"
                 }
 
@@ -141,8 +94,8 @@ class InstalledAppsRepositoryImpl(
                     assetSize = primaryAsset?.size,
                     releaseNotes = latestRelease.description ?: "",
                     timestamp = DateClock.System.now().toEpochMilliseconds(),
-                    latestVersionName = latestVersionName,
-                    latestVersionCode = latestVersionCode
+                    latestVersionName = latestRelease.tagName,
+                    latestVersionCode = null
                 )
 
                 return isUpdateAvailable
