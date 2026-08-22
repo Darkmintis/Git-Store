@@ -114,9 +114,14 @@ suspend inline fun <reified T> HttpClient.safeApiCall(
                 Logger.d { "⏳ Rate limited, waiting ${waitTime}ms..." }
                 kotlinx.coroutines.delay(waitTime + 1000)
             } else {
+                val currentLimit = rateLimitHandler.getCurrentRateLimit()
                 return Result.failure(
                     exception = RateLimitException(
-                        rateLimitInfo = rateLimitHandler.getCurrentRateLimit()!!,
+                        rateLimitInfo = currentLimit ?: RateLimitInfo(
+                            limit = 0,
+                            remaining = 0,
+                            reset = kotlinx.datetime.Clock.System.now()
+                        ),
                         getErrorString()
                     )
                 )

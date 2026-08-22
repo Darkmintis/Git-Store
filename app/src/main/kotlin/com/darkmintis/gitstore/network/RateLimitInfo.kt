@@ -41,6 +41,7 @@ class RateLimitException(
 ) : Exception(message)
 
 class RateLimitHandler {
+    @Volatile
     var lastKnownRateLimit: RateLimitInfo? = null
 
     fun isRateLimited(): Boolean {
