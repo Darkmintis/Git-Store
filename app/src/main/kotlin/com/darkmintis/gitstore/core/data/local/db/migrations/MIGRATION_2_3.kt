@@ -6,7 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("""
-            CREATE TABLE starred_repos (
+            CREATE TABLE IF NOT EXISTS starred_repos (
                 repoId INTEGER NOT NULL,
                 repoName TEXT NOT NULL,
                 repoOwner TEXT NOT NULL,
@@ -34,5 +34,3 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
         """.trimIndent())
     }
 }
-
-
