@@ -2,10 +2,13 @@ package com.darkmintis.gitstore.feature.starred_repos.presentation.components
 
 import coil3.compose.AsyncImage
 import com.darkmintis.gitstore.R
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,14 +19,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.CallSplit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Warning
-import androidx.compose.material3.Badge
-import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Icon
@@ -36,15 +40,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.starred_repos.presentation.model.StarredRepositoryUi
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun StarredRepositoryItem(
     repository: StarredRepositoryUi,
@@ -53,9 +60,14 @@ fun StarredRepositoryItem(
     onDevProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-        onClick = onItemClick
+        onClick = onItemClick,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
@@ -67,14 +79,16 @@ fun StarredRepositoryItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
-                    model = repository.repoOwnerAvatarUrl,
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(repository.repoOwnerAvatarUrl)
+                        .crossfade(true)
+                        .build(),
                     contentDescription = repository.repoOwner,
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .clickable(onClick = {
-                            onDevProfileClick()
-                        })
+                        .clickable(onClick = onDevProfileClick),
+                    contentScale = ContentScale.Crop
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -82,13 +96,12 @@ fun StarredRepositoryItem(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .clickable(onClick = {
-                            onDevProfileClick()
-                        })
+                        .clickable(onClick = onDevProfileClick)
                 ) {
                     Text(
                         text = repository.repoName,
                         style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -131,8 +144,9 @@ fun StarredRepositoryItem(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
                 )
             }
 
@@ -148,7 +162,8 @@ fun StarredRepositoryItem(
                 StatChip(
                     icon = Icons.Default.Star,
                     label = formatCount(repository.stargazersCount),
-                    contentDescription = stringResource(R.string.stargazer_count, repository.stargazersCount)
+                    contentDescription = stringResource(R.string.stargazer_count, repository.stargazersCount),
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 StatChip(
@@ -188,25 +203,33 @@ fun StarredRepositoryItem(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     if (repository.isInstalled) {
-                        Badge(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                                .padding(horizontal = 10.dp, vertical = 4.dp)
                         ) {
                             Text(
                                 text = stringResource(R.string.installed),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
 
                     repository.latestRelease?.let { version ->
-                        Badge(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .padding(horizontal = 10.dp, vertical = 4.dp)
                         ) {
                             Text(
                                 text = version,
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
@@ -221,7 +244,8 @@ private fun StatChip(
     icon: ImageVector,
     label: String,
     contentDescription: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurfaceVariant
 ) {
     Row(
         modifier = modifier,
@@ -232,7 +256,7 @@ private fun StatChip(
             imageVector = icon,
             contentDescription = contentDescription,
             modifier = Modifier.size(16.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
+            tint = tint
         )
 
         Text(
@@ -251,36 +275,3 @@ private fun formatCount(count: Int): String {
         else -> count.toString()
     }
 }
-
-@Preview
-@Composable
-private fun PreviewStarredRepoItem() {
-    GithubStoreTheme {
-        StarredRepositoryItem(
-            repository = StarredRepositoryUi(
-                repoId = 1,
-                repoName = "awesome-app",
-                repoOwner = "developer",
-                repoOwnerAvatarUrl = "",
-                repoDescription = "An awesome application that does amazing things",
-                primaryLanguage = "Kotlin",
-                repoUrl = "",
-                stargazersCount = 1234,
-                forksCount = 567,
-                openIssuesCount = 12,
-                isInstalled = true,
-                isFavorite = false,
-                latestRelease = "v1.2.3",
-                latestReleaseUrl = null,
-                starredAt = null
-            ),
-            onToggleFavoriteClick = {},
-            onItemClick = {},
-            onDevProfileClick = {}
-        )
-    }
-}
-
-
-
-
