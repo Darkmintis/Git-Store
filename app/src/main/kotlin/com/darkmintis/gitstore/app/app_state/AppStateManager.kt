@@ -2,6 +2,7 @@ package com.darkmintis.gitstore.app.app_state
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +20,7 @@ class AppStateManager(
     val appState: StateFlow<AppState> = _appState.asStateFlow()
 
     init {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default + SupervisorJob()).launch {
             tokenDataSource.tokenFlow.collect { token ->
                 val isAuth = token != null
                 _appState.update { it.copy(isAuthenticated = isAuth) }
