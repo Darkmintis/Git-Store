@@ -268,7 +268,9 @@ val settingsModule: Module = module {
             settingsRepository = get(),
             downloader = get(),
             installer = get(),
-            application = get()
+            application = get(),
+            tokenDataSource = get(),
+            starredRepository = get()
         )
     }
 }
