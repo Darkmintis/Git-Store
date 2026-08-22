@@ -16,5 +16,8 @@ data class SettingsState(
     val isDownloadingUpdate: Boolean = false,
     val updateDownloadProgress: Int? = null,
     val updateDownloadError: String? = null,
+    val userLogin: String? = null,
+    val userAvatarUrl: String? = null,
+    val starredReposCount: Int = 0,
 )
 
