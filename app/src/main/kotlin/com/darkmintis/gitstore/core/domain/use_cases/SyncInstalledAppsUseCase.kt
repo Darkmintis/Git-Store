@@ -45,7 +45,7 @@ class SyncInstalledAppsUseCase(
                 }
             }
 
-            executeInTransaction {
+            installedAppsRepository.executeInTransaction {
                 toDelete.forEach { packageName ->
                     try {
                         installedAppsRepository.deleteInstalledApp(packageName)
@@ -113,13 +113,5 @@ class SyncInstalledAppsUseCase(
         val versionCode: Long,
         val source: String
     )
-}
-
-suspend fun executeInTransaction(block: suspend () -> Unit) {
-    try {
-        block()
-    } catch (e: Exception) {
-        throw e
-    }
 }
 
