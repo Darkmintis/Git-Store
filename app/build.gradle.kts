@@ -9,8 +9,8 @@ plugins {
     alias(libs.plugins.androidx.room)
 }
 
-val appVersionName = "1.2.1"
-val appVersionCode = 5
+val appVersionName = "1.3.0"
+val appVersionCode = 6
 
 // GitHub OAuth Client ID (public for Device Flow)
 val githubClientId = "Ov23linXkLavDNV3zFMB"
