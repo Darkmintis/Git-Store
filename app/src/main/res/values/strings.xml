@@ -119,6 +119,7 @@
     <string name="donate_with_crypto">Donate with crypto</string>
 
     <!-- Sections -->
+    <string name="section_account">ACCOUNT</string>
     <string name="section_appearance">APPEARANCE</string>
     <string name="section_about">ABOUT</string>
     <string name="section_support">SUPPORT US</string>
@@ -139,6 +140,9 @@
 
     <!-- Account -->
     <string name="logout">Logout</string>
+    <string name="view_all_starred">View all</string>
+    <string name="starred_count">%1$d starred</string>
+    <string name="starred_section_preview">Starred Repos</string>
 
     <!-- Snackbar -->
     <string name="logout_success">Logged out successfully, redirecting...</string>
@@ -280,8 +284,10 @@
     <string name="unstar_from_github">You can unstar a repository from GitHub</string>
 
     <string name="sign_in_required">Sign in required</string>
+    <string name="starred_repos_x_repos">%1$d repositories starred</string>
     <string name="sign_in_with_github_for_stars">Sign in with GitHub to see your starred repositories</string>
     <string name="no_starred_repos">No starred repositories</string>
+    <string name="search_starred_repos">Search starred repos…</string>
     <string name="star_repos_hint">Star repositories on GitHub with installable releases to see them here</string>
     <string name="last_synced">Last synced</string>
     <string name="just_now">Just now</string>
