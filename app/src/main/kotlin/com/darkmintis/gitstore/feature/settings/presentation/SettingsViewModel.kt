@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -30,6 +31,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.int
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -41,7 +43,9 @@ class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val downloader: Downloader,
     private val installer: Installer,
-    private val application: Application
+    private val application: Application,
+    private val tokenDataSource: com.darkmintis.gitstore.core.data.data_source.TokenDataSource,
+    private val starredRepository: com.darkmintis.gitstore.core.domain.repository.StarredRepository
 ) : ViewModel() {
 
     private val stringProvider = AndroidStringProvider(application)
@@ -75,8 +79,60 @@ class SettingsViewModel(
             settingsRepository.isUserLoggedIn
                 .collect { isLoggedIn ->
                     _state.update { it.copy(isUserLoggedIn = isLoggedIn) }
+                    if (isLoggedIn) {
+                        fetchUserProfile()
+                        observeStarredReposCount()
+                    } else {
+                        _state.update { it.copy(userLogin = null, userAvatarUrl = null, starredReposCount = 0) }
+                    }
                 }
         }
+    }
+
+    private fun observeStarredReposCount() {
+        viewModelScope.launch {
+            starredRepository.getAllStarred()
+                .flowOn(Dispatchers.IO)
+                .collect { repos ->
+                    _state.update { it.copy(starredReposCount = repos.size) }
+                }
+        }
+    }
+
+    private fun fetchUserProfile() {
+        viewModelScope.launch {
+            val profile = fetchGitHubUserProfile() ?: return@launch
+            _state.update {
+                it.copy(
+                    userLogin = profile.login,
+                    userAvatarUrl = profile.avatarUrl
+                )
+            }
+        }
+    }
+
+    private suspend fun fetchGitHubUserProfile(): GitHubUser? = withContext(Dispatchers.IO) {
+        runCatching {
+            val token = tokenDataSource.current()?.accessToken ?: return@runCatching null
+            val connection = (URL("https://api.github.com/user").openConnection() as HttpURLConnection).apply {
+                requestMethod = "GET"
+                connectTimeout = 10_000
+                readTimeout = 10_000
+                setRequestProperty("Authorization", "Bearer $token")
+                setRequestProperty("Accept", "application/vnd.github+json")
+                setRequestProperty("User-Agent", "GitStore-Android")
+            }
+
+            if (connection.responseCode !in 200..299) return@runCatching null
+
+            val payload = connection.inputStream.bufferedReader().use { it.readText() }
+            val root = Json.parseToJsonElement(payload).jsonObject
+
+            GitHubUser(
+                login = root["login"]?.jsonPrimitive?.content.orEmpty(),
+                avatarUrl = root["avatar_url"]?.jsonPrimitive?.content.orEmpty()
+            )
+        }.getOrNull()
     }
 
     private fun loadCurrentTheme() {
@@ -206,6 +262,11 @@ class SettingsViewModel(
     private data class GitStoreRelease(
         val versionTag: String,
         val downloadUrl: String
+    )
+
+    private data class GitHubUser(
+        val login: String,
+        val avatarUrl: String
     )
 
     fun onAction(action: SettingsAction) {
