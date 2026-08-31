@@ -91,7 +91,7 @@ val platformModule: Module = module {
     }
 
     single<com.darkmintis.gitstore.core.data.services.TranslationService> {
-        com.darkmintis.gitstore.core.data.services.GoogleTranslationService(
+        com.darkmintis.gitstore.core.data.services.MyMemoryTranslationService(
             translationRepository = get(),
             localizationManager = get()
         )

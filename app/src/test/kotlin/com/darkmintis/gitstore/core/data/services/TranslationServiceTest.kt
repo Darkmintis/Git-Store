@@ -30,13 +30,13 @@ class TranslationServiceTest {
 
     private lateinit var fakeRepo: FakeTranslationRepository
     private lateinit var fakeLoc: FakeLocalizationManager
-    private lateinit var service: GoogleTranslationService
+    private lateinit var service: MyMemoryTranslationService
 
     @BeforeTest
     fun setup() {
         fakeRepo = FakeTranslationRepository()
         fakeLoc = FakeLocalizationManager()
-        service = GoogleTranslationService(fakeRepo, fakeLoc)
+        service = MyMemoryTranslationService(fakeRepo, fakeLoc)
     }
 
     @Test

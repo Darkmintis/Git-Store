@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -25,7 +25,7 @@ interface TranslationService {
     fun isChinese(text: String): Boolean
 }
 
-class GoogleTranslationService(
+class MyMemoryTranslationService(
     private val translationRepository: TranslationRepository,
     private val localizationManager: LocalizationManager,
     scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
@@ -51,7 +51,7 @@ class GoogleTranslationService(
     }
 
     override fun containsNonLatin(text: String): Boolean {
-        return text.any { 
+        return text.any {
             it in '\u4e00'..'\u9fff' || // Chinese
             it in '\u3040'..'\u30ff' || // Japanese
             it in '\uac00'..'\ud7af' || // Korean
@@ -73,10 +73,7 @@ class GoogleTranslationService(
 
         return withContext(Dispatchers.IO) {
             try {
-                val translated = translateViaGoogleClients(text, lang)
-                    ?: translateViaMyMemory(text, lang)
-                    ?: text
-
+                val translated = translateViaMyMemory(text, lang) ?: text
                 cache[cacheKey] = translated
                 translated
             } catch (e: Exception) {
@@ -86,67 +83,12 @@ class GoogleTranslationService(
         }
     }
 
-    private fun translateViaGoogleClients(text: String, targetLang: String): String? {
-        return try {
-            val encodedText = URLEncoder.encode(text, "UTF-8")
-            val urlString = "https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=$targetLang&q=$encodedText"
-            val url = URL(urlString)
-            val connection = (url.openConnection() as HttpURLConnection).apply {
-                requestMethod = "GET"
-                setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                connectTimeout = 5000
-                readTimeout = 5000
-            }
-
-            if (connection.responseCode == 200) {
-                val responseText = connection.inputStream.bufferedReader().use { it.readText() }
-                val jsonArray = JSONArray(responseText)
-                if (jsonArray.length() > 0) {
-                    val rawResult = when (val item = jsonArray.get(0)) {
-                        is JSONArray -> {
-                            val sb = StringBuilder()
-                            for (i in 0 until item.length()) {
-                                val piece = item.opt(i)
-                                if (piece is JSONArray && piece.length() > 0) {
-                                    sb.append(piece.optString(0))
-                                } else if (piece is String) {
-                                    sb.append(piece)
-                                }
-                            }
-                            sb.toString().ifBlank { item.toString() }
-                        }
-                        else -> item.toString()
-                    }
-                    val cleaned = cleanTranslatedText(rawResult)
-                    if (cleaned.isNotBlank()) {
-                        return cleaned
-                    }
-                }
-            }
-            null
-        } catch (e: Exception) {
-            Logger.w { "Google clients translate failed: ${e.message}" }
-            null
-        }
-    }
-
-    private fun cleanTranslatedText(raw: String): String {
-        var text = raw.trim()
-        while ((text.startsWith("[") && text.endsWith("]")) || (text.startsWith("\"") && text.endsWith("\""))) {
-            if (text.startsWith("[") && text.endsWith("]")) {
-                text = text.removeSurrounding("[", "]").trim()
-            }
-            if (text.startsWith("\"") && text.endsWith("\"")) {
-                text = text.removeSurrounding("\"", "\"").trim()
-            }
-        }
-        return text
-    }
-
+    // ponytail: MyMemory free tier ~5k chars/day; upgrade path = paid MyMemory or self-hosted LibreTranslate
     private fun translateViaMyMemory(text: String, targetLang: String): String? {
         return try {
             val encodedText = URLEncoder.encode(text, "UTF-8")
-            val urlString = "https://api.mymemory.translated.net/get?q=$encodedText&langpair=autodetect|$targetLang"
+            val urlString =
+                "https://api.mymemory.translated.net/get?q=$encodedText&langpair=autodetect|$targetLang"
             val url = URL(urlString)
             val connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "GET"
@@ -156,7 +98,7 @@ class GoogleTranslationService(
 
             if (connection.responseCode == 200) {
                 val responseText = connection.inputStream.bufferedReader().use { it.readText() }
-                val json = org.json.JSONObject(responseText)
+                val json = JSONObject(responseText)
                 val responseData = json.optJSONObject("responseData")
                 val translatedText = responseData?.optString("translatedText")
                 if (!translatedText.isNullOrBlank() && !translatedText.contains("MYMEMORY WARNING")) {
