@@ -26,8 +26,8 @@ fun RowScope.HomeFilterChips(
             Text(
                 text = category.displayText(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis,

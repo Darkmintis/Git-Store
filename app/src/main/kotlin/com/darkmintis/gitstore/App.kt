@@ -28,6 +28,15 @@ import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.core.presentation.utils.ApplyAndroidSystemBars
 import com.darkmintis.gitstore.core.presentation.utils.ConnectivityObserver
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import android.content.res.Configuration
+import java.util.Locale
+import com.darkmintis.gitstore.core.domain.model.TranslationLanguage
+import com.darkmintis.gitstore.core.domain.repository.TranslationRepository
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 @Preview
@@ -38,6 +47,37 @@ fun App(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val connectivityObserver: ConnectivityObserver = koinInject()
     val isOnline by connectivityObserver.isOnline.collectAsStateWithLifecycle(initialValue = true)
+    val translationRepository: TranslationRepository = koinInject()
+    val targetLanguage by translationRepository.getTargetLanguage().collectAsState(initial = TranslationLanguage.SYSTEM)
+
+    val currentLocale = remember(targetLanguage) {
+        if (targetLanguage == TranslationLanguage.SYSTEM) {
+            Locale.getDefault()
+        } else {
+            val code = targetLanguage.code
+            val parts = code.split("-", "_")
+            if (parts.size > 1) {
+                Locale(parts[0], parts[1])
+            } else {
+                Locale(parts[0])
+            }
+        }
+    }
+
+    val context = LocalContext.current
+    val localizedContext = remember(context, currentLocale) {
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(currentLocale)
+        config.setLayoutDirection(currentLocale)
+        context.createConfigurationContext(config)
+    }
+
+    val localizedConfiguration = remember(context, currentLocale) {
+        Configuration(context.resources.configuration).apply {
+            setLocale(currentLocale)
+            setLayoutDirection(currentLocale)
+        }
+    }
 
     val navBackStack = rememberSerializable(
         serializer = SnapshotStateListSerializer<GithubStoreGraph>()
@@ -45,11 +85,15 @@ fun App(
         mutableStateListOf(GithubStoreGraph.HomeScreen)
     }
 
-    GithubStoreTheme(
-        appTheme = state.currentColorTheme,
-        isAmoledTheme = state.isAmoledTheme,
-        isDarkTheme = state.isDarkTheme ?: isSystemInDarkTheme()
+    CompositionLocalProvider(
+        LocalContext provides localizedContext,
+        LocalConfiguration provides localizedConfiguration
     ) {
+        GithubStoreTheme(
+            appTheme = state.currentColorTheme,
+            isAmoledTheme = state.isAmoledTheme,
+            isDarkTheme = state.isDarkTheme ?: isSystemInDarkTheme()
+        ) {
         ApplyAndroidSystemBars(state.isDarkTheme)
 
         LaunchedEffect(state.isCheckingAuth) {
@@ -93,6 +137,7 @@ fun App(
             }
         }
     }
+}
 }
 
 

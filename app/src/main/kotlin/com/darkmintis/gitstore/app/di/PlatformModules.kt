@@ -84,6 +84,19 @@ val platformModule: Module = module {
         AndroidLocalizationManager()
     }
 
+    single<com.darkmintis.gitstore.core.domain.repository.TranslationRepository> {
+        com.darkmintis.gitstore.core.data.repository.TranslationRepositoryImpl(
+            preferences = get()
+        )
+    }
+
+    single<com.darkmintis.gitstore.core.data.services.TranslationService> {
+        com.darkmintis.gitstore.core.data.services.GoogleTranslationService(
+            translationRepository = get(),
+            localizationManager = get()
+        )
+    }
+
     single<AppLauncher> {
         AndroidAppLauncher(androidContext())
     }

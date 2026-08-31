@@ -36,7 +36,10 @@ fun BottomNavigation(
                         label = {
                             Text(
                                 text = stringResource(item.titleRes),
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.labelSmall,
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                             )
                         },
                         selected = selected,

@@ -1,5 +1,6 @@
 package com.darkmintis.gitstore.feature.settings.presentation
 
+import com.darkmintis.gitstore.core.domain.model.TranslationLanguage
 import com.darkmintis.gitstore.core.presentation.model.AppTheme
 
 data class SettingsState(
@@ -19,5 +20,8 @@ data class SettingsState(
     val userLogin: String? = null,
     val userAvatarUrl: String? = null,
     val starredReposCount: Int = 0,
+    val translationLanguage: TranslationLanguage = TranslationLanguage.FRENCH,
+    val isAutoTranslateEnabled: Boolean = true,
+    val isLanguagePickerVisible: Boolean = false,
 )
 

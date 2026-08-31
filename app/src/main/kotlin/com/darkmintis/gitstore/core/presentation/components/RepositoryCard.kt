@@ -33,6 +33,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import org.koin.compose.koinInject
+import com.darkmintis.gitstore.core.data.services.TranslationService
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,11 +49,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-
-
-
-
-
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.darkmintis.gitstore.core.domain.model.GithubRepoSummary
@@ -187,17 +190,50 @@ fun RepositoryCard(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                val translationService = koinInject<TranslationService>()
+                val rawDescription = discoveryRepository.repository.description
+                val isAutoTranslateEnabled by translationService.isAutoTranslateEnabled.collectAsState()
+                val currentTargetLang by translationService.targetLanguage.collectAsState()
 
-                discoveryRepository.repository.description?.let {
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyLarge,
-                        softWrap = true
-                    )
+                var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
+                var showOriginal by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+
+                val isForeign = remember(rawDescription) {
+                    rawDescription != null && translationService.containsNonLatin(rawDescription)
+                }
+
+                LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled) {
+                    if (rawDescription != null && (isForeign || isAutoTranslateEnabled)) {
+                        val res = translationService.translate(rawDescription)
+                        if (res != rawDescription) {
+                            translatedDescription = res
+                        }
+                    }
+                }
+
+                val displayedDesc = if (showOriginal || !isAutoTranslateEnabled) rawDescription else (translatedDescription ?: rawDescription)
+
+                displayedDesc?.let { desc ->
+                    Column {
+                        Text(
+                            text = desc,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyLarge,
+                            softWrap = true
+                        )
+                        if (translatedDescription != null && translatedDescription != rawDescription) {
+                            val langLabel = translationService.getEffectiveLanguageCode().uppercase()
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = if (showOriginal || !isAutoTranslateEnabled) "🌐 Traduire ($langLabel)" else "🌐 Traduit ($langLabel) - VO",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.clickable { showOriginal = !showOriginal }
+                            )
+                        }
+                    }
                 }
 
                 if (discoveryRepository.isInstalled) {

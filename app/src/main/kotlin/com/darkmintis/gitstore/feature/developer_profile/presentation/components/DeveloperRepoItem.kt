@@ -35,7 +35,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import org.koin.compose.koinInject
+import com.darkmintis.gitstore.core.data.services.TranslationService
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -129,13 +138,44 @@ fun DeveloperRepoItem(
                 }
             }
 
-            repository.description?.let { description ->
+            val translationService = koinInject<TranslationService>()
+            val rawDescription = repository.description
+            val isAutoTranslateEnabled by translationService.isAutoTranslateEnabled.collectAsState()
+            val currentTargetLang by translationService.targetLanguage.collectAsState()
+
+            var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
+            var showOriginal by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+
+            LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled) {
+                if (rawDescription != null && (translationService.containsNonLatin(rawDescription) || isAutoTranslateEnabled)) {
+                    val res = translationService.translate(rawDescription)
+                    if (res != rawDescription) {
+                        translatedDescription = res
+                    }
+                }
+            }
+
+            val displayedDesc = if (showOriginal || !isAutoTranslateEnabled) rawDescription else (translatedDescription ?: rawDescription)
+
+            displayedDesc?.let { description ->
                 Spacer(modifier = Modifier.height(8.dp))
 
-                GithubStoreBodyText(
-                    text = description,
-                    maxLines = 2
-                )
+                Column {
+                    GithubStoreBodyText(
+                        text = description,
+                        maxLines = 2
+                    )
+                    if (translatedDescription != null && translatedDescription != rawDescription) {
+                        val langCode = translationService.getEffectiveLanguageCode().uppercase()
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = if (showOriginal || !isAutoTranslateEnabled) "🌐 Traduire ($langCode)" else "🌐 Traduit ($langCode) - VO",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.clickable { showOriginal = !showOriginal }
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))

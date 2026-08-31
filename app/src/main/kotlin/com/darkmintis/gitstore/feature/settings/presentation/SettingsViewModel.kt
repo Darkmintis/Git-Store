@@ -45,7 +45,8 @@ class SettingsViewModel(
     private val installer: Installer,
     private val application: Application,
     private val tokenDataSource: com.darkmintis.gitstore.core.data.data_source.TokenDataSource,
-    private val starredRepository: com.darkmintis.gitstore.core.domain.repository.StarredRepository
+    private val starredRepository: com.darkmintis.gitstore.core.domain.repository.StarredRepository,
+    private val translationRepository: com.darkmintis.gitstore.core.domain.repository.TranslationRepository
 ) : ViewModel() {
 
     private val stringProvider = AndroidStringProvider(application)
@@ -59,6 +60,7 @@ class SettingsViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 loadCurrentTheme()
+                loadTranslationSettings()
                 collectIsUserLoggedIn()
                 checkForGitStoreUpdate()
 
@@ -156,6 +158,24 @@ class SettingsViewModel(
             themesRepository.getIsDarkTheme().collect { isDarkTheme ->
                 _state.update {
                     it.copy(isDarkTheme = isDarkTheme)
+                }
+            }
+        }
+    }
+
+    private fun loadTranslationSettings() {
+        viewModelScope.launch {
+            translationRepository.getTargetLanguage().collect { lang ->
+                _state.update {
+                    it.copy(translationLanguage = lang)
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            translationRepository.isAutoTranslateEnabled().collect { enabled ->
+                _state.update {
+                    it.copy(isAutoTranslateEnabled = enabled)
                 }
             }
         }
@@ -346,6 +366,27 @@ class SettingsViewModel(
                 viewModelScope.launch {
                     themesRepository.setDarkTheme(action.isDarkTheme)
                 }
+            }
+
+            is SettingsAction.OnTranslationLanguageSelected -> {
+                viewModelScope.launch {
+                    translationRepository.setTargetLanguage(action.language)
+                    _state.update { it.copy(isLanguagePickerVisible = false) }
+                }
+            }
+
+            is SettingsAction.OnAutoTranslateToggled -> {
+                viewModelScope.launch {
+                    translationRepository.setAutoTranslateEnabled(action.enabled)
+                }
+            }
+
+            SettingsAction.OnOpenLanguagePicker -> {
+                _state.update { it.copy(isLanguagePickerVisible = true) }
+            }
+
+            SettingsAction.OnDismissLanguagePicker -> {
+                _state.update { it.copy(isLanguagePickerVisible = false) }
             }
 
             SettingsAction.OnUpdateGitStoreClick -> {

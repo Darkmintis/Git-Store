@@ -45,6 +45,8 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.translation
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.TranslationLanguageDialog
 
 @Composable
 fun SettingsRoot(
@@ -109,6 +111,18 @@ fun SettingsRoot(
             }
         )
     }
+
+    if (state.isLanguagePickerVisible) {
+        TranslationLanguageDialog(
+            selectedLanguage = state.translationLanguage,
+            onLanguageSelected = { lang ->
+                viewModel.onAction(SettingsAction.OnTranslationLanguageSelected(lang))
+            },
+            onDismiss = {
+                viewModel.onAction(SettingsAction.OnDismissLanguagePicker)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -164,6 +178,21 @@ fun SettingsScreen(
                 },
                 onThemeColorSelected = { theme ->
                     onAction(SettingsAction.OnThemeColorSelected(theme))
+                }
+            )
+
+            item {
+                Spacer(Modifier.height(24.dp))
+            }
+
+            translation(
+                translationLanguage = state.translationLanguage,
+                isAutoTranslateEnabled = state.isAutoTranslateEnabled,
+                onAutoTranslateToggled = { enabled ->
+                    onAction(SettingsAction.OnAutoTranslateToggled(enabled))
+                },
+                onOpenLanguagePicker = {
+                    onAction(SettingsAction.OnOpenLanguagePicker)
                 }
             )
 
