@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.core.presentation.components.LoadingState
 import com.darkmintis.gitstore.core.presentation.components.RetryErrorState
 
@@ -144,11 +145,8 @@ fun AppsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(R.string.installed_apps),
-                        style = MaterialTheme.typography.titleMediumEmphasized,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                    GithubStoreTopBarTitle(
+                        text = stringResource(R.string.installed_apps)
                     )
                 },
                 actions = {

@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.core.presentation.components.LoadingState
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -52,10 +53,8 @@ fun DownloadManagerRoot(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = stringResource(R.string.downloads),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
+                    GithubStoreTopBarTitle(
+                        text = stringResource(R.string.downloads)
                     )
                 }
             )

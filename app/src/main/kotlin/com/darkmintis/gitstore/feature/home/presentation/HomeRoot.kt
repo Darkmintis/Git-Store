@@ -339,30 +339,26 @@ private fun TopAppBar(
 ) {
     TopAppBar(
         navigationIcon = {
-            Box(
-                modifier = Modifier.size(56.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.app_icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            Image(
+                painter = painterResource(R.drawable.app_icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .size(32.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
         },
         title = {
             Text(
                 text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
                 fontFamily = androidx.compose.ui.text.font.FontFamily(
                     androidx.compose.ui.text.font.Font(R.font.poppins_bold)
                 ),
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.padding(start = 4.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -379,8 +375,7 @@ private fun TopAppBar(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-        },
-        modifier = Modifier.padding(12.dp)
+        }
     )
 }
 

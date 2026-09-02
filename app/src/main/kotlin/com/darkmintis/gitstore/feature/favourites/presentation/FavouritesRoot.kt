@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.presentation.components.EmptyState
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.core.presentation.components.LoadingState
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
 import com.darkmintis.gitstore.feature.favourites.presentation.components.FavouriteRepositoryItem
@@ -133,11 +134,8 @@ private fun FavouritesTopbar(
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = stringResource(R.string.favourites),
-                style = MaterialTheme.typography.titleMediumEmphasized,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+            GithubStoreTopBarTitle(
+                text = stringResource(R.string.favourites)
             )
         }
     )

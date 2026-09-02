@@ -57,6 +57,7 @@ import androidx.compose.ui.res.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreBodyText
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreButtonText
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.core.presentation.components.GithubStoreTitleText
 import com.darkmintis.gitstore.core.presentation.components.ReportIssueButton
 import com.darkmintis.gitstore.feature.developer_profile.domain.model.RepoFilterType
@@ -288,11 +289,8 @@ fun DevProfileTopbar(
             }
         },
         title = {
-            Text(
-                text = state.username,
-                style = MaterialTheme.typography.titleMediumEmphasized,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+            GithubStoreTopBarTitle(
+                text = state.username
             )
         },
         actions = {

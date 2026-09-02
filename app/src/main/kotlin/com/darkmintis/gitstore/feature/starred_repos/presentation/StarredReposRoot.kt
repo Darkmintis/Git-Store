@@ -62,6 +62,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.feature.starred_repos.presentation.components.StarredRepositoryItem
 
 @Composable
@@ -347,11 +348,8 @@ private fun StarredTopBar(
         TopAppBar(
             title = {
                 Column {
-                    Text(
-                        text = stringResource(R.string.starred_repositories),
-                        style = MaterialTheme.typography.titleMediumEmphasized,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface
+                    GithubStoreTopBarTitle(
+                        text = stringResource(R.string.starred_repositories)
                     )
 
                     if (lastSyncTime != null && !isSyncing) {

@@ -15,7 +15,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalContext
@@ -28,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -37,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import com.darkmintis.gitstore.core.presentation.theme.GithubStoreTheme
+import com.darkmintis.gitstore.core.presentation.components.GithubStoreTopBarTitle
 import com.darkmintis.gitstore.core.presentation.utils.ObserveAsEvents
 import com.darkmintis.gitstore.feature.settings.presentation.components.LogoutDialog
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.about
@@ -223,7 +222,6 @@ private fun TopAppBar(
     TopAppBar(
         navigationIcon = {
             IconButton(
-                shapes = IconButtonDefaults.shapes(),
                 onClick = {
                     onAction(SettingsAction.OnNavigateBackClick)
                 }
@@ -236,17 +234,13 @@ private fun TopAppBar(
             }
         },
         title = {
-            Text(
-                text = stringResource(R.string.settings_title),
-                style = MaterialTheme.typography.titleMediumEmphasized,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface
+            GithubStoreTopBarTitle(
+                text = stringResource(R.string.settings_title)
             )
         },
         actions = {
             if (isUserLoggedIn) {
                 IconButton(
-                    shapes = IconButtonDefaults.shapes(),
                     onClick = {
                         onAction(SettingsAction.OnLogoutClick)
                     }

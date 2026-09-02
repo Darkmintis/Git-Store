@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,6 +30,28 @@ fun GithubStoreTitleText(
         overflow = TextOverflow.Ellipsis,
         fontWeight = fontWeight,
         softWrap = maxLines > 1
+    )
+}
+
+@Composable
+fun GithubStoreTopBarTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    fontWeight: FontWeight = FontWeight.SemiBold,
+) {
+    val typography = MaterialTheme.typography.titleLarge
+    Text(
+        text = text,
+        modifier = modifier,
+        style = typography.copy(
+            lineHeight = typography.fontSize,
+            platformStyle = PlatformTextStyle(includeFontPadding = false),
+        ),
+        color = color,
+        fontWeight = fontWeight,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
     )
 }
 
