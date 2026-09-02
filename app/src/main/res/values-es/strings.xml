@@ -1,5 +1,9 @@
-﻿<resources>
+<resources>
+
+    <!-- Apps feature - App -->
     <string name="app_name">Git Store</string>
+
+    <!-- Apps feature - Navigation / Top bar -->
     <string name="home">Inicio</string>
     <string name="apps">Aplicaciones</string>
     <string name="installed_apps">Apps instaladas</string>
@@ -8,75 +12,381 @@
     <string name="updates">Actualizaciones</string>
     <string name="up_to_date">Actualizado</string>
     <string name="check_for_updates">Buscar actualizaciones</string>
+
+    <!-- Apps feature - Errors / messages -->
+    <string name="cannot_launch">No se puede iniciar %1$s</string>
+    <string name="failed_to_open">No se puede abir %1.</string>
+    <string name="failed_to_update">Fallo en la actualización de la orden %1$s: %2$s;</string>
+    <string name="update_all_failed">Error al actualizar todo: %1$s</string>
+    <string name="all_apps_updated_successfully">Todas las aplicaciones actualizadas correctamente</string>
+    <string name="no_updates_available">No hay actualizaciones disponibles</string>
+
+    <!-- Apps feature - Search -->
     <string name="search_your_apps">Buscar tus apps</string>
     <string name="no_apps_found">No se encontraron apps</string>
+
+    <!-- Apps feature - Actions -->
     <string name="update_all">Actualizar todo</string>
     <string name="update">Actualizar</string>
     <string name="open">Abrir</string>
     <string name="cancel">Cancelar</string>
+
+    <!-- Apps feature - Update states -->
     <string name="checking">Comprobando…</string>
     <string name="updated_successfully">Actualizado con éxito</string>
     <string name="error_with_message">Error: %1$s</string>
+
+    <!-- Apps feature - Update all progress -->
+    <string name="updating_x_of_y">Actualizando %1$d de %2$d</string>
+    <string name="currently_updating">Actualmente: %1$s</string>
+
+
+    <!-- Auth general -->
+    <string name="waiting_for_authorization">Esperando autorización…</string>
+    <string name="signed_in">Sesión iniciada&amp;#x0D;</string>
+    <string name="redirecting_message">Ahora puedes usar la aplicación. Redireccionando...</string>
+    <string name="try_again">Probar de nuevo</string>
+
+    <!-- Errors -->
+    <string name="auth_error_with_message">Error: %1$s</string>
+
+    <!-- Device flow -->
+    <string name="enter_code_on_github">Introduce este código en GitHub:</string>
+    <string name="copy_code">Copiar el código</string>
+    <string name="open_github">Abrir GitHub</string>
+
+    <!-- Logged out -->
+    <string name="unlock_full_experience">Desbloquea la\ nexperienciacompleta</string>
+
+    <string name="more_requests">Más pedidos</string>
+    <string name="more_requests_description">Inicia sesión para obtener límites de tasa de API más altos y evitar interrupciones.</string>
+
     <string name="sign_in_with_github">Iniciar sesión con GitHub</string>
+
+    <string name="error_cancelled">Cancelada</string>
+    <string name="error_unknown">Error desconocido</string>
+
+    <string name="language_label">Lenguaje:</string>
+
     <string name="discover_repositories">Descubrir repositorios</string>
     <string name="search_repositories_hint">Buscar repo, descripción…</string>
     <string name="search">Buscar</string>
+
+    <!-- Filters -->
     <string name="filter_by_language">Filtrar por idioma</string>
+
+    <!-- Results -->
     <string name="results_found">%1$d resultados encontrados</string>
+
+
+    <!-- Sorting -->
     <string name="sort_by">Ordenar por</string>
     <string name="close">Cerrar</string>
+
     <string name="sort_most_stars">Más estrellas</string>
     <string name="sort_most_forks">Más forks</string>
     <string name="sort_best_match">Mejor coincidencia</string>
+
+    <!-- Programming languages -->
+    <string name="language_all">Todos los idiomas</string>
+    <string name="language_kotlin">Kotlin</string>
+    <string name="language_java">Java</string>
+    <string name="language_javascript">JavaScript</string>
+    <string name="language_typescript">TypeScript</string>
+    <string name="language_python">Python</string>
+    <string name="language_swift">Swift</string>
+    <string name="language_rust">Rust</string>
+    <string name="language_go">Go</string>
+    <string name="language_csharp">C#</string>
+    <string name="language_cpp">C++</string>
+    <string name="language_c">C</string>
+    <string name="language_dart">Dart</string>
+    <string name="language_ruby">Ruby</string>
+    <string name="language_php">PHP</string>
+
+    <string name="search_failed">Falló la búsqueda</string>
+    <string name="no_repositories_found">No se han encontrado repositorios</string>
+    <string name="search_try_different_filters">Prueba con una palabra clave, un idioma o una opción de ordenación diferente.</string>
+
+    <!-- Settings -->
     <string name="settings_title">Ajustes</string>
+    <string name="settings_sign_in_github_title">Connectarse con GitHub</string>
+    <string name="settings_sign_in_github_description">Conecta tu cuenta de GitHub para sincronizar tus favoritos y aumentar los límites de velocidad de la API de 60 a 5000 solicitudes por hora</string>
+    <string name="support_development_title">Apoyo al desarrollo</string>
+    <string name="support_development_description">Ayuda a mantener Git Store libre de anuncios. Tu ayuda ayuda a mantener y mejorar la aplicación.</string>
+    <string name="donate_with_crypto">Dona con criptomonedas</string>
+
+    <!-- Sections -->
     <string name="section_account">CUENTA</string>
     <string name="section_appearance">APARIENCIA</string>
     <string name="section_translation">TRADUCCIÓN</string>
     <string name="section_about">ACERCA DE</string>
     <string name="section_support">APOYARNOS</string>
+
+    <!-- Translation -->
     <string name="auto_translate_title">Traducción automática</string>
-    <string name="auto_translate_description">Traducir automáticamente descripciones en otros idiomas</string>
-    <string name="translation_language_title">Idioma de destino</string>
-    <string name="select_translation_language">Seleccionar idioma de traducción</string>
+    <string name="auto_translate_description">Traducir automáticamente el texto del repositorio que no esté en tu idioma</string>
+    <string name="translation_language_title">Idioma</string>
+    <string name="select_translation_language">Seleccionar idioma</string>
     <string name="translate">Traducir</string>
+    <string name="translate_with_language">Traducir (%1$s)</string>
+    <string name="translated_show_original">Traducido (%1$s) · Original</string>
+    <string name="show_translation">Mostrar traducción (%1$s)</string>
+    <string name="translation_unavailable">Traducción no disponible ahora</string>
     <string name="original">Original</string>
+
+    <!-- Appearance -->
     <string name="theme_color">Color del tema</string>
     <string name="amoled_black_theme">Tema negro AMOLED</string>
     <string name="amoled_black_description">Fondo negro puro para modo oscuro</string>
     <string name="selected_color">Color seleccionado: %1$s</string>
+
+    <!-- About -->
     <string name="version">Versión</string>
     <string name="report_an_issue">Reportar un problema</string>
     <string name="star_git_store">Dar estrella en GitHub</string>
     <string name="view_source_code">Ver código fuente</string>
     <string name="check_now">Comprobar ahora</string>
-    <string name="home_category_trending">Tendencias</string>
-    <string name="home_category_new">Novedades</string>
-    <string name="home_category_popular">Populares</string>
-    <string name="home_finding_repositories">Buscando repositorios...</string>
-    <string name="home_loading_more">Cargando más...</string>
-    <string name="home_no_more_repositories">No hay más repositorios</string>
-    <string name="home_retry">Reintentar</string>
-    <string name="home_failed_to_load_repositories">Error al cargar repositorios</string>
-    <string name="home_view_details">Ver detalles</string>
-    <string name="theme_light">Claro</string>
-    <string name="theme_dark">Oscuro</string>
-    <string name="theme_system">Predeterminado</string>
-    <string name="favourites">Favoritos</string>
-    <string name="added_to_favourites">Añadido a favoritos</string>
-    <string name="removed_from_favourites">Eliminado de favoritos</string>
-    <string name="add_to_favourites">Añadir a favoritos</string>
-    <string name="remove_from_favourites">Eliminar de favoritos</string>
+    <string name="update_check_failed">No se han podido comprobar las actualizaciones</string>
+
+    <!-- Account -->
+    <string name="logout">Cerrar sesión</string>
+    <string name="view_all_starred">Ver todo</string>
+    <string name="starred_count">%1$d estrellas</string>
+    <string name="starred_section_preview">Repos. Destacados</string>
+
+    <!-- Snackbar -->
+    <string name="logout_success">Iniciado sesión con éxito, redirigiendo ...</string>
+
+    <!-- Dialog -->
+    <string name="warning">¡Atención!</string>
+    <string name="logout_confirmation">¿Seguro que quieres cerrar sesión?</string>
+
+    <!-- Theme names -->
+    <string name="theme_dynamic">Dinámico</string>
+    <string name="theme_ocean">Océano</string>
+    <string name="theme_purple">Morado</string>
+    <string name="theme_forest">Bosque</string>
+    <string name="theme_slate">Piedra pizarra</string>
+    <string name="theme_amber">Ámbar</string>
+
+    <!-- Navigation & actions -->
+    <string name="open_repository">Abierto en el depósito</string>
+    <string name="open_in_browser">Abrir en el navegador</string>
+    <string name="cancel_download">Cancelar descarga</string>
+    <string name="show_install_options">Opciones de Instalación</string>
+
+    <!-- Errors & states -->
+    <string name="error_loading_details">Error al cargar los detalles del sitio</string>
+    <string name="retry">Reintentar</string>
+    <string name="no_description">No se ha especificado ninguna descripción.</string>
+    <string name="no_release_notes">Notas sobre la versión</string>
+
+    <!-- Headers -->
     <string name="about_this_app">Acerca de esta aplicación</string>
+    <string name="install_logs">Instalar registros</string>
+    <string name="author">Autor</string>
     <string name="whats_new">Novedades</string>
+
+    <!-- Install status -->
     <string name="installed">Instalado</string>
     <string name="update_available">Actualización disponible</string>
     <string name="not_available">No disponible</string>
     <string name="install_latest">Instalar última versión</string>
     <string name="reinstall">Reinstalar</string>
     <string name="update_app">Actualizar aplicación</string>
+
+    <!-- Download stages -->
     <string name="downloading">Descargando</string>
     <string name="updating">Actualizando</string>
+    <string name="verifying">Verificando</string>
     <string name="installing">Instalando</string>
+
+    <!-- Install helpers -->
+    <string name="open_in_obtainium">Abrir en Obtainium</string>
+    <string name="obtainium_description">Gestionar actualizaciones automáticamente</string>
+    <string name="inspect_with_appmanager">Inspeccionar con AppManager</string>
+    <string name="appmanager_description">Comprueba los permisos, los rastreadores y la seguridad</string>
+
+    <!-- Author -->
+    <string name="profile">Perfil</string>
+
+    <!-- Stats -->
+    <string name="forks">Horquillas</string>
+    <string name="stars">Estrellas</string>
+    <string name="issues">Problemas</string>
+
+    <!-- Misc -->
+    <string name="by_author">por %1$s</string>
+    <string name="installed_version">• Instalado: %1$s</string>
+    <string name="architecture_compatible">Compatible con arquitectura</string>
+    <string name="update_to_version">Actualizar a %1$s</string>
+
+    <!-- General -->
+    <string name="error_load_details">No se han podido cargar los datos</string>
+    <string name="installer_saved_downloads">El instalador se ha guardado en la carpeta Descargas</string>
+
+    <!-- Download / install states -->
+    <string name="log_download_started">La descarga comenzó.</string>
+    <string name="log_downloaded">Descargado</string>
+    <string name="log_update_started">Actualización iniciada</string>
+    <string name="log_installed">Instal·lat</string>
+    <string name="log_updated">Actualizado</string>
+    <string name="log_cancelled">Cancelada</string>
+    <string name="log_install_started">Instalación iniciada</string>
+    <string name="log_error">Error</string>
+    <string name="log_error_with_message">Error: %1$s</string>
+
+    <!-- External tools -->
+    <string name="log_prepare_appmanager">Preparación para AppManager</string>
+    <string name="log_opened_appmanager">Abierto en AppManager</string>
+
+    <!-- Errors -->
+    <string name="error_generic">Error: %1$s</string>
+    <string name="error_asset_not_supported">Tipo de activo.%1$s no admitido</string>
+    <string name="error_file_not_found">Archivo descargado no encontrado</string>
+
+    <string name="home_category_trending">Tendencias</string>
+    <string name="home_category_new">Novedades</string>
+    <string name="home_category_popular">Populares</string>
+
+    <string name="home_finding_repositories">Buscando repositorios...</string>
+    <string name="home_loading_more">Cargando más...</string>
+    <string name="home_no_more_repositories">No hay más repositorios</string>
+    <string name="home_retry">Reintentar</string>
+    <string name="home_failed_to_load_repositories">Error al cargar repositorios</string>
+    <string name="home_view_details">Ver detalles</string>
+
+    <string name="updated_just_now">Recién actualizado</string>
+    <string name="updated_hours_ago">actualizado hace %1$d hora(s)</string>
+    <string name="updated_yesterday">actualizado ayer</string>
+    <string name="updated_days_ago">actualizado hace %1$d día(s)</string>
+    <string name="updated_on_date">Ultima actualización sobre %1$s</string>
+
+    <string name="rate_limit_exceeded">Límite Excedido</string>
+    <string name="rate_limit_used_all">Has utilizado las %1$d solicitudes de API.</string>
+    <string name="rate_limit_used_all_free">Has utilizado las %1$d solicitudes de API gratuitas.</string>
+    <string name="rate_limit_resets_in_minutes">Se restablece en %1$d minutos</string>
+    <string name="rate_limit_tip_sign_in">💡 ¡Inicia sesión para recibir 5.000 solicitudes por hora en lugar de 60!</string>
+    <string name="rate_limit_sign_in">Iniciar sesión</string>
+    <string name="rate_limit_ok">Aceptar</string>
+    <string name="rate_limit_close">Cerrar</string>
+
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="theme_system">Predeterminado</string>
+
+    <string name="added_to_favourites">Añadido a favoritos</string>
+    <string name="removed_from_favourites">Eliminado de favoritos</string>
+    <string name="add_to_favourites">Añadir a favoritos</string>
+    <string name="remove_from_favourites">Eliminar de favoritos</string>
+    <string name="favourites">Favoritos</string>
+
+    <string name="added_just_now">añadido hace un momento</string>
+    <string name="added_hours_ago">añadido hace %1$d hora(s)</string>
+    <string name="added_yesterday">añadido ayer</string>
+    <string name="added_days_ago">añadido hace %1$d día(s)</string>
+    <string name="added_on_date">añadido el %1$s</string>
+
+    <string name="starred_repositories">Repositorios destacados</string>
+    <string name="repository_starred">El repositorio está destacado</string>
+    <string name="repository_not_starred">El repositorio no está destacado</string>
+    <string name="star_from_github">Puedes marcar como estrella un repositorio desde GitHub</string>
+    <string name="unstar_from_github">Puedes quitar las estrellas de un repositorio desde GitHub</string>
+
+    <string name="sign_in_required">Es necesario iniciar sesión</string>
+    <string name="starred_repos_x_repos">%1$d repositorios destacados</string>
+    <string name="sign_in_with_github_for_stars">Inicia sesión con GitHub para ver tus repositorios destacados</string>
+    <string name="no_starred_repos">No hay repositorios con estrellas</string>
+    <string name="search_starred_repos">Buscar repositorios destacados...</string>
+    <string name="star_repos_hint">Repositorios Star en GitHub con versiones instalables para verlos aquí</string>
+    <string name="last_synced">Última sincronización</string>
+    <string name="just_now">Justo ahora</string>
+    <string name="minutes_ago">hace %d min</string>
+    <string name="hours_ago">hace %d h</string>
+    <string name="days_ago">hace %d d</string>
+    <string name="dismiss">Descartar</string>
+    <string name="sync_starred_failed">No se pudieron sincronizar los repositorios destacados</string>
+
+    <string name="developer_profile_title">Perfil del desarrollador</string>
+    <string name="open_developer_profile">Abrir perfil del desarrollador</string>
+
+    <string name="failed_to_load_repositories">No se pudieron cargar los repositorios</string>
+    <string name="failed_to_load_profile">No se pudo cargar el perfil</string>
+
+    <!-- Developer Profile - Stats -->
+    <string name="repositories">Repositorios</string>
+    <string name="followers">Seguidores</string>
+    <string name="following">Siguiendo</string>
+
+    <!-- Developer Profile - Filter & Sort -->
+    <string name="search_repositories">Buscar repositorios…</string>
+    <string name="clear_search">Borrar búsqueda</string>
+    <string name="filter_all">Todos</string>
+    <string name="filter_with_releases">Con releases</string>
+    <string name="filter_installed">Instal·lat</string>
+    <string name="filter_favorites">Favoritos</string>
+    <string name="sort">Ordenar</string>
+    <string name="sort_recently_updated">Actualizados recientemente</string>
+    <string name="sort_name">Nombre</string>
+
+    <!-- Developer Profile - Repository Count -->
+    <string name="repository_singular">repositorio</string>
+    <string name="repositories_plural">repositorios</string>
+    <string name="showing_x_of_y_repositories">Mostrando %1$d de %2$d repositorios</string>
+
+    <!-- Developer Profile - Empty States -->
+    <string name="no_repos_with_releases">No hay repositorios con releases instalables</string>
+    <string name="no_installed_repos">No hay repositorios instalados</string>
+    <string name="no_favorite_repos">No hay repositorios favoritos</string>
+
+    <!-- Developer Profile - Repository Item -->
+    <string name="updated_x_ago">Actualizado %1$s</string>
+    <string name="has_release">Tiene release</string>
+
+    <string name="time_years_ago">hace %1$d a</string>
+    <string name="time_months_ago">hace %1$d m</string>
+    <string name="time_days_ago">hace %1$d d</string>
+    <string name="time_hours_ago">hace %1$d h</string>
+    <string name="time_minutes_ago">hace %1$d m</string>
+
+    <!-- Developer Profile - Count Formatting -->
+    <string name="count_millions">%1$dM</string>
+    <string name="count_thousands">%1$dk</string>
+
+    <!-- Shared empty / offline / downloads polish -->
+    <string name="you_are_offline">Estás sin conexión</string>
+    <string name="no_downloads_yet">Aún no hay descargas</string>
+    <string name="no_downloads_yet_message">Los APK descargados aparecerán aquí para instalar o eliminar.</string>
     <string name="install">Instalar</string>
     <string name="delete">Eliminar</string>
+    <string name="favourites_empty_message">Guarda los repositorios que te interesan para encontrarlos rápidamente.</string>
+    <string name="apps_empty_message">Instala una app de código abierto desde GitHub para gestionar actualizaciones aquí.</string>
+    <string name="search_idle_title">Encuentra apps de código abierto</string>
+    <string name="search_idle_message">Busca repositorios de GitHub con releases de Android por nombre, lenguaje u orden.</string>
+    <string name="owner_avatar">Avatar del propietario</string>
+    <string name="update_progress_summary">%1$d correctas, %2$d fallidas</string>
+    <string name="more_apps_by_darkmintis">Más apps de Darkmintis</string>
+    <string name="promo_app_blink">Blink</string>
+    <string name="unable_to_check_for_updates">No se pudieron comprobar las actualizaciones</string>
+    <string name="stargazer_count">%1$d estrellas</string>
+
+    <!-- User-facing errors -->
+    <string name="error_rate_limit">Límite de la API de GitHub alcanzado. Inicia sesión o espera unos minutos e inténtalo de nuevo.</string>
+    <string name="error_timeout">La solicitud ha caducado. Comprueba tu conexión e inténtalo de nuevo.</string>
+    <string name="error_offline">Parece que estás sin conexión. Comprueba tu internet e inténtalo de nuevo.</string>
+    <string name="error_network">Error de red. Inténtalo de nuevo.</string>
+    <string name="error_unauthorized">Error de autenticación. Inicia sesión con GitHub e inténtalo de nuevo.</string>
+    <string name="error_forbidden">Acceso denegado. Puede que debas iniciar sesión o que el recurso sea privado.</string>
+    <string name="error_not_found">No encontramos ese repositorio o recurso.</string>
+    <string name="error_server">GitHub tiene problemas en este momento. Inténtalo de nuevo más tarde.</string>
+    <string name="error_http_generic">Algo salió mal (error %1$d). Inténtalo de nuevo.</string>
+    <string name="error_download_failed">La descarga falló. Inténtalo de nuevo.</string>
+    <string name="error_auth_not_configured">El inicio de sesión con GitHub no está configurado en esta compilación.</string>
+    <string name="error_install_failed">La instalación falló. Inténtalo de nuevo.</string>
+    <string name="error_load_apps">No se pudieron cargar las apps instaladas. Inténtalo de nuevo.</string>
+    <string name="error_favourite_toggle">No se pudieron actualizar los favoritos. Inténtalo de nuevo.</string>
+    <string name="error_check_updates">No se pudieron comprobar las actualizaciones. Inténtalo de nuevo.</string>
+    <string name="error_logout_failed">No se pudo cerrar sesión. Inténtalo de nuevo.</string>
+    <string name="details_warning_release">Repositorio cargado, pero no se pudo obtener la información de la release.</string>
 </resources>

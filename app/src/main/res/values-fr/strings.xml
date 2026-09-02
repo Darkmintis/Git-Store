@@ -124,11 +124,15 @@
 
     <!-- Translation -->
     <string name="auto_translate_title">Traduction automatique</string>
-    <string name="auto_translate_description">Traduire automatiquement les descriptions de dépôts en langues étrangères</string>
-    <string name="translation_language_title">Langue cible</string>
-    <string name="select_translation_language">Sélectionner la langue de traduction</string>
+    <string name="auto_translate_description">Traduire automatiquement le texte des dépôts qui n\'est pas dans votre langue</string>
+    <string name="translation_language_title">Langue</string>
+    <string name="select_translation_language">Sélectionner la langue</string>
     <string name="translate">Traduire</string>
     <string name="original">Original</string>
+    <string name="translate_with_language">Traduire (%1$s)</string>
+    <string name="translated_show_original">Traduit (%1$s) · Original</string>
+    <string name="show_translation">Afficher la traduction (%1$s)</string>
+    <string name="translation_unavailable">Traduction indisponible pour le moment</string>
 
     <!-- Appearance -->
     <string name="theme_color">Couleur du thème</string>
