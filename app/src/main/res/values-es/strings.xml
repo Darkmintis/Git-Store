@@ -366,7 +366,8 @@
     <string name="search_idle_message">Busca repositorios de GitHub con releases de Android por nombre, lenguaje u orden.</string>
     <string name="owner_avatar">Avatar del propietario</string>
     <string name="update_progress_summary">%1$d correctas, %2$d fallidas</string>
-    <string name="more_apps_by_darkmintis">Más apps de Darkmintis</string>
+    <string name="more_apps_by_prefix">Más apps de </string>
+    <string name="more_apps_by_suffix"></string>
     <string name="promo_app_blink">Blink</string>
     <string name="unable_to_check_for_updates">No se pudieron comprobar las actualizaciones</string>
     <string name="stargazer_count">%1$d estrellas</string>

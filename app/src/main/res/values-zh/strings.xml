@@ -369,7 +369,8 @@
     <string name="search_idle_message">按名称、语言或排序搜索包含 Android 版本的 GitHub 仓库。</string>
     <string name="owner_avatar">所有者头像</string>
     <string name="update_progress_summary">成功 %1$d 个，失败 %2$d 个</string>
-    <string name="more_apps_by_darkmintis">Darkmintis 的更多应用</string>
+    <string name="more_apps_by_prefix"></string>
+    <string name="more_apps_by_suffix"> 的更多应用</string>
     <string name="promo_app_blink">Blink</string>
     <string name="unable_to_check_for_updates">无法检查更新</string>
     <string name="stargazer_count">%1$d 颗星</string>

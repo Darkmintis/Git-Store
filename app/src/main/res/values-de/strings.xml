@@ -369,7 +369,8 @@ Erlebnis frei
     <string name="search_idle_message">Suchen Sie GitHub-Repositorys mit Android-Versionen nach Name, Sprache oder Sortierung.</string>
     <string name="owner_avatar">Profilbild</string>
     <string name="update_progress_summary">%1$d erfolgreich, %2$d fehlgeschlagen</string>
-    <string name="more_apps_by_darkmintis">Weitere Apps von Darkmintis</string>
+    <string name="more_apps_by_prefix">Weitere Apps von </string>
+    <string name="more_apps_by_suffix"></string>
     <string name="promo_app_blink">Blink</string>
     <string name="unable_to_check_for_updates">Es kann nicht nach Updates gesucht werden.</string>
     <string name="stargazer_count">%1$d Sterne</string>

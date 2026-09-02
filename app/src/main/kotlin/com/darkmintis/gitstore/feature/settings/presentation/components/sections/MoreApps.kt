@@ -2,6 +2,7 @@ package com.darkmintis.gitstore.feature.settings.presentation.components.section
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -45,6 +46,7 @@ import java.net.URL
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.darkmintis.gitstore.R
+import com.darkmintis.gitstore.core.presentation.utils.GitStoreLinks
 
 private const val PROMO_APPS_URL = "https://darkmintis.dev/promo-apps.json"
 private const val PREFS_NAME = "promo_apps_cache"
@@ -122,12 +124,7 @@ fun LazyListScope.moreApps(
                     tint = Color.White,
                     modifier = Modifier.size(24.dp)
                 )
-                Text(
-                    text = stringResource(R.string.more_apps_by_darkmintis),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+                MoreAppsSectionTitle(onAction)
             }
         }
 
@@ -146,6 +143,43 @@ fun LazyListScope.moreApps(
                 onAction(SettingsAction.OnBrowserOpen(playStoreUrl))
             }
         )
+    }
+}
+
+@Composable
+private fun MoreAppsSectionTitle(onAction: (SettingsAction) -> Unit) {
+    val prefix = stringResource(R.string.more_apps_by_prefix)
+    val suffix = stringResource(R.string.more_apps_by_suffix)
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(0.dp)
+    ) {
+        if (prefix.isNotEmpty()) {
+            Text(
+                text = "${prefix.trimEnd()} ",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Text(
+            text = "Darkmintis",
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.clickable {
+                onAction(SettingsAction.OnBrowserOpen(GitStoreLinks.DEVELOPER_SITE))
+            }
+        )
+        if (suffix.isNotEmpty()) {
+            Text(
+                text = " ${suffix.trimStart()}",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 

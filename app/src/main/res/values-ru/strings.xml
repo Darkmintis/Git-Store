@@ -369,7 +369,8 @@
     <string name="search_idle_message">Ищите репозитории GitHub с Android-релизами по имени, языку или сортировке.</string>
     <string name="owner_avatar">Аватар владельца</string>
     <string name="update_progress_summary">Успешно: %1$d, ошибок: %2$d</string>
-    <string name="more_apps_by_darkmintis">Другие приложения Darkmintis</string>
+    <string name="more_apps_by_prefix">Другие приложения </string>
+    <string name="more_apps_by_suffix"></string>
     <string name="promo_app_blink">Blink</string>
     <string name="unable_to_check_for_updates">Не удалось проверить обновления</string>
     <string name="stargazer_count">%1$d звёзд</string>
