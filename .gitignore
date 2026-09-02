@@ -25,3 +25,5 @@ output-metadata.json
 *.jks
 *.keystore
 
+graphify-out/
+

@@ -15,7 +15,7 @@
 
     <!-- Apps feature - Errors / messages -->
     <string name="cannot_launch">%1$s kann nicht gestartet werden</string>
-    <string name="failed_to_open">%s konnte nicht geöffnet werden</string>
+    <string name="failed_to_open">%1$s konnte nicht geöffnet werden</string>
     <string name="failed_to_update">Fehler beim Aktualisieren von %1$s: %2$s</string>
     <string name="update_all_failed">Alle Aktualisierungen fehlgeschlagen: %1$s</string>
     <string name="all_apps_updated_successfully">Alle Apps erfolgreich aktualisiert</string>

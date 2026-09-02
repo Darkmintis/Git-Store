@@ -36,7 +36,6 @@ class MyMemoryTranslationService(
 ) : TranslationService {
 
     private val memoryCache = ConcurrentHashMap<String, String>()
-    private val failedKeys = ConcurrentHashMap.newKeySet<String>()
     private val apiMutex = Mutex()
     private var diskCacheReady = false
 
@@ -92,7 +91,6 @@ class MyMemoryTranslationService(
             memoryCache[cacheKey] = cached
             return cached
         }
-        if (failedKeys.contains(cacheKey)) return text
 
         return withContext(Dispatchers.IO) {
             try {
@@ -102,7 +100,6 @@ class MyMemoryTranslationService(
                 }.joinToString("")
 
                 if (translated == text || !MyMemoryTranslationSupport.isUsableTranslation(translated, text)) {
-                    failedKeys.add(cacheKey)
                     text
                 } else {
                     memoryCache[cacheKey] = translated
@@ -113,7 +110,6 @@ class MyMemoryTranslationService(
                 }
             } catch (e: Exception) {
                 Logger.e(e) { "Translation failed" }
-                failedKeys.add(cacheKey)
                 text
             }
         }
@@ -174,7 +170,6 @@ class MyMemoryTranslationService(
             memoryCache[cacheKey] = cached
             return cached
         }
-        if (failedKeys.contains(cacheKey)) return markdown
 
         return withContext(Dispatchers.IO) {
             try {
@@ -197,12 +192,10 @@ class MyMemoryTranslationService(
                     diskCache?.put(cacheKey, translatedMarkdown)
                     translatedMarkdown
                 } else {
-                    failedKeys.add(cacheKey)
                     markdown
                 }
             } catch (e: Exception) {
                 Logger.e(e) { "Markdown translation failed" }
-                failedKeys.add(cacheKey)
                 markdown
             }
         }
