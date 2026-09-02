@@ -93,7 +93,10 @@ val platformModule: Module = module {
     single<com.darkmintis.gitstore.core.data.services.TranslationService> {
         com.darkmintis.gitstore.core.data.services.MyMemoryTranslationService(
             translationRepository = get(),
-            localizationManager = get()
+            localizationManager = get(),
+            diskCache = com.darkmintis.gitstore.core.data.services.TranslationDiskCache(
+                java.io.File(androidContext().cacheDir, "translation_cache.json")
+            ),
         )
     }
 

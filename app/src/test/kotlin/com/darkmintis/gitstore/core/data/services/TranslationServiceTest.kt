@@ -2,6 +2,8 @@
 
 import com.darkmintis.gitstore.core.domain.model.TranslationLanguage
 import com.darkmintis.gitstore.core.domain.repository.TranslationRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -12,8 +14,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FakeTranslationRepository : TranslationRepository {
-    private val _targetLang = MutableStateFlow(TranslationLanguage.FRENCH)
-    private val _autoTranslate = MutableStateFlow(true)
+    private val _targetLang = MutableStateFlow(TranslationLanguage.SYSTEM)
+    private val _autoTranslate = MutableStateFlow(false)
 
     override fun getTargetLanguage(): Flow<TranslationLanguage> = _targetLang
     override suspend fun setTargetLanguage(language: TranslationLanguage) { _targetLang.value = language }
@@ -30,48 +32,71 @@ class TranslationServiceTest {
 
     private lateinit var fakeRepo: FakeTranslationRepository
     private lateinit var fakeLoc: FakeLocalizationManager
-    private lateinit var service: MyMemoryTranslationService
 
     @BeforeTest
     fun setup() {
         fakeRepo = FakeTranslationRepository()
         fakeLoc = FakeLocalizationManager()
-        service = MyMemoryTranslationService(fakeRepo, fakeLoc)
     }
 
-    @Test
-    fun `test language resolution`() = runTest {
-        assertEquals("fr", service.getEffectiveLanguageCode())
+    private fun createService(): MyMemoryTranslationService =
+        MyMemoryTranslationService(
+            fakeRepo,
+            fakeLoc,
+            diskCache = null,
+            scope = CoroutineScope(Dispatchers.Unconfined),
+        )
 
-        fakeRepo.setTargetLanguage(TranslationLanguage.ENGLISH)
-        assertEquals("en", service.getEffectiveLanguageCode())
+    @Test
+    fun `test language resolution uses system locale`() = runTest {
+        assertEquals("en", createService().getEffectiveLanguageCode())
+
+        fakeRepo.setTargetLanguage(TranslationLanguage.FRENCH)
+        assertEquals("fr", createService().getEffectiveLanguageCode())
 
         fakeRepo.setTargetLanguage(TranslationLanguage.SYSTEM)
-        assertEquals("en", service.getEffectiveLanguageCode())
+        assertEquals("en", createService().getEffectiveLanguageCode())
     }
 
     @Test
-    fun `test non latin detection`() {
-        assertTrue(service.containsNonLatin("这是一个测试"))
-        assertTrue(service.containsNonLatin("これはテストです"))
-        assertTrue(service.containsNonLatin("이것은 테스트입니다"))
-        assertTrue(service.containsNonLatin("Это тест"))
-        assertTrue(service.containsNonLatin("هذا اختبار"))
-        assertFalse(service.containsNonLatin("This is a simple English sentence."))
+    fun `test needsTranslation when content language differs from target`() = runTest {
+        fakeRepo.setTargetLanguage(TranslationLanguage.ENGLISH)
+        val englishTarget = createService()
+
+        assertTrue(englishTarget.needsTranslation("这是一个测试"))
+        assertFalse(
+            englishTarget.needsTranslation(
+                "This is the app for you to install and use from the store."
+            )
+        )
+
+        fakeRepo.setTargetLanguage(TranslationLanguage.FRENCH)
+        val frenchTarget = createService()
+        assertTrue(
+            frenchTarget.needsTranslation(
+                "This is the app for you to install and use from the store."
+            )
+        )
     }
 
     @Test
-    fun `test chinese detection`() {
-        assertTrue(service.isChinese("这是一个测试"))
-        assertFalse(service.isChinese("This is English"))
+    fun `test needsTranslation is false when language cannot be detected`() = runTest {
+        fakeRepo.setTargetLanguage(TranslationLanguage.ENGLISH)
+        assertFalse(createService().needsTranslation("v1.2.3"))
     }
 
     @Test
-    fun `test translation language from code`() {
+    fun `test translation language from code defaults to system`() {
+        assertEquals(TranslationLanguage.SYSTEM, TranslationLanguage.fromCode(null))
         assertEquals(TranslationLanguage.FRENCH, TranslationLanguage.fromCode("fr"))
         assertEquals(TranslationLanguage.ENGLISH, TranslationLanguage.fromCode("en"))
-        assertEquals(TranslationLanguage.SPANISH, TranslationLanguage.fromCode("es"))
-        assertEquals(TranslationLanguage.GERMAN, TranslationLanguage.fromCode("de"))
-        assertEquals(TranslationLanguage.FRENCH, TranslationLanguage.fromCode("unknown_code"))
+        assertEquals(TranslationLanguage.SYSTEM, TranslationLanguage.fromCode("unknown_code"))
+    }
+
+    @Test
+    fun `picker options start with system then english`() {
+        assertEquals(TranslationLanguage.SYSTEM, TranslationLanguage.pickerOptions.first())
+        assertEquals(TranslationLanguage.ENGLISH, TranslationLanguage.pickerOptions[1])
+        assertEquals(8, TranslationLanguage.pickerOptions.size)
     }
 }
