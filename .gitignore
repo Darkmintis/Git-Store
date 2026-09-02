@@ -18,6 +18,10 @@ captures/
 *.aab
 output-metadata.json
 
+# Python
+__pycache__/
+*.pyc
+
 # Logs
 *.log
 

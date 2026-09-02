@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
       
     - name: Set up JDK 21
       uses: actions/setup-java@v4
@@ -53,12 +55,19 @@ jobs:
       id: notes
       run: |
         if [ -f "RELEASE_NOTES.md" ]; then
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          BODY=$(cat RELEASE_NOTES.md)
         else
-          echo "body=Release ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          BODY="Release ${{ github.ref_name }}"
         fi
+        CREDITS=$(python3 scripts/release_credits.py "${{ github.ref_name }}")
+        {
+          echo "body<<EOF"
+          printf '%s\n' "$BODY"
+          if [ -n "$CREDITS" ]; then
+            printf '%s\n' "$CREDITS"
+          fi
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
       
     - name: Create Release
       uses: softprops/action-gh-release@v2
