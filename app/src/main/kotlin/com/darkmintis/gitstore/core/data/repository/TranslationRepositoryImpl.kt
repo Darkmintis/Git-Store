@@ -31,7 +31,7 @@ class TranslationRepositoryImpl(
 
     override fun isAutoTranslateEnabled(): Flow<Boolean> {
         return preferences.data.map { prefs ->
-            prefs[AUTO_TRANSLATE_KEY] ?: true
+            prefs[AUTO_TRANSLATE_KEY] ?: false
         }
     }
 
