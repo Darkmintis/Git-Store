@@ -44,6 +44,7 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.appearance
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.SHOW_SUPPORT_SECTION
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.translation
 
@@ -191,13 +192,15 @@ fun SettingsScreen(
                 onAction = onAction
             )
 
-            item {
-                Spacer(Modifier.height(24.dp))
-            }
+            if (SHOW_SUPPORT_SECTION) {
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
 
-            support(
-                onAction = onAction
-            )
+                support(
+                    onAction = onAction
+                )
+            }
 
             item {
                 Spacer(Modifier.height(24.dp))

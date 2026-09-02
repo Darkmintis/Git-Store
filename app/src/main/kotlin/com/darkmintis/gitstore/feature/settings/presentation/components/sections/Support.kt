@@ -38,6 +38,9 @@ import androidx.compose.ui.res.stringResource
 import com.darkmintis.gitstore.core.presentation.utils.GitStoreLinks
 import com.darkmintis.gitstore.feature.settings.presentation.SettingsAction
 
+/** Flip to `true` when the Support Us section is ready to ship. */
+internal const val SHOW_SUPPORT_SECTION = false
+
 private const val USDT_BEACON_ADDRESS = "0xc9A505E28D0ff4C627Bd64c62e885d7f4e94c6d5"
 private const val USDT_BEACON_FALLBACK_URL = "ethereum://"
 
