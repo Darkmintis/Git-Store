@@ -12,6 +12,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 fun <T> SnapshotStateList<T>.replaceAll(element: T) {
     clear()
@@ -26,6 +28,9 @@ data class BottomNavigationItem(
 )
 
 object BottomNavigationUtils {
+    // ponytail: M3 NavigationBar is 80dp; +8dp so the last list item clears the bar
+    val contentInset: Dp = 88.dp
+
     fun items(): List<BottomNavigationItem> {
         return listOf(
             BottomNavigationItem(

@@ -8,7 +8,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -47,6 +46,9 @@ fun AppNavigation(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
+            val currentScreen = navBackStack.lastOrNull()
+            val bottomNavVisible = currentScreen in BottomNavigationUtils.allowedScreens()
+
             NavDisplay(
                 backStack = navBackStack,
                 onBack = {
@@ -260,7 +262,16 @@ fun AppNavigation(
                         animationSpec = spring(Spring.DampingRatioLowBouncy)
                     )
                 },
-                modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .then(
+                        if (bottomNavVisible) {
+                            Modifier.padding(bottom = BottomNavigationUtils.contentInset)
+                        } else {
+                            Modifier
+                        }
+                    )
             )
 
             if (navBackStack.isNotEmpty()) {
