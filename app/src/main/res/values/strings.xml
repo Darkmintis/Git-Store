@@ -127,10 +127,14 @@
 
     <!-- Translation -->
     <string name="auto_translate_title">Auto-translate</string>
-    <string name="auto_translate_description">Automatically translate non-Latin and foreign repository descriptions</string>
-    <string name="translation_language_title">Target language</string>
-    <string name="select_translation_language">Select translation language</string>
+    <string name="auto_translate_description">Automatically translate repository text that is not in your selected language</string>
+    <string name="translation_language_title">Language</string>
+    <string name="select_translation_language">Select your language</string>
     <string name="translate">Translate</string>
+    <string name="translate_with_language">Translate (%1$s)</string>
+    <string name="translated_show_original">Translated (%1$s) · Show original</string>
+    <string name="show_translation">Show translation (%1$s)</string>
+    <string name="translation_unavailable">Translation unavailable right now</string>
     <string name="original">Original</string>
 
     <!-- Appearance -->

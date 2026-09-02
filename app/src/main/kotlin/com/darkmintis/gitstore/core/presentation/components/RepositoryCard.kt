@@ -197,21 +197,41 @@ fun RepositoryCard(
 
                 var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
                 var showOriginal by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+                var manualTranslateRequested by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+                var translationFailed by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
 
-                val isForeign = remember(rawDescription) {
-                    rawDescription != null && translationService.containsNonLatin(rawDescription)
+                val needsTranslation = remember(rawDescription, currentTargetLang) {
+                    rawDescription != null && translationService.needsTranslation(rawDescription)
                 }
 
-                LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled) {
-                    if (rawDescription != null && (isForeign || isAutoTranslateEnabled)) {
-                        val res = translationService.translate(rawDescription)
-                        if (res != rawDescription) {
-                            translatedDescription = res
-                        }
+                LaunchedEffect(rawDescription, currentTargetLang) {
+                    translatedDescription = null
+                    showOriginal = false
+                    manualTranslateRequested = false
+                    translationFailed = false
+                }
+
+                LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled, manualTranslateRequested) {
+                    if (rawDescription == null || !needsTranslation) return@LaunchedEffect
+                    if (!isAutoTranslateEnabled && !manualTranslateRequested) return@LaunchedEffect
+                    val res = translationService.translate(rawDescription)
+                    if (res != rawDescription) {
+                        translatedDescription = res
+                        translationFailed = false
+                    } else {
+                        translationFailed = true
                     }
                 }
 
-                val displayedDesc = if (showOriginal || !isAutoTranslateEnabled) rawDescription else (translatedDescription ?: rawDescription)
+                val langLabel = translationService.getEffectiveLanguageCode().uppercase()
+                val hasTranslation = translatedDescription != null && translatedDescription != rawDescription
+                val showingTranslation = hasTranslation &&
+                    !showOriginal &&
+                    (isAutoTranslateEnabled || manualTranslateRequested)
+                val displayedDesc = when {
+                    showingTranslation -> translatedDescription
+                    else -> rawDescription
+                }
 
                 displayedDesc?.let { desc ->
                     Column {
@@ -223,14 +243,31 @@ fun RepositoryCard(
                             style = MaterialTheme.typography.bodyLarge,
                             softWrap = true
                         )
-                        if (translatedDescription != null && translatedDescription != rawDescription) {
-                            val langLabel = translationService.getEffectiveLanguageCode().uppercase()
+                        if (needsTranslation) {
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = if (showOriginal || !isAutoTranslateEnabled) "🌐 Traduire ($langLabel)" else "🌐 Traduit ($langLabel) - VO",
+                                text = when {
+                                    hasTranslation && !showOriginal ->
+                                        stringResource(R.string.translated_show_original, langLabel)
+                                    hasTranslation && showOriginal ->
+                                        stringResource(R.string.show_translation, langLabel)
+                                    translationFailed ->
+                                        stringResource(R.string.translation_unavailable)
+                                    else ->
+                                        stringResource(R.string.translate_with_language, langLabel)
+                                },
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.clickable { showOriginal = !showOriginal }
+                                modifier = Modifier.clickable {
+                                    when {
+                                        hasTranslation -> showOriginal = !showOriginal
+                                        translationFailed -> {
+                                            translationFailed = false
+                                            manualTranslateRequested = true
+                                        }
+                                        else -> manualTranslateRequested = true
+                                    }
+                                }
                             )
                         }
                     }

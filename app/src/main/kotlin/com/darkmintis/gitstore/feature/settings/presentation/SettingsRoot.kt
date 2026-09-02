@@ -46,7 +46,6 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.translation
-import com.darkmintis.gitstore.feature.settings.presentation.components.sections.TranslationLanguageDialog
 
 @Composable
 fun SettingsRoot(
@@ -108,18 +107,6 @@ fun SettingsRoot(
             },
             onLogout = {
                 viewModel.onAction(SettingsAction.OnLogoutConfirmClick)
-            }
-        )
-    }
-
-    if (state.isLanguagePickerVisible) {
-        TranslationLanguageDialog(
-            selectedLanguage = state.translationLanguage,
-            onLanguageSelected = { lang ->
-                viewModel.onAction(SettingsAction.OnTranslationLanguageSelected(lang))
-            },
-            onDismiss = {
-                viewModel.onAction(SettingsAction.OnDismissLanguagePicker)
             }
         )
     }
@@ -191,8 +178,8 @@ fun SettingsScreen(
                 onAutoTranslateToggled = { enabled ->
                     onAction(SettingsAction.OnAutoTranslateToggled(enabled))
                 },
-                onOpenLanguagePicker = {
-                    onAction(SettingsAction.OnOpenLanguagePicker)
+                onLanguageSelected = { language ->
+                    onAction(SettingsAction.OnTranslationLanguageSelected(language))
                 }
             )
 

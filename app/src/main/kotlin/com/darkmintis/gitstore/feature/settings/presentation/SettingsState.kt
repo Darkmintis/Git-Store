@@ -20,8 +20,7 @@ data class SettingsState(
     val userLogin: String? = null,
     val userAvatarUrl: String? = null,
     val starredReposCount: Int = 0,
-    val translationLanguage: TranslationLanguage = TranslationLanguage.FRENCH,
-    val isAutoTranslateEnabled: Boolean = true,
-    val isLanguagePickerVisible: Boolean = false,
+    val translationLanguage: TranslationLanguage = TranslationLanguage.SYSTEM,
+    val isAutoTranslateEnabled: Boolean = false,
 )
 

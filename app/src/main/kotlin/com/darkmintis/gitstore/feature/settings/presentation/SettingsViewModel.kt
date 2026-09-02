@@ -371,7 +371,6 @@ class SettingsViewModel(
             is SettingsAction.OnTranslationLanguageSelected -> {
                 viewModelScope.launch {
                     translationRepository.setTargetLanguage(action.language)
-                    _state.update { it.copy(isLanguagePickerVisible = false) }
                 }
             }
 
@@ -379,14 +378,6 @@ class SettingsViewModel(
                 viewModelScope.launch {
                     translationRepository.setAutoTranslateEnabled(action.enabled)
                 }
-            }
-
-            SettingsAction.OnOpenLanguagePicker -> {
-                _state.update { it.copy(isLanguagePickerVisible = true) }
-            }
-
-            SettingsAction.OnDismissLanguagePicker -> {
-                _state.update { it.copy(isLanguagePickerVisible = false) }
             }
 
             SettingsAction.OnUpdateGitStoreClick -> {

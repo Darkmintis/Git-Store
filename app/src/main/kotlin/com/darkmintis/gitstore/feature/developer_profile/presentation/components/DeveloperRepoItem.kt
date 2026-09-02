@@ -145,17 +145,41 @@ fun DeveloperRepoItem(
 
             var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
             var showOriginal by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+            var manualTranslateRequested by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+            var translationFailed by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
 
-            LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled) {
-                if (rawDescription != null && (translationService.containsNonLatin(rawDescription) || isAutoTranslateEnabled)) {
-                    val res = translationService.translate(rawDescription)
-                    if (res != rawDescription) {
-                        translatedDescription = res
-                    }
+            val needsTranslation = remember(rawDescription, currentTargetLang) {
+                rawDescription != null && translationService.needsTranslation(rawDescription)
+            }
+
+            LaunchedEffect(rawDescription, currentTargetLang) {
+                translatedDescription = null
+                showOriginal = false
+                manualTranslateRequested = false
+                translationFailed = false
+            }
+
+            LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled, manualTranslateRequested) {
+                if (rawDescription == null || !needsTranslation) return@LaunchedEffect
+                if (!isAutoTranslateEnabled && !manualTranslateRequested) return@LaunchedEffect
+                val res = translationService.translate(rawDescription)
+                if (res != rawDescription) {
+                    translatedDescription = res
+                    translationFailed = false
+                } else {
+                    translationFailed = true
                 }
             }
 
-            val displayedDesc = if (showOriginal || !isAutoTranslateEnabled) rawDescription else (translatedDescription ?: rawDescription)
+            val langCode = translationService.getEffectiveLanguageCode().uppercase()
+            val hasTranslation = translatedDescription != null && translatedDescription != rawDescription
+            val showingTranslation = hasTranslation &&
+                !showOriginal &&
+                (isAutoTranslateEnabled || manualTranslateRequested)
+            val displayedDesc = when {
+                showingTranslation -> translatedDescription
+                else -> rawDescription
+            }
 
             displayedDesc?.let { description ->
                 Spacer(modifier = Modifier.height(8.dp))
@@ -165,14 +189,31 @@ fun DeveloperRepoItem(
                         text = description,
                         maxLines = 2
                     )
-                    if (translatedDescription != null && translatedDescription != rawDescription) {
-                        val langCode = translationService.getEffectiveLanguageCode().uppercase()
+                    if (needsTranslation) {
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = if (showOriginal || !isAutoTranslateEnabled) "🌐 Traduire ($langCode)" else "🌐 Traduit ($langCode) - VO",
+                            text = when {
+                                hasTranslation && !showOriginal ->
+                                    stringResource(R.string.translated_show_original, langCode)
+                                hasTranslation && showOriginal ->
+                                    stringResource(R.string.show_translation, langCode)
+                                translationFailed ->
+                                    stringResource(R.string.translation_unavailable)
+                                else ->
+                                    stringResource(R.string.translate_with_language, langCode)
+                            },
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.clickable { showOriginal = !showOriginal }
+                            modifier = Modifier.clickable {
+                                when {
+                                    hasTranslation -> showOriginal = !showOriginal
+                                    translationFailed -> {
+                                        translationFailed = false
+                                        manualTranslateRequested = true
+                                    }
+                                    else -> manualTranslateRequested = true
+                                }
+                            }
                         )
                     }
                 }

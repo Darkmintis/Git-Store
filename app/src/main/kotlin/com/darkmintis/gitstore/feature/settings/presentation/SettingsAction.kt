@@ -10,8 +10,6 @@ sealed interface SettingsAction {
     data class OnDarkThemeChange(val isDarkTheme: Boolean?) : SettingsAction
     data class OnTranslationLanguageSelected(val language: TranslationLanguage) : SettingsAction
     data class OnAutoTranslateToggled(val enabled: Boolean) : SettingsAction
-    data object OnOpenLanguagePicker : SettingsAction
-    data object OnDismissLanguagePicker : SettingsAction
     data object OnLogoutClick : SettingsAction
     data object OnLogoutConfirmClick : SettingsAction
     data object OnLogoutDismiss : SettingsAction

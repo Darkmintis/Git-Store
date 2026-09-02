@@ -49,14 +49,32 @@ fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
         val rawDescription = latestRelease.description
         var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
         var isTranslated by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+        var manualTranslateRequested by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+        var translationFailed by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
 
-        LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled) {
-            if (rawDescription != null && (translationService.containsNonLatin(rawDescription) || isAutoTranslateEnabled)) {
-                val res = translationService.translate(rawDescription)
-                if (res != rawDescription) {
-                    translatedDescription = res
+        val needsTranslation = remember(rawDescription, currentTargetLang) {
+            rawDescription != null && translationService.needsTranslation(rawDescription)
+        }
+
+        LaunchedEffect(rawDescription, currentTargetLang) {
+            translatedDescription = null
+            isTranslated = false
+            manualTranslateRequested = false
+            translationFailed = false
+        }
+
+        LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled, manualTranslateRequested) {
+            if (rawDescription == null || !needsTranslation) return@LaunchedEffect
+            if (!isAutoTranslateEnabled && !manualTranslateRequested) return@LaunchedEffect
+            val res = translationService.translate(rawDescription)
+            if (res != rawDescription) {
+                translatedDescription = res
+                translationFailed = false
+                if (isAutoTranslateEnabled || manualTranslateRequested) {
                     isTranslated = true
                 }
+            } else {
+                translationFailed = true
             }
         }
 
@@ -77,15 +95,34 @@ fun LazyListScope.whatsNew(latestRelease: GithubRelease) {
                 fontWeight = FontWeight.Bold,
             )
 
+            val langCode = translationService.getEffectiveLanguageCode().uppercase()
             val currentTranslated = translatedDescription
-            if (currentTranslated != null && currentTranslated != rawDescription) {
-                val langCode = translationService.getEffectiveLanguageCode().uppercase()
+            val hasTranslation = currentTranslated != null && currentTranslated != rawDescription
+            if (needsTranslation && (hasTranslation || !isAutoTranslateEnabled || translationFailed)) {
                 TextButton(
-                    onClick = { isTranslated = !isTranslated },
+                    onClick = {
+                        when {
+                            hasTranslation -> isTranslated = !isTranslated
+                            translationFailed -> {
+                                translationFailed = false
+                                manualTranslateRequested = true
+                            }
+                            else -> manualTranslateRequested = true
+                        }
+                    },
                     modifier = Modifier.liquefiable(liquidState)
                 ) {
                     Text(
-                        text = if (isTranslated) "Original" else "🌐 Traduire ($langCode)",
+                        text = when {
+                            hasTranslation && isTranslated ->
+                                stringResource(R.string.original)
+                            hasTranslation ->
+                                stringResource(R.string.show_translation, langCode)
+                            translationFailed ->
+                                stringResource(R.string.translation_unavailable)
+                            else ->
+                                stringResource(R.string.translate_with_language, langCode)
+                        },
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
