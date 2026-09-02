@@ -1,6 +1,7 @@
 package com.darkmintis.gitstore.feature.details.data.utils
 
 import com.darkmintis.gitstore.core.data.services.LocalizationManager
+import com.darkmintis.gitstore.core.data.utils.ContentLanguageDetector
 import com.darkmintis.gitstore.feature.details.data.model.ReadmeAttempt
 
 class ReadmeLocalizationHelper(
@@ -111,50 +112,6 @@ class ReadmeLocalizationHelper(
         return attempts.sortedBy { it.priority }
     }
 
-    fun detectReadmeLanguage(content: String): String? {
-        val sample = content.take(1000)
-        val sampleLower = sample.lowercase()
-
-        val chineseChars = sample.count { it in '\u4e00'..'\u9fff' }
-        val japaneseHiragana = sample.count { it in '\u3040'..'\u309f' }
-        val japaneseKatakana = sample.count { it in '\u30a0'..'\u30ff' }
-        val koreanChars = sample.count { it in '\uac00'..'\ud7af' }
-        val arabicChars = sample.count { it in '\u0600'..'\u06ff' }
-        val cyrillicChars = sample.count { it in 'а'..'я' || it in 'А'..'Я' || it == 'ё' || it == 'Ё' }
-
-        val totalChars = sample.length
-        val threshold = 0.15
-
-        return when {
-            chineseChars > totalChars * threshold -> "zh"
-
-            (japaneseHiragana + japaneseKatakana) > totalChars * threshold -> "ja"
-
-            koreanChars > totalChars * threshold -> "ko"
-
-            arabicChars > totalChars * threshold -> "ar"
-
-            cyrillicChars > totalChars * threshold -> "ru"
-
-            else -> {
-                val englishIndicators = listOf(
-                    "\\bthe\\b", "\\band\\b", "\\bfor\\b", "\\bwith\\b",
-                    "\\bthis\\b", "\\bthat\\b", "\\bfrom\\b", "\\bare\\b",
-                    "\\bwas\\b", "\\bhave\\b", "\\bhas\\b", "\\bwill\\b",
-                    "\\byou\\b", "\\bcan\\b", "\\buse\\b", "\\binstall\\b"
-                )
-
-                val matchCount = englishIndicators.count { pattern ->
-                    Regex(pattern, RegexOption.IGNORE_CASE).containsMatchIn(sampleLower)
-                }
-
-                if (matchCount >= 4) {
-                    "en"
-                } else {
-                    null
-                }
-            }
-        }
-    }
+    fun detectReadmeLanguage(content: String): String? = ContentLanguageDetector.detect(content)
 }
 

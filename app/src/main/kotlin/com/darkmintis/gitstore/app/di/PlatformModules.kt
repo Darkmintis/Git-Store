@@ -84,6 +84,22 @@ val platformModule: Module = module {
         AndroidLocalizationManager()
     }
 
+    single<com.darkmintis.gitstore.core.domain.repository.TranslationRepository> {
+        com.darkmintis.gitstore.core.data.repository.TranslationRepositoryImpl(
+            preferences = get()
+        )
+    }
+
+    single<com.darkmintis.gitstore.core.data.services.TranslationService> {
+        com.darkmintis.gitstore.core.data.services.MyMemoryTranslationService(
+            translationRepository = get(),
+            localizationManager = get(),
+            diskCache = com.darkmintis.gitstore.core.data.services.TranslationDiskCache(
+                java.io.File(androidContext().cacheDir, "translation_cache.json")
+            ),
+        )
+    }
+
     single<AppLauncher> {
         AndroidAppLauncher(androidContext())
     }

@@ -27,8 +27,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import org.koin.compose.koinInject
+import com.darkmintis.gitstore.core.data.services.TranslationService
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -180,11 +188,87 @@ fun AppHeader(
 
         Spacer(Modifier.height(16.dp))
 
-        Text(
-            text = repository.description ?: stringResource(R.string.no_description),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        val translationService = koinInject<TranslationService>()
+        val rawDescription = repository.description
+        val isAutoTranslateEnabled by translationService.isAutoTranslateEnabled.collectAsState()
+        val currentTargetLang by translationService.targetLanguage.collectAsState()
+
+        var translatedDescription by remember(rawDescription, currentTargetLang) { mutableStateOf<String?>(null) }
+        var showOriginal by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+        var manualTranslateRequested by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+        var translationFailed by remember(rawDescription, currentTargetLang) { mutableStateOf(false) }
+
+        val needsTranslation = remember(rawDescription, currentTargetLang) {
+            rawDescription != null && translationService.needsTranslation(rawDescription)
+        }
+
+        LaunchedEffect(rawDescription, currentTargetLang) {
+            translatedDescription = null
+            showOriginal = false
+            manualTranslateRequested = false
+            translationFailed = false
+        }
+
+        LaunchedEffect(rawDescription, currentTargetLang, isAutoTranslateEnabled, manualTranslateRequested) {
+            if (rawDescription == null || !needsTranslation) return@LaunchedEffect
+            if (!isAutoTranslateEnabled && !manualTranslateRequested) return@LaunchedEffect
+            val res = translationService.translate(rawDescription)
+            if (res != rawDescription) {
+                translatedDescription = res
+                translationFailed = false
+            } else {
+                translationFailed = true
+            }
+        }
+
+        val langLabel = translationService.getEffectiveLanguageCode().uppercase()
+        val hasTranslation = translatedDescription != null && translatedDescription != rawDescription
+        val showingTranslation = hasTranslation &&
+            !showOriginal &&
+            (isAutoTranslateEnabled || manualTranslateRequested)
+
+        if (rawDescription != null) {
+            Column {
+                Text(
+                    text = if (showingTranslation) translatedDescription!! else rawDescription,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                if (needsTranslation) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = when {
+                            hasTranslation && !showOriginal ->
+                                stringResource(R.string.translated_show_original, langLabel)
+                            hasTranslation && showOriginal ->
+                                stringResource(R.string.show_translation, langLabel)
+                            translationFailed ->
+                                stringResource(R.string.translation_unavailable)
+                            else ->
+                                stringResource(R.string.translate_with_language, langLabel)
+                        },
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable {
+                            when {
+                                hasTranslation -> showOriginal = !showOriginal
+                                translationFailed -> {
+                                    translationFailed = false
+                                    manualTranslateRequested = true
+                                }
+                                else -> manualTranslateRequested = true
+                            }
+                        }
+                    )
+                }
+            }
+        } else {
+            Text(
+                text = stringResource(R.string.no_description),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 

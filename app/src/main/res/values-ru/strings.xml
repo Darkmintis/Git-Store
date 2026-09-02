@@ -1,0 +1,395 @@
+<resources>
+
+    <!-- Apps feature - App -->
+    <string name="app_name">Git Store</string>
+
+    <!-- Apps feature - Navigation / Top bar -->
+    <string name="home">Главная</string>
+    <string name="apps">Приложения</string>
+    <string name="installed_apps">Установленные</string>
+    <string name="navigate_back">Назад</string>
+    <string name="downloads">Загрузки</string>
+    <string name="updates">Обновления</string>
+    <string name="up_to_date">Актуально</string>
+    <string name="check_for_updates">Проверить обновления</string>
+
+    <!-- Apps feature - Errors / messages -->
+    <string name="cannot_launch">Не удалось запустить %1$s</string>
+    <string name="failed_to_open">Не удалось открыть %1$s</string>
+    <string name="failed_to_update">Не удалось обновить %1$s: %2$s</string>
+    <string name="update_all_failed">Не удалось обновить все: %1$s</string>
+    <string name="all_apps_updated_successfully">Все приложения успешно обновлены</string>
+    <string name="no_updates_available">Обновления недоступны</string>
+
+    <!-- Apps feature - Search -->
+    <string name="search_your_apps">Поиск приложений</string>
+    <string name="no_apps_found">Приложения не найдены</string>
+
+    <!-- Apps feature - Actions -->
+    <string name="update_all">Обновить все</string>
+    <string name="update">Обновить</string>
+    <string name="open">Открыть</string>
+    <string name="cancel">Отмена</string>
+
+    <!-- Apps feature - Update states -->
+    <string name="checking">Проверка…</string>
+    <string name="updated_successfully">Успешно обновлено</string>
+    <string name="error_with_message">Ошибка: %1$s</string>
+
+    <!-- Apps feature - Update all progress -->
+    <string name="updating_x_of_y">Обновление %1$d из %2$d</string>
+    <string name="currently_updating">Сейчас: %1$s</string>
+
+
+    <!-- Auth general -->
+    <string name="waiting_for_authorization">Ожидание авторизации…</string>
+    <string name="signed_in">Вход выполнен!</string>
+    <string name="redirecting_message">Теперь можно пользоваться приложением. Перенаправление…</string>
+    <string name="try_again">Повторить</string>
+
+    <!-- Errors -->
+    <string name="auth_error_with_message">Ошибка: %1$s</string>
+
+    <!-- Device flow -->
+    <string name="enter_code_on_github">Введите этот код на GitHub:</string>
+    <string name="copy_code">Скопировать код</string>
+    <string name="open_github">Открыть GitHub</string>
+
+    <!-- Logged out -->
+    <string name="unlock_full_experience">
+Откройте все
+возможности
+    </string>
+
+    <string name="more_requests">Больше запросов</string>
+    <string name="more_requests_description">Войдите, чтобы увеличить лимит API и избежать прерываний.</string>
+
+    <string name="sign_in_with_github">Войти через GitHub</string>
+
+    <string name="error_cancelled">Отменено</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
+
+    <string name="language_label">Язык:</string>
+
+    <string name="discover_repositories">Каталог репозиториев</string>
+    <string name="search_repositories_hint">Поиск репозиториев, описаний…</string>
+    <string name="search">Поиск</string>
+
+    <!-- Filters -->
+    <string name="filter_by_language">Фильтр по языку</string>
+
+    <!-- Results -->
+    <string name="results_found">Найдено: %1$d</string>
+
+
+    <!-- Sorting -->
+    <string name="sort_by">Сортировка</string>
+    <string name="close">Закрыть</string>
+
+    <string name="sort_most_stars">Больше звёзд</string>
+    <string name="sort_most_forks">Больше форков</string>
+    <string name="sort_best_match">По релевантности</string>
+
+    <!-- Programming languages -->
+    <string name="language_all">Все языки</string>
+    <string name="language_kotlin">Kotlin</string>
+    <string name="language_java">Java</string>
+    <string name="language_javascript">JavaScript</string>
+    <string name="language_typescript">TypeScript</string>
+    <string name="language_python">Python</string>
+    <string name="language_swift">Swift</string>
+    <string name="language_rust">Rust</string>
+    <string name="language_go">Go</string>
+    <string name="language_csharp">C#</string>
+    <string name="language_cpp">C++</string>
+    <string name="language_c">C</string>
+    <string name="language_dart">Dart</string>
+    <string name="language_ruby">Ruby</string>
+    <string name="language_php">PHP</string>
+
+    <string name="search_failed">Ошибка поиска</string>
+    <string name="no_repositories_found">Репозитории не найдены</string>
+    <string name="search_try_different_filters">Попробуйте другой запрос, язык или сортировку.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_sign_in_github_title">Войти через GitHub</string>
+    <string name="settings_sign_in_github_description">Подключите аккаунт GitHub для синхронизации избранного и увеличения лимита API с 60 до 5000 запросов в час</string>
+    <string name="support_development_title">Поддержать разработку</string>
+    <string name="support_development_description">Помогите сохранить Git Store бесплатным и без рекламы.</string>
+    <string name="donate_with_crypto">Пожертвовать криптовалютой</string>
+
+    <!-- Sections -->
+    <string name="section_account">АККАУНТ</string>
+    <string name="section_appearance">ВНЕШНИЙ ВИД</string>
+    <string name="section_translation">ПЕРЕВОД</string>
+    <string name="section_about">О ПРИЛОЖЕНИИ</string>
+    <string name="section_support">ПОДДЕРЖКА</string>
+
+    <!-- Translation -->
+    <string name="auto_translate_title">Автоперевод</string>
+    <string name="auto_translate_description">Автоматически переводить текст репозитория, если он не на вашем языке</string>
+    <string name="translation_language_title">Язык</string>
+    <string name="select_translation_language">Выберите язык</string>
+    <string name="translate">Перевести</string>
+    <string name="translate_with_language">Перевести (%1$s)</string>
+    <string name="translated_show_original">Перевод (%1$s) · Оригинал</string>
+    <string name="show_translation">Показать перевод (%1$s)</string>
+    <string name="translation_unavailable">Перевод сейчас недоступен</string>
+    <string name="original">Оригинал</string>
+
+    <!-- Appearance -->
+    <string name="theme_color">Цвет темы</string>
+    <string name="amoled_black_theme">Тема AMOLED Black</string>
+    <string name="amoled_black_description">Глубокий чёрный фон для тёмного режима</string>
+    <string name="selected_color">Выбранный цвет: %1$s</string>
+
+    <!-- About -->
+    <string name="version">Версия</string>
+    <string name="report_an_issue">Сообщить об ошибке</string>
+    <string name="star_git_store">Поставить звезду на GitHub</string>
+    <string name="view_source_code">Исходный код</string>
+    <string name="check_now">Проверить сейчас</string>
+    <string name="update_check_failed">Не удалось проверить обновления</string>
+
+    <!-- Account -->
+    <string name="logout">Выйти</string>
+    <string name="view_all_starred">Показать все</string>
+    <string name="starred_count">%1$d в избранном</string>
+    <string name="starred_section_preview">Избранные репозитории</string>
+
+    <!-- Snackbar -->
+    <string name="logout_success">Выход выполнен, перенаправление…</string>
+
+    <!-- Dialog -->
+    <string name="warning">Внимание!</string>
+    <string name="logout_confirmation">Вы уверены, что хотите выйти?</string>
+
+    <!-- Theme names -->
+    <string name="theme_dynamic">Динамическая</string>
+    <string name="theme_ocean">Океан</string>
+    <string name="theme_purple">Фиолетовая</string>
+    <string name="theme_forest">Лес</string>
+    <string name="theme_slate">Сланец</string>
+    <string name="theme_amber">Янтарь</string>
+
+    <!-- Navigation & actions -->
+    <string name="open_repository">Открыть репозиторий</string>
+    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="cancel_download">Отменить загрузку</string>
+    <string name="show_install_options">Показать параметры установки</string>
+
+    <!-- Errors & states -->
+    <string name="error_loading_details">Ошибка загрузки сведений</string>
+    <string name="retry">Повторить</string>
+    <string name="no_description">Описание отсутствует.</string>
+    <string name="no_release_notes">Нет заметок о выпуске.</string>
+
+    <!-- Headers -->
+    <string name="about_this_app">О приложении</string>
+    <string name="install_logs">Журнал установки</string>
+    <string name="author">Автор</string>
+    <string name="whats_new">Что нового</string>
+
+    <!-- Install status -->
+    <string name="installed">Установлено</string>
+    <string name="update_available">Доступно обновление</string>
+    <string name="not_available">Недоступно</string>
+    <string name="install_latest">Установить последнюю версию</string>
+    <string name="reinstall">Переустановить</string>
+    <string name="update_app">Обновить приложение</string>
+
+    <!-- Download stages -->
+    <string name="downloading">Загрузка</string>
+    <string name="updating">Обновление</string>
+    <string name="verifying">Проверка</string>
+    <string name="installing">Установка</string>
+
+    <!-- Install helpers -->
+    <string name="open_in_obtainium">Открыть в Obtainium</string>
+    <string name="obtainium_description">Автоматически управлять обновлениями</string>
+    <string name="inspect_with_appmanager">Проверить в AppManager</string>
+    <string name="appmanager_description">Проверить разрешения, трекеры и безопасность</string>
+
+    <!-- Author -->
+    <string name="profile">Профиль</string>
+
+    <!-- Stats -->
+    <string name="forks">Форки</string>
+    <string name="stars">Звёзды</string>
+    <string name="issues">Задачи</string>
+
+    <!-- Misc -->
+    <string name="by_author">от %1$s</string>
+    <string name="installed_version">• Установлено: %1$s</string>
+    <string name="architecture_compatible">Совместимая архитектура</string>
+    <string name="update_to_version">Обновить до %1$s</string>
+
+    <!-- General -->
+    <string name="error_load_details">Не удалось загрузить сведения</string>
+    <string name="installer_saved_downloads">Установщик сохранён в папку «Загрузки»</string>
+
+    <!-- Download / install states -->
+    <string name="log_download_started">Загрузка начата</string>
+    <string name="log_downloaded">Загружено</string>
+    <string name="log_update_started">Обновление начато</string>
+    <string name="log_installed">Установлено</string>
+    <string name="log_updated">Обновлено</string>
+    <string name="log_cancelled">Отменено</string>
+    <string name="log_install_started">Установка начата</string>
+    <string name="log_error">Ошибка</string>
+    <string name="log_error_with_message">Ошибка: %1$s</string>
+
+    <!-- External tools -->
+    <string name="log_prepare_appmanager">Подготовка для AppManager</string>
+    <string name="log_opened_appmanager">Открыто в AppManager</string>
+
+    <!-- Errors -->
+    <string name="error_generic">Ошибка: %1$s</string>
+    <string name="error_asset_not_supported">Тип файла .%1$s не поддерживается</string>
+    <string name="error_file_not_found">Загруженный файл не найден</string>
+
+    <string name="home_category_trending">В тренде</string>
+    <string name="home_category_new">Новинки</string>
+    <string name="home_category_popular">Популярные</string>
+
+    <string name="home_finding_repositories">Поиск репозиториев...</string>
+    <string name="home_loading_more">Загрузка...</string>
+    <string name="home_no_more_repositories">Репозиториев больше нет</string>
+    <string name="home_retry">Повторить</string>
+    <string name="home_failed_to_load_repositories">Не удалось загрузить репозитории</string>
+    <string name="home_view_details">Подробнее</string>
+
+    <string name="updated_just_now">обновлено только что</string>
+    <string name="updated_hours_ago">обновлено %1$d ч. назад</string>
+    <string name="updated_yesterday">обновлено вчера</string>
+    <string name="updated_days_ago">обновлено %1$d дн. назад</string>
+    <string name="updated_on_date">обновлено %1$s</string>
+
+    <string name="rate_limit_exceeded">Превышен лимит запросов</string>
+    <string name="rate_limit_used_all">Вы использовали все %1$d запросов API.</string>
+    <string name="rate_limit_used_all_free">Вы использовали все %1$d бесплатных запросов API.</string>
+    <string name="rate_limit_resets_in_minutes">Сброс через %1$d мин.</string>
+    <string name="rate_limit_tip_sign_in">💡 Войдите, чтобы получить 5000 запросов в час вместо 60!</string>
+    <string name="rate_limit_sign_in">Войти</string>
+    <string name="rate_limit_ok">OK</string>
+    <string name="rate_limit_close">Закрыть</string>
+
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_system">Системная</string>
+
+    <string name="added_to_favourites">Добавлено в избранное</string>
+    <string name="removed_from_favourites">Удалено из избранного</string>
+    <string name="add_to_favourites">В избранное</string>
+    <string name="remove_from_favourites">Удалить из избранного</string>
+    <string name="favourites">Избранное</string>
+
+    <string name="added_just_now">добавлено только что</string>
+    <string name="added_hours_ago">добавлено %1$d ч. назад</string>
+    <string name="added_yesterday">добавлено вчера</string>
+    <string name="added_days_ago">добавлено %1$d дн. назад</string>
+    <string name="added_on_date">добавлено %1$s</string>
+
+    <string name="starred_repositories">Избранные репозитории</string>
+    <string name="repository_starred">Репозиторий в избранном</string>
+    <string name="repository_not_starred">Репозиторий не в избранном</string>
+    <string name="star_from_github">Вы можете отметить репозиторий на GitHub</string>
+    <string name="unstar_from_github">Вы можете убрать отметку на GitHub</string>
+
+    <string name="sign_in_required">Требуется вход</string>
+    <string name="starred_repos_x_repos">%1$d репозиториев в избранном</string>
+    <string name="sign_in_with_github_for_stars">Войдите через GitHub, чтобы увидеть избранные репозитории</string>
+    <string name="no_starred_repos">Нет избранных репозиториев</string>
+    <string name="search_starred_repos">Поиск избранных репозиториев…</string>
+    <string name="star_repos_hint">Отмечайте на GitHub репозитории с устанавливаемыми релизами, чтобы видеть их здесь</string>
+    <string name="last_synced">Последняя синхронизация</string>
+    <string name="just_now">Только что</string>
+    <string name="minutes_ago">%d мин. назад</string>
+    <string name="hours_ago">%d ч. назад</string>
+    <string name="days_ago">%d дн. назад</string>
+    <string name="dismiss">Закрыть</string>
+    <string name="sync_starred_failed">Не удалось синхронизировать избранные репозитории</string>
+
+    <string name="developer_profile_title">Профиль разработчика</string>
+    <string name="open_developer_profile">Открыть профиль разработчика</string>
+
+    <string name="failed_to_load_repositories">Не удалось загрузить репозитории</string>
+    <string name="failed_to_load_profile">Не удалось загрузить профиль</string>
+
+    <!-- Developer Profile - Stats -->
+    <string name="repositories">Репозитории</string>
+    <string name="followers">Подписчики</string>
+    <string name="following">Подписки</string>
+
+    <!-- Developer Profile - Filter & Sort -->
+    <string name="search_repositories">Поиск репозиториев…</string>
+    <string name="clear_search">Очистить поиск</string>
+    <string name="filter_all">Все</string>
+    <string name="filter_with_releases">С релизами</string>
+    <string name="filter_installed">Установленные</string>
+    <string name="filter_favorites">Избранные</string>
+    <string name="sort">Сортировка</string>
+    <string name="sort_recently_updated">Недавно обновлённые</string>
+    <string name="sort_name">Имя</string>
+
+    <!-- Developer Profile - Repository Count -->
+    <string name="repository_singular">репозиторий</string>
+    <string name="repositories_plural">репозитория</string>
+    <string name="showing_x_of_y_repositories">Показано %1$d из %2$d репозиториев</string>
+
+    <!-- Developer Profile - Empty States -->
+    <string name="no_repos_with_releases">Нет репозиториев с устанавливаемыми релизами</string>
+    <string name="no_installed_repos">Нет установленных репозиториев</string>
+    <string name="no_favorite_repos">Нет избранных репозиториев</string>
+
+    <!-- Developer Profile - Repository Item -->
+    <string name="updated_x_ago">Обновлено %1$s</string>
+    <string name="has_release">Есть релиз</string>
+
+    <string name="time_years_ago">%1$d г. назад</string>
+    <string name="time_months_ago">%1$d мес. назад</string>
+    <string name="time_days_ago">%1$d дн. назад</string>
+    <string name="time_hours_ago">%1$d ч. назад</string>
+    <string name="time_minutes_ago">%1$d мин. назад</string>
+
+    <!-- Developer Profile - Count Formatting -->
+    <string name="count_millions">%1$dM</string>
+    <string name="count_thousands">%1$dk</string>
+
+    <!-- Shared empty / offline / downloads polish -->
+    <string name="you_are_offline">Вы не в сети</string>
+    <string name="no_downloads_yet">Загрузок пока нет</string>
+    <string name="no_downloads_yet_message">Загруженные APK появятся здесь для установки или удаления.</string>
+    <string name="install">Установить</string>
+    <string name="delete">Удалить</string>
+    <string name="favourites_empty_message">Сохраняйте интересные репозитории, чтобы быстро находить их позже.</string>
+    <string name="apps_empty_message">Установите open-source приложение из релизов GitHub, чтобы управлять обновлениями здесь.</string>
+    <string name="search_idle_title">Найти open-source приложения</string>
+    <string name="search_idle_message">Ищите репозитории GitHub с Android-релизами по имени, языку или сортировке.</string>
+    <string name="owner_avatar">Аватар владельца</string>
+    <string name="update_progress_summary">Успешно: %1$d, ошибок: %2$d</string>
+    <string name="more_apps_by_darkmintis">Другие приложения Darkmintis</string>
+    <string name="promo_app_blink">Blink</string>
+    <string name="unable_to_check_for_updates">Не удалось проверить обновления</string>
+    <string name="stargazer_count">%1$d звёзд</string>
+
+    <!-- User-facing errors -->
+    <string name="error_rate_limit">Достигнут лимит GitHub. Войдите или подождите несколько минут и повторите попытку.</string>
+    <string name="error_timeout">Время ожидания истекло. Проверьте соединение и повторите попытку.</string>
+    <string name="error_offline">Похоже, вы не в сети. Проверьте подключение к интернету и повторите попытку.</string>
+    <string name="error_network">Сетевая ошибка. Повторите попытку.</string>
+    <string name="error_unauthorized">Ошибка аутентификации. Войдите через GitHub и повторите попытку.</string>
+    <string name="error_forbidden">Доступ запрещён. Возможно, нужно войти или ресурс приватный.</string>
+    <string name="error_not_found">Не удалось найти этот репозиторий или ресурс.</string>
+    <string name="error_server">У GitHub сейчас временные проблемы. Повторите попытку позже.</string>
+    <string name="error_http_generic">Что-то пошло не так (ошибка %1$d). Повторите попытку.</string>
+    <string name="error_download_failed">Не удалось загрузить. Повторите попытку.</string>
+    <string name="error_auth_not_configured">Вход через GitHub не настроен в этой сборке.</string>
+    <string name="error_install_failed">Не удалось установить. Повторите попытку.</string>
+    <string name="error_load_apps">Не удалось загрузить установленные приложения. Повторите попытку.</string>
+    <string name="error_favourite_toggle">Не удалось обновить избранное. Повторите попытку.</string>
+    <string name="error_check_updates">Не удалось проверить обновления. Повторите попытку.</string>
+    <string name="error_logout_failed">Не удалось выйти. Повторите попытку.</string>
+    <string name="details_warning_release">Репозиторий загружен, но сведения о релизе получить не удалось.</string>
+</resources>

@@ -121,8 +121,21 @@
     <!-- Sections -->
     <string name="section_account">ACCOUNT</string>
     <string name="section_appearance">APPEARANCE</string>
+    <string name="section_translation">TRANSLATION</string>
     <string name="section_about">ABOUT</string>
     <string name="section_support">SUPPORT US</string>
+
+    <!-- Translation -->
+    <string name="auto_translate_title">Auto-translate</string>
+    <string name="auto_translate_description">Automatically translate repository text that is not in your selected language</string>
+    <string name="translation_language_title">Language</string>
+    <string name="select_translation_language">Select your language</string>
+    <string name="translate">Translate</string>
+    <string name="translate_with_language">Translate (%1$s)</string>
+    <string name="translated_show_original">Translated (%1$s) · Show original</string>
+    <string name="show_translation">Show translation (%1$s)</string>
+    <string name="translation_unavailable">Translation unavailable right now</string>
+    <string name="original">Original</string>
 
     <!-- Appearance -->
     <string name="theme_color">Theme Color</string>

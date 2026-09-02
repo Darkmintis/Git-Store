@@ -1,0 +1,395 @@
+<resources>
+
+    <!-- Apps feature - App -->
+    <string name="app_name">Git Store</string>
+
+    <!-- Apps feature - Navigation / Top bar -->
+    <string name="home">ホーム</string>
+    <string name="apps">アプリ</string>
+    <string name="installed_apps">インストール済み</string>
+    <string name="navigate_back">戻る</string>
+    <string name="downloads">ダウンロード</string>
+    <string name="updates">更新</string>
+    <string name="up_to_date">最新です</string>
+    <string name="check_for_updates">更新を確認</string>
+
+    <!-- Apps feature - Errors / messages -->
+    <string name="cannot_launch">%1$s を起動できません</string>
+    <string name="failed_to_open">%1$s を開けませんでした</string>
+    <string name="failed_to_update">%1$s の更新に失敗しました: %2$s</string>
+    <string name="update_all_failed">一括更新に失敗しました: %1$s</string>
+    <string name="all_apps_updated_successfully">すべてのアプリを更新しました</string>
+    <string name="no_updates_available">利用可能な更新はありません</string>
+
+    <!-- Apps feature - Search -->
+    <string name="search_your_apps">アプリを検索</string>
+    <string name="no_apps_found">アプリが見つかりません</string>
+
+    <!-- Apps feature - Actions -->
+    <string name="update_all">すべて更新</string>
+    <string name="update">更新</string>
+    <string name="open">開く</string>
+    <string name="cancel">キャンセル</string>
+
+    <!-- Apps feature - Update states -->
+    <string name="checking">確認中…</string>
+    <string name="updated_successfully">更新が完了しました</string>
+    <string name="error_with_message">エラー: %1$s</string>
+
+    <!-- Apps feature - Update all progress -->
+    <string name="updating_x_of_y">%2$d 件中 %1$d 件を更新中</string>
+    <string name="currently_updating">現在: %1$s</string>
+
+
+    <!-- Auth general -->
+    <string name="waiting_for_authorization">認証を待っています…</string>
+    <string name="signed_in">サインインしました！</string>
+    <string name="redirecting_message">アプリを使用できます。リダイレクト中…</string>
+    <string name="try_again">再試行</string>
+
+    <!-- Errors -->
+    <string name="auth_error_with_message">エラー: %1$s</string>
+
+    <!-- Device flow -->
+    <string name="enter_code_on_github">GitHub でこのコードを入力してください:</string>
+    <string name="copy_code">コードをコピー</string>
+    <string name="open_github">GitHub を開く</string>
+
+    <!-- Logged out -->
+    <string name="unlock_full_experience">
+すべての機能を
+解放
+    </string>
+
+    <string name="more_requests">リクエスト上限を増やす</string>
+    <string name="more_requests_description">サインインして API レート制限を引き上げ、中断を避けましょう。</string>
+
+    <string name="sign_in_with_github">GitHubでログイン</string>
+
+    <string name="error_cancelled">キャンセルしました</string>
+    <string name="error_unknown">不明なエラー</string>
+
+    <string name="language_label">言語:</string>
+
+    <string name="discover_repositories">リポジトリを見つける</string>
+    <string name="search_repositories_hint">リポジトリ、説明を検索…</string>
+    <string name="search">検索</string>
+
+    <!-- Filters -->
+    <string name="filter_by_language">言語でフィルター</string>
+
+    <!-- Results -->
+    <string name="results_found">%1$d件見つかりました</string>
+
+
+    <!-- Sorting -->
+    <string name="sort_by">並び替え</string>
+    <string name="close">閉じる</string>
+
+    <string name="sort_most_stars">スター数順</string>
+    <string name="sort_most_forks">フォーク数順</string>
+    <string name="sort_best_match">関連度順</string>
+
+    <!-- Programming languages -->
+    <string name="language_all">すべての言語</string>
+    <string name="language_kotlin">Kotlin</string>
+    <string name="language_java">Java</string>
+    <string name="language_javascript">JavaScript</string>
+    <string name="language_typescript">TypeScript</string>
+    <string name="language_python">Python</string>
+    <string name="language_swift">Swift</string>
+    <string name="language_rust">Rust</string>
+    <string name="language_go">Go</string>
+    <string name="language_csharp">C#</string>
+    <string name="language_cpp">C++</string>
+    <string name="language_c">C</string>
+    <string name="language_dart">Dart</string>
+    <string name="language_ruby">Ruby</string>
+    <string name="language_php">PHP</string>
+
+    <string name="search_failed">検索に失敗しました</string>
+    <string name="no_repositories_found">リポジトリが見つかりません</string>
+    <string name="search_try_different_filters">別のキーワード、言語、または並べ替えを試してください。</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="settings_sign_in_github_title">GitHub でサインイン</string>
+    <string name="settings_sign_in_github_description">GitHub アカウントを接続してお気に入りを同期し、API レート制限を 60 から 5000 リクエスト/時に増やします</string>
+    <string name="support_development_title">開発を支援</string>
+    <string name="support_development_description">Git Store を無料で広告なしに保つためにご支援ください。</string>
+    <string name="donate_with_crypto">暗号資産で寄付</string>
+
+    <!-- Sections -->
+    <string name="section_account">アカウント</string>
+    <string name="section_appearance">外観</string>
+    <string name="section_translation">翻訳</string>
+    <string name="section_about">アプリについて</string>
+    <string name="section_support">サポート</string>
+
+    <!-- Translation -->
+    <string name="auto_translate_title">自動翻訳</string>
+    <string name="auto_translate_description">選択した言語以外のリポジトリテキストを自動翻訳します</string>
+    <string name="translation_language_title">言語</string>
+    <string name="select_translation_language">言語を選択</string>
+    <string name="translate">翻訳</string>
+    <string name="translate_with_language">翻訳 (%1$s)</string>
+    <string name="translated_show_original">翻訳 (%1$s) · 原文</string>
+    <string name="show_translation">翻訳を表示 (%1$s)</string>
+    <string name="translation_unavailable">現在翻訳できません</string>
+    <string name="original">原文</string>
+
+    <!-- Appearance -->
+    <string name="theme_color">テーマカラー</string>
+    <string name="amoled_black_theme">AMOLED黒テーマ</string>
+    <string name="amoled_black_description">ダークモード用の純黒背景</string>
+    <string name="selected_color">選択中: %1$s</string>
+
+    <!-- About -->
+    <string name="version">バージョン</string>
+    <string name="report_an_issue">問題を報告</string>
+    <string name="star_git_store">GitHubでスターをつける</string>
+    <string name="view_source_code">ソースコードを表示</string>
+    <string name="check_now">今すぐ確認</string>
+    <string name="update_check_failed">更新を確認できませんでした</string>
+
+    <!-- Account -->
+    <string name="logout">ログアウト</string>
+    <string name="view_all_starred">すべて表示</string>
+    <string name="starred_count">%1$d 件スター済み</string>
+    <string name="starred_section_preview">スターしたリポジトリ</string>
+
+    <!-- Snackbar -->
+    <string name="logout_success">ログアウトしました。リダイレクト中…</string>
+
+    <!-- Dialog -->
+    <string name="warning">警告！</string>
+    <string name="logout_confirmation">ログアウトしてもよろしいですか？</string>
+
+    <!-- Theme names -->
+    <string name="theme_dynamic">ダイナミック</string>
+    <string name="theme_ocean">オーシャン</string>
+    <string name="theme_purple">パープル</string>
+    <string name="theme_forest">フォレスト</string>
+    <string name="theme_slate">スレート</string>
+    <string name="theme_amber">アンバー</string>
+
+    <!-- Navigation & actions -->
+    <string name="open_repository">リポジトリを開く</string>
+    <string name="open_in_browser">ブラウザで開く</string>
+    <string name="cancel_download">ダウンロードをキャンセル</string>
+    <string name="show_install_options">インストールオプションを表示</string>
+
+    <!-- Errors & states -->
+    <string name="error_loading_details">詳細の読み込みエラー</string>
+    <string name="retry">再試行</string>
+    <string name="no_description">説明はありません。</string>
+    <string name="no_release_notes">リリースノートはありません。</string>
+
+    <!-- Headers -->
+    <string name="about_this_app">このアプリについて</string>
+    <string name="install_logs">インストールログ</string>
+    <string name="author">作者</string>
+    <string name="whats_new">更新内容</string>
+
+    <!-- Install status -->
+    <string name="installed">インストール済み</string>
+    <string name="update_available">アップデート利用可能</string>
+    <string name="not_available">利用不可</string>
+    <string name="install_latest">最新版をインストール</string>
+    <string name="reinstall">再インストール</string>
+    <string name="update_app">アプリを更新</string>
+
+    <!-- Download stages -->
+    <string name="downloading">ダウンロード中</string>
+    <string name="updating">更新中</string>
+    <string name="verifying">検証中</string>
+    <string name="installing">インストール中</string>
+
+    <!-- Install helpers -->
+    <string name="open_in_obtainium">Obtainium で開く</string>
+    <string name="obtainium_description">更新を自動管理</string>
+    <string name="inspect_with_appmanager">AppManager で検査</string>
+    <string name="appmanager_description">権限、トラッカー、セキュリティを確認</string>
+
+    <!-- Author -->
+    <string name="profile">プロフィール</string>
+
+    <!-- Stats -->
+    <string name="forks">フォーク</string>
+    <string name="stars">スター</string>
+    <string name="issues">Issue</string>
+
+    <!-- Misc -->
+    <string name="by_author">作者: %1$s</string>
+    <string name="installed_version">• インストール済み: %1$s</string>
+    <string name="architecture_compatible">互換性のあるアーキテクチャ</string>
+    <string name="update_to_version">%1$s に更新</string>
+
+    <!-- General -->
+    <string name="error_load_details">詳細を読み込めませんでした</string>
+    <string name="installer_saved_downloads">インストーラーをダウンロードフォルダーに保存しました</string>
+
+    <!-- Download / install states -->
+    <string name="log_download_started">ダウンロード開始</string>
+    <string name="log_downloaded">ダウンロード完了</string>
+    <string name="log_update_started">更新開始</string>
+    <string name="log_installed">インストール済み</string>
+    <string name="log_updated">更新済み</string>
+    <string name="log_cancelled">キャンセル</string>
+    <string name="log_install_started">インストール開始</string>
+    <string name="log_error">エラー</string>
+    <string name="log_error_with_message">エラー: %1$s</string>
+
+    <!-- External tools -->
+    <string name="log_prepare_appmanager">AppManager の準備中</string>
+    <string name="log_opened_appmanager">AppManager で開きました</string>
+
+    <!-- Errors -->
+    <string name="error_generic">エラー: %1$s</string>
+    <string name="error_asset_not_supported">.%1$s 形式はサポートされていません</string>
+    <string name="error_file_not_found">ダウンロードしたファイルが見つかりません</string>
+
+    <string name="home_category_trending">トレンド</string>
+    <string name="home_category_new">新着</string>
+    <string name="home_category_popular">人気</string>
+
+    <string name="home_finding_repositories">リポジトリを検索中...</string>
+    <string name="home_loading_more">読み込み中...</string>
+    <string name="home_no_more_repositories">これ以上のリポジトリはありません</string>
+    <string name="home_retry">再試行</string>
+    <string name="home_failed_to_load_repositories">リポジトリの読み込みに失敗しました</string>
+    <string name="home_view_details">詳細を見る</string>
+
+    <string name="updated_just_now">たった今更新</string>
+    <string name="updated_hours_ago">%1$d 時間前に更新</string>
+    <string name="updated_yesterday">昨日更新</string>
+    <string name="updated_days_ago">%1$d 日前に更新</string>
+    <string name="updated_on_date">%1$s に更新</string>
+
+    <string name="rate_limit_exceeded">レート制限に達しました</string>
+    <string name="rate_limit_used_all">API リクエスト %1$d 件をすべて使用しました。</string>
+    <string name="rate_limit_used_all_free">無料 API リクエスト %1$d 件をすべて使用しました。</string>
+    <string name="rate_limit_resets_in_minutes">%1$d 分後にリセット</string>
+    <string name="rate_limit_tip_sign_in">💡 サインインすると 60 件/時ではなく 5,000 件/時になります！</string>
+    <string name="rate_limit_sign_in">サインイン</string>
+    <string name="rate_limit_ok">OK</string>
+    <string name="rate_limit_close">閉じる</string>
+
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_system">システム</string>
+
+    <string name="added_to_favourites">お気に入りに追加しました</string>
+    <string name="removed_from_favourites">お気に入りから削除しました</string>
+    <string name="add_to_favourites">お気に入りに追加</string>
+    <string name="remove_from_favourites">お気に入りから削除</string>
+    <string name="favourites">お気に入り</string>
+
+    <string name="added_just_now">たった今追加</string>
+    <string name="added_hours_ago">%1$d 時間前に追加</string>
+    <string name="added_yesterday">昨日追加</string>
+    <string name="added_days_ago">%1$d 日前に追加</string>
+    <string name="added_on_date">%1$s に追加</string>
+
+    <string name="starred_repositories">スターしたリポジトリ</string>
+    <string name="repository_starred">リポジトリにスター済み</string>
+    <string name="repository_not_starred">リポジトリにスターしていません</string>
+    <string name="star_from_github">GitHub からリポジトリにスターできます</string>
+    <string name="unstar_from_github">GitHub からスターを外せます</string>
+
+    <string name="sign_in_required">サインインが必要です</string>
+    <string name="starred_repos_x_repos">%1$d 件のリポジトリにスター</string>
+    <string name="sign_in_with_github_for_stars">GitHub でサインインしてスターしたリポジトリを表示</string>
+    <string name="no_starred_repos">スターしたリポジトリはありません</string>
+    <string name="search_starred_repos">スターしたリポジトリを検索…</string>
+    <string name="star_repos_hint">インストール可能なリリースがあるリポジトリを GitHub でスターするとここに表示されます</string>
+    <string name="last_synced">最終同期</string>
+    <string name="just_now">たった今</string>
+    <string name="minutes_ago">%d 分前</string>
+    <string name="hours_ago">%d 時間前</string>
+    <string name="days_ago">%d 日前</string>
+    <string name="dismiss">閉じる</string>
+    <string name="sync_starred_failed">スターしたリポジトリの同期に失敗しました</string>
+
+    <string name="developer_profile_title">開発者プロフィール</string>
+    <string name="open_developer_profile">開発者プロフィールを開く</string>
+
+    <string name="failed_to_load_repositories">リポジトリを読み込めませんでした</string>
+    <string name="failed_to_load_profile">プロフィールを読み込めませんでした</string>
+
+    <!-- Developer Profile - Stats -->
+    <string name="repositories">リポジトリ</string>
+    <string name="followers">フォロワー</string>
+    <string name="following">フォロー中</string>
+
+    <!-- Developer Profile - Filter & Sort -->
+    <string name="search_repositories">リポジトリを検索…</string>
+    <string name="clear_search">検索をクリア</string>
+    <string name="filter_all">すべて</string>
+    <string name="filter_with_releases">リリースあり</string>
+    <string name="filter_installed">インストール済み</string>
+    <string name="filter_favorites">お気に入り</string>
+    <string name="sort">並べ替え</string>
+    <string name="sort_recently_updated">最近の更新</string>
+    <string name="sort_name">名前</string>
+
+    <!-- Developer Profile - Repository Count -->
+    <string name="repository_singular">リポジトリ</string>
+    <string name="repositories_plural">リポジトリ</string>
+    <string name="showing_x_of_y_repositories">%2$d 件中 %1$d 件のリポジトリを表示</string>
+
+    <!-- Developer Profile - Empty States -->
+    <string name="no_repos_with_releases">インストール可能なリリースがあるリポジトリはありません</string>
+    <string name="no_installed_repos">インストール済みのリポジトリはありません</string>
+    <string name="no_favorite_repos">お気に入りのリポジトリはありません</string>
+
+    <!-- Developer Profile - Repository Item -->
+    <string name="updated_x_ago">%1$s に更新</string>
+    <string name="has_release">リリースあり</string>
+
+    <string name="time_years_ago">%1$d 年前</string>
+    <string name="time_months_ago">%1$d か月前</string>
+    <string name="time_days_ago">%1$d 日前</string>
+    <string name="time_hours_ago">%1$d 時間前</string>
+    <string name="time_minutes_ago">%1$d 分前</string>
+
+    <!-- Developer Profile - Count Formatting -->
+    <string name="count_millions">%1$dM</string>
+    <string name="count_thousands">%1$dk</string>
+
+    <!-- Shared empty / offline / downloads polish -->
+    <string name="you_are_offline">オフラインです</string>
+    <string name="no_downloads_yet">ダウンロードはまだありません</string>
+    <string name="no_downloads_yet_message">ダウンロードした APK はここに表示され、インストールや削除ができます。</string>
+    <string name="install">インストール</string>
+    <string name="delete">削除</string>
+    <string name="favourites_empty_message">気になるリポジトリを保存してすぐに見つけましょう。</string>
+    <string name="apps_empty_message">GitHub リリースから OSS アプリをインストールして、ここで更新を管理しましょう。</string>
+    <string name="search_idle_title">OSS アプリを探す</string>
+    <string name="search_idle_message">Android リリースのある GitHub リポジトリを名前、言語、並べ替えで検索します。</string>
+    <string name="owner_avatar">所有者のアバター</string>
+    <string name="update_progress_summary">成功 %1$d 件、失敗 %2$d 件</string>
+    <string name="more_apps_by_darkmintis">Darkmintis の他のアプリ</string>
+    <string name="promo_app_blink">Blink</string>
+    <string name="unable_to_check_for_updates">更新を確認できませんでした</string>
+    <string name="stargazer_count">%1$d スター</string>
+
+    <!-- User-facing errors -->
+    <string name="error_rate_limit">GitHub のレート制限に達しました。サインインするか、数分待ってから再試行してください。</string>
+    <string name="error_timeout">リクエストがタイムアウトしました。接続を確認して再試行してください。</string>
+    <string name="error_offline">オフラインのようです。インターネット接続を確認して再試行してください。</string>
+    <string name="error_network">ネットワークエラーです。再試行してください。</string>
+    <string name="error_unauthorized">認証に失敗しました。GitHub でサインインして再試行してください。</string>
+    <string name="error_forbidden">アクセスが拒否されました。サインインが必要か、リソースが非公開の可能性があります。</string>
+    <string name="error_not_found">そのリポジトリまたはリソースが見つかりませんでした。</string>
+    <string name="error_server">GitHub で一時的な問題が発生しています。後でもう一度お試しください。</string>
+    <string name="error_http_generic">問題が発生しました（エラー %1$d）。再試行してください。</string>
+    <string name="error_download_failed">ダウンロードに失敗しました。再試行してください。</string>
+    <string name="error_auth_not_configured">このビルドでは GitHub サインインが設定されていません。</string>
+    <string name="error_install_failed">インストールに失敗しました。再試行してください。</string>
+    <string name="error_load_apps">インストール済みアプリを読み込めませんでした。再試行してください。</string>
+    <string name="error_favourite_toggle">お気に入りを更新できませんでした。再試行してください。</string>
+    <string name="error_check_updates">更新を確認できませんでした。再試行してください。</string>
+    <string name="error_logout_failed">ログアウトできませんでした。再試行してください。</string>
+    <string name="details_warning_release">リポジトリは読み込みましたが、リリース情報を取得できませんでした。</string>
+</resources>

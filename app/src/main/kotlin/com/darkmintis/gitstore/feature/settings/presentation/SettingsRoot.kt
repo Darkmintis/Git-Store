@@ -45,6 +45,7 @@ import com.darkmintis.gitstore.feature.settings.presentation.components.sections
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.moreApps
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.signInWithGitHub
 import com.darkmintis.gitstore.feature.settings.presentation.components.sections.support
+import com.darkmintis.gitstore.feature.settings.presentation.components.sections.translation
 
 @Composable
 fun SettingsRoot(
@@ -164,6 +165,21 @@ fun SettingsScreen(
                 },
                 onThemeColorSelected = { theme ->
                     onAction(SettingsAction.OnThemeColorSelected(theme))
+                }
+            )
+
+            item {
+                Spacer(Modifier.height(24.dp))
+            }
+
+            translation(
+                translationLanguage = state.translationLanguage,
+                isAutoTranslateEnabled = state.isAutoTranslateEnabled,
+                onAutoTranslateToggled = { enabled ->
+                    onAction(SettingsAction.OnAutoTranslateToggled(enabled))
+                },
+                onLanguageSelected = { language ->
+                    onAction(SettingsAction.OnTranslationLanguageSelected(language))
                 }
             )
 

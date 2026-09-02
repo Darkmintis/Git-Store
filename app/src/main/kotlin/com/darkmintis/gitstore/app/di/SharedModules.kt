@@ -270,7 +270,8 @@ val settingsModule: Module = module {
             installer = get(),
             application = get(),
             tokenDataSource = get(),
-            starredRepository = get()
+            starredRepository = get(),
+            translationRepository = get()
         )
     }
 }
