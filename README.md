@@ -38,7 +38,7 @@ This project incorporates code and concepts from multiple open source projects. 
 
 ## Credits
 
-**Inspired by**: [GitHub Store](https://github.com/rainxchzed/Github-Store.git) by [@rainxchzed](https://github.com/rainxchzed)
+**Inspired by**: [komi-store](https://github.com/komi-store/komi-store) by [@rainxchzed](https://github.com/rainxchzed)
 
 This project is a reimagined version built with significant modifications, new features, and a different vision. We're grateful to the original project for the inspiration and foundation.
 
