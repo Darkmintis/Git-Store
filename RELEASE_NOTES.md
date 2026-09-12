@@ -1,16 +1,29 @@
-# What's New in v1.3.0
+# What's New in v1.4.0
 
 ### New Features
-- **Search Starred Repositories** - quickly find any of your starred repos
-- **User Profile in Settings** - see your GitHub avatar and username at a glance
-- **Starred Repos Count** - view how many repos you've starred directly from Settings
+- **Multi-Language Translation** - on-the-fly app translation via MyMemory API with 16 supported languages
+- **Language Selector** - switch app language instantly from Settings
+- **Complete Localizations** - French, German, Spanish, Japanese, Russian, and Chinese
+- **Translation Disk Cache** - translated strings cached for offline use
+- **Download Manager** - view, track, and cancel active downloads from a new bottom tab
+- **Offline Detection** - animated banner warns when network is unavailable
+- **Batch Update Tracking** - see succeeded/failed counts when updating all apps
 
 ### Improvements
-- Redesigned Settings screen with centered profile card
-- Logout moved to app bar for cleaner navigation
-- Improved repository cards with refined styling and badges
-- Smarter update checks - faster startup, less data usage
+- Polished top app bar and home bar layout
+- Tab scroll content stays above bottom navigation
+- Translation retry with corrected German and Spanish strings
+- Support Us section hidden behind feature flag
+- More Apps header links to darkmintis.dev
+
+### Bug Fixes
+- Fixed translation retry after failure
+- Corrected German and Spanish format string escaping
+- Hardened translation with disk cache fallback
+- Language picker limited to supported locales
 
 ### Under the Hood
-- Optimized network calls and background sync
-- Improved stability across the app
+- TranslationRepository and TranslationService architecture
+- LocalizationManager for dynamic string switching
+- ContentLanguageDetector for automatic language detection
+- Contributor credits script for GitHub releases
