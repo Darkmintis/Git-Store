@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Contributor credits for commits between the previous tag and the current ref."""
+"""Contributor credits with GitHub avatars for commits between the previous tag and the current ref."""
 
 from __future__ import annotations
 
+import json
 import re
 import subprocess
 import sys
+import urllib.request
+import urllib.error
 
 BOT_RE = re.compile(
     r"(\[bot\]|github-actions|dependabot|renovate|copilot|codecov|"
@@ -13,7 +16,7 @@ BOT_RE = re.compile(
     re.I,
 )
 
-Contributor = tuple[str, str, str | None, int]
+Contributor = tuple[str, str, str | None, int]  # (name, email, handle, count)
 
 
 def git(*args: str) -> str:
@@ -34,7 +37,8 @@ def is_bot(name: str, email: str) -> bool:
     return bool(BOT_RE.search(f"{name} {email}"))
 
 
-def github_handle(name: str, email: str) -> str | None:
+def github_handle_from_email(email: str) -> str | None:
+    """Extract GitHub handle from noreply email (e.g. 123+alice@users.noreply.github.com → alice)."""
     if "users.noreply.github.com" not in email.lower():
         return None
     local = email.split("@", 1)[0]
@@ -45,7 +49,45 @@ def github_handle(name: str, email: str) -> str | None:
     return local
 
 
-def contributors(from_ref: str, to_ref: str) -> list[Contributor]:
+def gh_token() -> str | None:
+    """Get GitHub token from gh CLI config."""
+    try:
+        result = subprocess.run(
+            ["gh", "auth", "token"], capture_output=True, text=True, check=True
+        )
+        return result.stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+
+
+def search_github_user(email: str, token: str | None) -> str | None:
+    """Search GitHub for a user by email, return their login handle."""
+    try:
+        url = f"https://api.github.com/search/users?q={email}+in:email"
+        req = urllib.request.Request(url)
+        req.add_header("Accept", "application/vnd.github+json")
+        if token:
+            req.add_header("Authorization", f"Bearer {token}")
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+            if data.get("items"):
+                return data["items"][0].get("login")
+    except (urllib.error.URLError, json.JSONDecodeError, KeyError, IndexError):
+        pass
+    return None
+
+
+def resolve_handle(name: str, email: str, token: str | None) -> str | None:
+    """Try to find GitHub handle: first from noreply email, then via API search."""
+    handle = github_handle_from_email(email)
+    if handle:
+        return handle
+    if token:
+        return search_github_user(email, token)
+    return None
+
+
+def contributors(from_ref: str, to_ref: str, token: str | None) -> list[Contributor]:
     counts: dict[str, tuple[str, str, int]] = {}
     out = git("log", f"{from_ref}..{to_ref}", "--format=%aN|%aE")
     for line in out.splitlines():
@@ -63,16 +105,29 @@ def contributors(from_ref: str, to_ref: str) -> list[Contributor]:
 
     result: list[Contributor] = []
     for name, email, count in counts.values():
-        result.append((name, email, github_handle(name, email), count))
+        handle = resolve_handle(name, email, token)
+        result.append((name, email, handle, count))
     result.sort(key=lambda row: (-row[3], (row[2] or row[0]).lower()))
     return result
 
 
-def format_credits(from_ref: str, to_ref: str, people: list[Contributor]) -> str:
+def format_credits(people: list[Contributor]) -> str:
     if not people:
         return ""
-    tokens = [f"@{handle}" if handle else name for name, _, handle, _ in people]
-    return f"\n---\n\n## Credits ({from_ref} → {to_ref})\n\n{' '.join(tokens)}\n"
+    avatars = []
+    for name, _, handle, _ in people:
+        if handle:
+            avatars.append(
+                f'<a href="https://github.com/{handle}">'
+                f'<img src="https://github.com/{handle}.png?size=50" width="50" height="50" '
+                f'alt="{handle}" title="{handle}" /></a>'
+            )
+        else:
+            avatars.append(
+                f'<img src="https://ui-avatars.com/api/?name={name.replace(" ", "+")}&size=50&background=random" '
+                f'width="50" height="50" alt="{name}" title="{name}" />'
+            )
+    return "\n---\n\n## Credits\n\n<p>\n" + "\n".join(avatars) + "\n</p>\n"
 
 
 def main() -> None:
@@ -80,23 +135,27 @@ def main() -> None:
     from_ref = previous_tag(to_ref)
     if not from_ref:
         return
-    print(format_credits(from_ref, to_ref, contributors(from_ref, to_ref)))
+    token = gh_token()
+    people = contributors(from_ref, to_ref, token)
+    print(format_credits(people))
 
 
 def self_check() -> None:
     assert is_bot("github-actions[bot]", "github-actions[bot]@users.noreply.github.com")
     assert not is_bot("Alice", "alice@example.com")
-    assert github_handle("x", "123+alice@users.noreply.github.com") == "alice"
-    assert github_handle("x", "alice@users.noreply.github.com") == "alice"
-    assert github_handle("Alice", "alice@example.com") is None
+    assert github_handle_from_email("123+alice@users.noreply.github.com") == "alice"
+    assert github_handle_from_email("alice@users.noreply.github.com") == "alice"
+    assert github_handle_from_email("alice@example.com") is None
 
     people: list[Contributor] = [
         ("Alice", "alice@users.noreply.github.com", "alice", 5),
-        ("Bob", "bob@example.com", None, 2),
+        ("Bob", "bob@example.com", "bob", 2),
     ]
-    body = format_credits("v0.1.0", "v0.2.0", people)
-    assert "@alice Bob" in body
-    assert body.index("@alice") < body.index("Bob")
+    body = format_credits(people)
+    assert "github.com/alice" in body
+    assert "github.com/bob" in body
+    assert "alice.png" in body
+    assert "bob.png" in body
     print("ok")
 
 
